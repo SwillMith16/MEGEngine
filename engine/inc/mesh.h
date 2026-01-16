@@ -1,0 +1,38 @@
+//
+// Created by Will on 26/12/2025.
+//
+
+#ifndef MESH_H
+#define MESH_H
+
+// #include <vector>
+#include "vao.h"
+#include "ebo.h"
+#include "camera.h"
+#include "texture.h"
+
+class Mesh {
+public:
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+	std::vector<Texture> textures;
+
+	// float scale = 1.0f;
+
+	VAO vao;
+
+	Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+
+	void draw
+	(
+		Shader& shader,
+		Camera& camera,
+		glm::mat4 matrix = glm::mat4(1.0f),
+		glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
+	);
+};
+
+
+#endif //MESH_H
