@@ -3,7 +3,6 @@
 //
 
 #include "camera.h"
-#include "timer.h"
 
 Camera::Camera(int width, int height, glm::vec3 position) {
     _width = width;
@@ -27,31 +26,31 @@ void Camera::matrix(Shader& shader, const char* uniform) {
 	shader.setUniform(uniform, camMatrix);
 }
 
-void Camera::processInputs(GLFWwindow* window) {
+void Camera::processInputs(GLFWwindow* window, float deltaTime) {
     // Handles key inputs
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * orientation;
+        position += speed * deltaTime * orientation;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * -glm::normalize(glm::cross(orientation, up));
+        position += speed * deltaTime * -glm::normalize(glm::cross(orientation, up));
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * -orientation;
+        position += speed * deltaTime * -orientation;
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * glm::normalize(glm::cross(orientation, up));
+        position += speed * deltaTime * glm::normalize(glm::cross(orientation, up));
     }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * up;
+        position += speed * deltaTime * up;
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     {
-        position += speed * Time.deltaTime() * -up;
+        position += speed * deltaTime * -up;
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {

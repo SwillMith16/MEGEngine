@@ -30,9 +30,9 @@ public:
     int lastMouseInputState;
     double initialMouseX, initialMouseY;
 
-    float speed = 20.0f;
-	float baseSpeed = 20.0f;
-	float boostSpeed = 50.0f;
+    float speed = 2.0f;
+	float baseSpeed = 2.0f;
+	float boostSpeed = 10.0f;
     float sensitivity = 100.0f;
 
     Camera(int width, int height, glm::vec3 position);
@@ -40,7 +40,7 @@ public:
 	glm::vec3 getPosition();
     void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 	void matrix(Shader& shader, const char* uniform);
-    void processInputs(GLFWwindow* window);
+    void processInputs(GLFWwindow* window, float deltaTime);
 
 private:
 	int _width;

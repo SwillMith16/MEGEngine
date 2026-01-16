@@ -9,6 +9,8 @@ include_directories(MEGEngine
 
 # App executable
 add_library(MEGEngine SHARED
+        inc/application.h
+        src/application.cpp
         inc/shader.h
         src/shader.cpp
         src/vao.cpp
@@ -32,6 +34,7 @@ add_library(MEGEngine SHARED
         inc/model.h
         src/app.cpp
         inc/app.h
+        inc/common.h
 )
 
 # GLFW and GLAD libraries
@@ -40,6 +43,9 @@ target_link_libraries(MEGEngine PRIVATE
         ${LIB_PATH}/libglad.a
 )
 
-target_compile_definitions(MEGEngine PRIVATE $<$<CONFIG:Debug>:DEBUG>)
+target_compile_definitions(MEGEngine PRIVATE
+        $<$<CONFIG:Debug>:DEBUG>
+        ENGINE_BUILD
+)
 
 

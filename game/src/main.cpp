@@ -1,185 +1,25 @@
-#include <iostream>
+#include "application.h"
 
-// #include <GLAD/glad.h>
-// #include <GLFW/glfw3.h>
-#include <GLM/glm.hpp>
-// #include <GLM/gtc/matrix_transform.hpp>
-// #include <GLM/gtc/type_ptr.hpp>
+class ExampleGame : public MEGEngine::Application {
+public:
+	using Application::Application;
 
-#include "settings.h"
-#include "model.h"
-#include "timer.h"
+protected:
+	void onInit() override {
+		// once at start
+	}
 
-const GLint g_windowWidth = 800, g_windowHeight = 800;
-
-Vertex lightVertices[] =
-{
-	//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
-	// top
-	Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-
-	// front
-	Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-
-	// right
-	Vertex{glm::vec3(01.0, -01.0,  01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(01.0, -01.0, -01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(01.0,  01.0, -01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(01.0,  01.0,  01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-
-	// back
-	Vertex{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-
-	// left
-	Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-
-	// bottom
-	Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)}
-
-};
-
-GLuint lightIndices[] =
-{
-	// top
-	0, 1, 2,
-	2, 3, 0,
-
-	// front
-	4, 5, 6,
-	6, 7, 4,
-
-	// right
-	8, 9, 10,
-	10, 11, 8,
-
-	// back
-	12, 13, 14,
-	14, 15, 12,
-
-	// left
-	16, 17, 18,
-	18, 19, 16,
-
-	// bottom
-	20, 21, 22,
-	22, 23, 20
+	void onUpdate(float dt) override {
+		// once per frame
+	}
 };
 
 int main() {
-    // initialise GLFW and set some data for the window
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	MEGEngine::ApplicationConfig appConfig;
+	appConfig.windowTitle = "Test Game";
 
-    // create window object
-    GLFWwindow* window = glfwCreateWindow(g_windowWidth, g_windowHeight, "LearnOpenGL", nullptr, nullptr);
-    if (!window) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    // apply actions to this window (make it the current context)
-    glfwMakeContextCurrent(window);
-
-    // load glad for access to GL functions
-    int status = gladLoadGL();
-    if (!status) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        glfwTerminate();
-        return status;
-    }
-
-    // set the viewport
-    glViewport(0, 0, g_windowWidth, g_windowHeight);
-
-	// enables depth perception - prevents incorrect overlapping triangles
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
-	glm::vec4 lightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	Shader objectShader((g_resourcesDir + "/shaders/default.vert").c_str(), (g_resourcesDir + "/shaders/default.frag").c_str());
-	objectShader.activate();
-	objectShader.setUniform("lightColour", lightColour);
-	objectShader.setUniform("lightPos", lightPos);
-
-	std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
-	std::vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
-	std::vector<Texture> tex {Texture("", "diffuse", 0)};
-	Mesh light(lightVerts, lightInd, tex);
-
-	Shader lightShader((g_resourcesDir + "/shaders/light.vert").c_str(), (g_resourcesDir + "/shaders/light.frag").c_str());
-	lightShader.activate();
-	lightShader.setUniform("lightColour", lightColour);
-	lightShader.setUniform("translation", lightPos);
-
-
-	// glm::vec3 cameraPos = glm::vec3(-5.0f, 7.0f, 5.0f);
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -10.0f);
-    Camera camera(g_windowWidth, g_windowHeight, cameraPos);
-	// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
-	// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), glm::normalize(glm::cross(camera.orientation, camera.up))); // up-down rotation
-
-	Model scroll((g_resourcesDir + "/models/sword/sword.gltf").c_str());
-	scroll.transform = glm::vec3(-3.0f, -10.0f, 4.0f);
-	scroll.orientation = glm::quat(0.707, 0, 0, 0.707);
-	scroll.scale = 0.2f;
-
-    TimerKey timerKey;
-
-    while (!glfwWindowShouldClose(window)) {
-
-        // set background colour
-        glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-
-        // clean back buffer and depth buffer
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        camera.processInputs(window);
-    	camera.updateMatrix(70.0f, 0.1f, 1000.0f);
-
-    	scroll.draw(objectShader, camera);
-    	light.draw(lightShader, camera, glm::mat4(1.0), lightPos);
-
-        // bring buffer to the front
-        glfwSwapBuffers(window);
-
-        // poll for events, otherwise program doesn't respond
-        glfwPollEvents();
-
-        // Limit FPS and set deltaTime
-        Timer::processTime(timerKey);
-    	std::string windowTitle = "LearnOpenGL - FPS: " + std::to_string(Timer::FPS);
-    	glfwSetWindowTitle(window, windowTitle.c_str());
-    }
-
-    // cleanup
-	objectShader.del();
-	// lightShader.del();
-
-    // close
-    glfwDestroyWindow(window);
-    glfwTerminate();
+	ExampleGame game(appConfig);
+	game.run();
 
     return 0;
 }
