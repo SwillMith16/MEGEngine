@@ -6,7 +6,7 @@
 #define VBO_H
 
 #include "GLAD/glad.h"
-#include "glm/glm.hpp"
+#include "GLM/glm.hpp"
 #include <vector>
 
 struct Vertex {

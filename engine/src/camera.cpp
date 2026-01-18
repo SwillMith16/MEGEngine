@@ -4,11 +4,13 @@
 
 #include "camera.h"
 
-Camera::Camera(int width, int height, glm::vec3 position) {
-    _width = width;
-    _height = height;
-    this->position = glm::vec3(position.x, position.y, -position.z);
-}
+Camera::Camera(int width, int height, glm::vec3 position) :
+    _width(static_cast<float>(width)),
+    _height(static_cast<float>(height)),
+    initialMouseX(float(width)),
+    initialMouseY(float(height)),
+    position(glm::vec3(position.x, position.y, -position.z)),
+    lastMouseInputState(GLFW_RELEASE){}
 
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
     glm::mat4 view = glm::mat4(1.0f);
@@ -62,9 +64,8 @@ void Camera::processInputs(GLFWwindow* window, float deltaTime) {
     }
 
 
-
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // Prevents camera from jumping on the first click
         if (firstClick)
@@ -77,8 +78,8 @@ void Camera::processInputs(GLFWwindow* window, float deltaTime) {
         double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        float rotX = sensitivity * (float)(mouseY - ((float)_height/2)) / _height;
-        float rotY = sensitivity * (float)(mouseX - ((float)_width/2)) / _width;
+        float rotX = sensitivity * ((float)mouseY - (_height/2)) / _height;
+        float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
 
         // Calculates upcoming vertical change in the Orientation
         glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
@@ -101,13 +102,13 @@ void Camera::processInputs(GLFWwindow* window, float deltaTime) {
 
         // only need to process this if the state has just changed, not constantly when button not pressed
         if (lastMouseInputState == GLFW_PRESS) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
             // Makes sure the next time the camera looks around it doesn't jump
             firstClick = true;
 
             // return cursor to position it was in
             glfwSetCursorPos(window, initialMouseX, initialMouseY);
+
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
             lastMouseInputState = GLFW_RELEASE;
         }

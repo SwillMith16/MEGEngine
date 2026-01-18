@@ -69,7 +69,7 @@ namespace MEGEngine {
 		// Internal function to handle application exit
 		void shutdown();
 		// Internal function to encapsulate deltaTime calculation
-		void setDeltaTime(auto _lastTime);
+		void setDeltaTime(auto& _lastTime);
 
 		bool running = false;
 		float _deltaTime = 0.0f;

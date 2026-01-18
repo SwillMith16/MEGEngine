@@ -7,11 +7,11 @@
 
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/vector_angle.hpp"
+#include "GLM/glm.hpp"
+#include "GLM/gtc/matrix_transform.hpp"
+#include "GLM/gtc/type_ptr.hpp"
+#include "GLM/gtx/rotate_vector.hpp"
+#include "GLM/gtx/vector_angle.hpp"
 
 #include "shader.h"
 
@@ -30,8 +30,8 @@ public:
     int lastMouseInputState;
     double initialMouseX, initialMouseY;
 
-    float speed = 2.0f;
-	float baseSpeed = 2.0f;
+    float speed = 5.0f;
+	float baseSpeed = 5.0f;
 	float boostSpeed = 10.0f;
     float sensitivity = 100.0f;
 
@@ -43,9 +43,8 @@ public:
     void processInputs(GLFWwindow* window, float deltaTime);
 
 private:
-	int _width;
-	int _height;
-
+	float _width;
+	float _height;
 };
 
 

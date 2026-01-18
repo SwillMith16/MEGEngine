@@ -1,20 +1,22 @@
-//
-// Created by Will on 16/01/2026.
-//
-
 #include "application.h"
 
 #include <chrono>
 #include <thread>
 
 #include "GLAD/glad.h"
+#include "GLFW/glfw3.h"
+#include "GLM/glm.hpp"
 
 // #include "window.h"
 // #include "scene.h"
 // #include "renderer.h"
 
+#include "mesh.h"
 #include "settings.h"
 #include "model.h"
+#include "shader.h"
+#include "texture.h"
+#include "vbo.h"
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
 
@@ -112,7 +114,7 @@ namespace MEGEngine {
 	    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	    // create window object
-	    GLFWwindow* window = glfwCreateWindow(g_windowWidth, g_windowHeight, "LearnOpenGL", nullptr, nullptr);
+	    GLFWwindow* window = glfwCreateWindow(g_windowWidth, g_windowHeight, "MEGEngine", nullptr, nullptr);
 	    if (!window) {
 	        glfwTerminate();
 	        throw std::runtime_error("Failed to create GLFW window");
@@ -188,7 +190,7 @@ namespace MEGEngine {
 	        glfwPollEvents();
 
 	        // Limit FPS and set deltaTime
-	    	std::this_thread::sleep_for(std::chrono::milliseconds(16));
+	    	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	    	setDeltaTime(lastTime);
 	    }
@@ -241,7 +243,7 @@ namespace MEGEngine {
 		// _window.reset();
 	}
 
-	void Application::setDeltaTime(auto lastTime) {
+	void Application::setDeltaTime(auto& lastTime) {
 		auto now = clock::now();
 		std::chrono::duration<float> delta = now - lastTime;
 		lastTime = now;

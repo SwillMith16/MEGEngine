@@ -5,8 +5,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <JSON/json.h>
-#include "Mesh.h"
+#include <JSON/json.hpp>
+#include "mesh.h"
 
 using json = nlohmann::json;
 
