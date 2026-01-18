@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 4.2)
 
 set(LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/libraries")
 
@@ -20,7 +20,13 @@ target_link_libraries(Game MEGEngine)
 
 target_compile_definitions(Game PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
+if (WIN32)
+    set(ENGINE_LIB_FILE libMEGEngine.dll)
+else(UNIX)
+    set(ENGINE_LIB_FILE libMEGEngine.so)
+endif ()
+
 add_custom_command(TARGET Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different                   # executes "cmake - E copy_if_different..."
-        "${PROJECT_SOURCE_DIR}/build/debug/engine/libMEGEngine.dll"     # <-- in-file
+        "${PROJECT_SOURCE_DIR}/build/debug/engine/${ENGINE_LIB_FILE}"     # <-- in-file
         $<TARGET_FILE_DIR:Game>)                                        # <-- out-file path

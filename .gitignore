@@ -1,10 +1,5 @@
 .idea/
 
 build/
-engine/build/
-game/build/
-tests/build/
 
 docs/
-
-engine/ext/

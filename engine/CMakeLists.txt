@@ -1,13 +1,14 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 4.2)
 
-set(LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/libraries")
-
-include_directories(MEGEngine
-        inc
-        ${LIB_PATH}/include
+find_library(GLFW
+        NAMES libglfw3.a libglfw3.so
+        PATHS /usr/local/lib64/GLFW/
+)
+find_library(GLAD
+        NAMES libGLAD.a libGLAD.so
+        PATHS /usr/local/lib64/GLAD/
 )
 
-# App executable
 add_library(MEGEngine SHARED
         inc/application.h
         src/application.cpp
@@ -37,15 +38,24 @@ add_library(MEGEngine SHARED
         inc/common.h
 )
 
+target_include_directories(MEGEngine
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ext/
+)
+
 # GLFW and GLAD libraries
 target_link_libraries(MEGEngine PRIVATE
-        ${LIB_PATH}/libglfw3.a
-        ${LIB_PATH}/libglad.a
+        ${CMAKE_CURRENT_SOURCE_DIR}/ext/GLFW/libglfw3.a
+        ${CMAKE_CURRENT_SOURCE_DIR}/ext/GLAD/libGLADstatic.a
+        ${CMAKE_CURRENT_SOURCE_DIR}/ext/GLM/libglm.a
 )
 
 target_compile_definitions(MEGEngine PRIVATE
         $<$<CONFIG:Debug>:DEBUG>
         ENGINE_BUILD
+        GLM_ENABLE_EXPERIMENTAL
 )
+
+target_compile_options(MEGEngine PRIVATE -fPIC)
 
 
