@@ -2,29 +2,26 @@
 // Created by Will on 05/12/2025.
 //
 
-#ifndef VBO_H
-#define VBO_H
+#ifndef MEGENGINE_VBO_H
+#define MEGENGINE_VBO_H
 
-#include "GLAD/glad.h"
-#include "GLM/glm.hpp"
+
 #include <vector>
 
-struct Vertex {
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec3 colour;
-	glm::vec2 texUV;
-};
+#include "vertex.h"
 
-class VBO {
-public:
-    GLuint ID;
-    VBO(std::vector<Vertex>& vertices);
+namespace MEGEngine {
+    class VBO {
+    public:
+        unsigned int ID;
+        VBO(std::vector<Vertex>& vertices);
 
-    void bind();
-    void unbind();
-    void del();
-};
+        void bind();
+        void unbind();
+        void del();
+    };
+}
 
 
-#endif //VBO_H
+
+#endif

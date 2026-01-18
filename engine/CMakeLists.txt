@@ -36,6 +36,7 @@ add_library(MEGEngine SHARED
         src/app.cpp
         inc/app.h
         inc/common.h
+        inc/vertex.h
 )
 
 target_include_directories(MEGEngine

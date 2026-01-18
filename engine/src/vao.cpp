@@ -9,7 +9,7 @@ VAO::VAO() {
 }
 
 // links a VBO to the VAO and assigns the vertex attributes
-void VAO::linkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset) {
+void VAO::linkAttrib(MEGEngine::VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset) {
     VBO.bind();
     glEnableVertexAttribArray(layout);
     glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);

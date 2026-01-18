@@ -43,7 +43,7 @@ private:
 	std::vector<GLuint> getIndices(json accesor);
 	std::vector<Texture> getTextures();
 
-	std::vector<Vertex> assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs);
+	std::vector<MEGEngine::Vertex> assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs);
 
 	std::vector<glm::vec2> groupFloatsVec2(std::vector<float> floatVec);
 	std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);

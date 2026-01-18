@@ -13,7 +13,7 @@
 
 class Mesh {
 public:
-	std::vector<Vertex> vertices;
+	std::vector<MEGEngine::Vertex> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
 
@@ -21,7 +21,7 @@ public:
 
 	VAO vao;
 
-	Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+	Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
 
 	void draw
 	(

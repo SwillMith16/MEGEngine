@@ -43,7 +43,7 @@ void Model::loadMesh(unsigned int indMesh) {
 	std::vector<glm::vec2> texUVs = groupFloatsVec2(texVec);
 
 	// Combine all the vertex components and also get the indices and textures
-	std::vector<Vertex> vertices = assembleVertices(positions, normals, texUVs);
+	std::vector<MEGEngine::Vertex> vertices = assembleVertices(positions, normals, texUVs);
 	std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
 	std::vector<Texture> textures = getTextures();
 
@@ -282,13 +282,13 @@ std::vector<Texture> Model::getTextures() {
 	return textures;
 }
 
-std::vector<Vertex> Model::assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs) {
-	std::vector<Vertex> vertices;
+std::vector<MEGEngine::Vertex> Model::assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs) {
+	std::vector<MEGEngine::Vertex> vertices;
 	for (int i = 0; i < positions.size(); i++)
 	{
 		vertices.push_back
 		(
-			Vertex
+			MEGEngine::Vertex
 			{
 				positions[i],
 				normals[i],
