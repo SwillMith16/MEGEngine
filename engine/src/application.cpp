@@ -165,10 +165,10 @@ namespace MEGEngine {
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), glm::normalize(glm::cross(camera.orientation, camera.up))); // up-down rotation
 
-		Model scroll((g_resourcesDir + "/models/sword/sword.gltf").c_str());
-		scroll.transform = glm::vec3(-3.0f, -10.0f, 4.0f);
-		scroll.orientation = glm::quat(0.707, 0, 0, 0.707);
-		scroll.scale = 0.2f;
+		Model sword((g_resourcesDir + "/models/sword/sword.gltf").c_str());
+		sword.transform = glm::vec3(-10.0f, -10.0f, 4.0f);
+		sword.orientation = glm::quat(0.707, 0, 0, 0.707);
+		sword.scale = 0.2f;
 
 		auto lastTime = clock::now();
 
@@ -180,10 +180,12 @@ namespace MEGEngine {
 	        // clean back buffer and depth buffer
 	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	    	sword.transform += glm::vec3(1, 0, 0) * deltaTime();
+
 	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
-    		scroll.draw(objectShader, camera);
+    		sword.draw(objectShader, camera);
     		light.draw(lightShader, camera, glm::mat4(1.0), lightPos);
 
 	        // bring buffer to the front
