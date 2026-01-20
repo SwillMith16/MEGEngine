@@ -14,7 +14,7 @@
 namespace MEGEngine {
 	class Mesh {
 	public:
-		std::vector<MEGEngine::Vertex> vertices;
+		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;
 		std::vector<Texture> textures;
 
@@ -22,7 +22,7 @@ namespace MEGEngine {
 
 		VAO vao;
 
-		Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+		Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
 
 		void draw
 		(

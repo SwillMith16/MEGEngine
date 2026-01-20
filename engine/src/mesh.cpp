@@ -7,19 +7,19 @@
 #include <iostream>
 
 namespace MEGEngine {
-	Mesh::Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures) {
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures) {
 		this->vertices = vertices;
 		this->indices = indices;
 		this->textures = textures;
 
 		vao.bind();
-		MEGEngine::VBO vbo(vertices);
+		VBO vbo(vertices);
 		EBO ebo(indices);
 
-		vao.linkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(MEGEngine::Vertex), (void *) 0); // position
-		vao.linkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(MEGEngine::Vertex), (void *) (3 * sizeof(float))); // normal
-		vao.linkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(MEGEngine::Vertex), (void *) (6 * sizeof(float))); // colour
-		vao.linkAttrib(vbo, 3, 2, GL_FLOAT, sizeof(MEGEngine::Vertex), (void *) (9 * sizeof(float))); // texture UV
+		vao.linkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (void *) 0); // position
+		vao.linkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (void *) (3 * sizeof(float))); // normal
+		vao.linkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(Vertex), (void *) (6 * sizeof(float))); // colour
+		vao.linkAttrib(vbo, 3, 2, GL_FLOAT, sizeof(Vertex), (void *) (9 * sizeof(float))); // texture UV
 		vao.unbind();
 		vbo.unbind();
 		ebo.unbind();
