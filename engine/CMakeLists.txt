@@ -37,6 +37,11 @@ add_library(MEGEngine SHARED
         inc/app.h
         inc/common.h
         inc/vertex.h
+        inc/math/vec2.h
+        inc/math/vec2.cpp
+        inc/math/vec3.h
+        inc/math/vec3.cpp
+        inc/math/glm_conversions.h
 )
 
 target_include_directories(MEGEngine
