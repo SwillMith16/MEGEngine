@@ -64,6 +64,14 @@ target_compile_definitions(MEGEngine PRIVATE
         GLM_ENABLE_EXPERIMENTAL
 )
 
-target_compile_options(MEGEngine PRIVATE -fPIC)
+target_compile_options(MEGEngine
+        PRIVATE -fPIC
+)
+
+if (UNIX)
+    target_compile_options(MEGEngine
+            PRIVATE -fvisibility=hidden
+    )
+endif (UNIX)
 
 
