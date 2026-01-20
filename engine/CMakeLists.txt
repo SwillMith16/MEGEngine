@@ -20,7 +20,6 @@ add_library(MEGEngine SHARED
         inc/vbo.h
         src/ebo.cpp
         inc/ebo.h
-        src/stb.cpp
         src/texture.cpp
         inc/texture.h
         src/camera.cpp
@@ -62,6 +61,7 @@ target_compile_definitions(MEGEngine PRIVATE
         $<$<CONFIG:Debug>:DEBUG>
         ENGINE_BUILD
         GLM_ENABLE_EXPERIMENTAL
+        STB_IMAGE_IMPLEMENTATION
 )
 
 target_compile_options(MEGEngine
