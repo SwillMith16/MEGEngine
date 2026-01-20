@@ -42,6 +42,8 @@ add_library(MEGEngine SHARED
         inc/math/vec3.h
         inc/math/vec3.cpp
         inc/math/glm_conversions.h
+        inc/math/mat4.cpp
+        inc/math/mat4.h
 )
 
 target_include_directories(MEGEngine

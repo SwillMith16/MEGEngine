@@ -1,13 +1,28 @@
 #ifndef MEGENGINE_GLM_CONVERSIONS_H
 #define MEGENGINE_GLM_CONVERSIONS_H
 
-#include "GLM/vec3.hpp"
-#include "GLM/vec2.hpp"
+#include <cstring>
 
-#include "math/vec3.h"
+#include "GLM/vec2.hpp"
+#include "GLM/vec3.hpp"
+#include "GLM/mat4x4.hpp"
+
 #include "math/vec2.h"
+#include "math/vec3.h"
+#include "math/mat4.h"
 
 namespace MEGEngine::Private {
+
+	inline glm::vec2 toGlmVec2(const Vec2& v) {
+		return {v.x, v.y};
+	}
+
+	inline Vec2 fromGlmVec2(const glm::vec2& v) {
+		return {v.x, v.y};
+	}
+
+
+
 	inline glm::vec3 toGlmVec3(const Vec3& v) {
 		return {v.x, v.y, v.z};
 	}
@@ -16,12 +31,20 @@ namespace MEGEngine::Private {
 		return {v.x, v.y, v.z};
 	}
 
-	inline glm::vec2 toGlmVec2(const Vec2& v) {
-		return {v.x, v.y};
+
+
+	inline glm::mat4 toGlmMat4(const Mat4& m)
+	{
+		glm::mat4 out;
+		std::memcpy(&out[0][0], m.m, sizeof(float) * 16);
+		return out;
 	}
 
-	inline Vec2 fromGlmVec2(const glm::vec2& v) {
-		return {v.x, v.y};
+	inline Mat4 fromGlmMat4(const glm::mat4& m)
+	{
+		Mat4 out;
+		std::memcpy(out.m, &m[0][0], sizeof(float) * 16);
+		return out;
 	}
 }
 
