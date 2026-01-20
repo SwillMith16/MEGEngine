@@ -8,20 +8,22 @@
 #include "GLAD/glad.h"
 #include "shader.h"
 
-class Texture {
-public:
-    GLuint ID;
-    const char* type;
-	GLuint unit;
-	bool isTextureFlipped = false;
+namespace MEGEngine {
+	class Texture {
+	public:
+		GLuint ID;
+		const char* type;
+		GLuint unit;
+		bool isTextureFlipped = false;
 
-	Texture(const char* image, const char* texType, GLuint slot);
+		Texture(const char* image, const char* texType, GLuint slot);
 
-    void texUnit(Shader& shader, const char* uniform, GLuint unit);
-    void bind();
-    void unbind();
-    void del();
-};
+		void texUnit(Shader& shader, const char* uniform, GLuint unit);
+		void bind();
+		void unbind();
+		void del();
+	};
+}
 
 
 #endif //TEXTURE_H

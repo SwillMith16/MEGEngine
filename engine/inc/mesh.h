@@ -11,28 +11,30 @@
 #include "camera.h"
 #include "texture.h"
 
-class Mesh {
-public:
-	std::vector<MEGEngine::Vertex> vertices;
-	std::vector<GLuint> indices;
-	std::vector<Texture> textures;
+namespace MEGEngine {
+	class Mesh {
+	public:
+		std::vector<MEGEngine::Vertex> vertices;
+		std::vector<GLuint> indices;
+		std::vector<Texture> textures;
 
-	// float scale = 1.0f;
+		// float scale = 1.0f;
 
-	VAO vao;
+		VAO vao;
 
-	Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+		Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
 
-	void draw
-	(
-		Shader& shader,
-		Camera& camera,
-		glm::mat4 matrix = glm::mat4(1.0f),
-		glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
-	);
-};
+		void draw
+		(
+			Shader& shader,
+			Camera& camera,
+			glm::mat4 matrix = glm::mat4(1.0f),
+			glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
+		);
+	};
+}
 
 
 #endif //MESH_H

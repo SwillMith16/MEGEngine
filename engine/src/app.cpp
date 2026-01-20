@@ -4,5 +4,5 @@
 
 #include "app.h"
 
-namespace Engine {
+namespace MEGEngine {
 } // Engine

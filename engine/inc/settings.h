@@ -9,10 +9,12 @@
 
 inline std::string g_resourcesDir = "../../../engine/resources";
 
-class Settings {
-public:
-	static int maxFPS;
-};
+namespace MEGEngine {
+	class Settings {
+	public:
+		static int maxFPS;
+	};
+}
 
 
 #endif //SETTINGS_H
