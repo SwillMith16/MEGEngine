@@ -18,6 +18,9 @@
 #include "texture.h"
 #include "vbo.h"
 
+#include "math/vec3.h"
+#include "math/vec2.h"
+
 #include "math/glm_conversions.h"
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
@@ -29,40 +32,40 @@ MEGEngine::Vertex lightVertices[] =
 	//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
 	// top
 	//TODO: abstract all use of glm types into engine types
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 
 	// front
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 
 	// right
-	MEGEngine::Vertex{glm::vec3(01.0, -01.0,  01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(01.0, -01.0, -01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(01.0,  01.0, -01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(01.0,  01.0,  01.0), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(01.0, -01.0,  01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(01.0, -01.0, -01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(01.0,  01.0, -01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(01.0,  01.0,  01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 
 	// back
-	MEGEngine::Vertex{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 
 	// left
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 
 	// bottom
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec3(0.0f,  0.0f,  0.0f), glm::vec2(0.0f,  0.0f)}
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
+	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)}
 
 };
 
