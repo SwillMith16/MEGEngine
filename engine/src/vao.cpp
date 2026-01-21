@@ -1,6 +1,4 @@
-//
-// Created by Will on 05/12/2025.
-//
+#include "GLAD/glad.h"
 
 #include "vao.h"
 
@@ -10,10 +8,10 @@ namespace MEGEngine {
     }
 
     // links a VBO to the VAO and assigns the vertex attributes
-    void VAO::linkAttrib(MEGEngine::VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset) {
+    void VAO::linkAttrib(MEGEngine::VBO& VBO, unsigned int layout, int numComponents, int stride, void* offset) {
         VBO.bind();
         glEnableVertexAttribArray(layout);
-        glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
+        glVertexAttribPointer(layout, numComponents, GL_FLOAT, GL_FALSE, stride, offset);
         VBO.unbind();
     }
 

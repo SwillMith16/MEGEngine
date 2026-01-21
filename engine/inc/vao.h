@@ -1,16 +1,15 @@
 #ifndef VAO_H
 #define VAO_H
 
-#include "GLAD/glad.h"
 #include "vbo.h"
 
 namespace MEGEngine {
     class VAO {
     public:
-        GLuint ID;
+        unsigned int ID;
         VAO();
 
-        void linkAttrib(MEGEngine::VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+        void linkAttrib(MEGEngine::VBO& VBO, unsigned int layout, int numComponents, int stride, void* offset);
         void bind();
         void unbind();
         void del();

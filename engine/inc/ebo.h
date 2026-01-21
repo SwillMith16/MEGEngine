@@ -1,14 +1,13 @@
 #ifndef EBO_H
 #define EBO_H
 
-#include "GLAD/glad.h"
 #include <vector>
 
 namespace MEGEngine {
     class EBO {
     public:
-        GLuint ID;
-        EBO(std::vector<GLuint>& indices);
+        unsigned int ID;
+        EBO(std::vector<unsigned int>& indices);
 
         void bind();
         void unbind();
