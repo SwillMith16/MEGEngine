@@ -9,6 +9,8 @@
 #include <sstream>
 
 #include "common.h"
+#include "math/vec3.h"
+#include "math/vec2.h"
 
 namespace MEGEngine {
 	std::string get_file_contents(const char* filename);
@@ -27,9 +29,9 @@ namespace MEGEngine {
 				glUniform1f(glGetUniformLocation(ID, name), value);
 			else if constexpr (std::is_same<T, GLuint>::value)
 				glUniform1i(glGetUniformLocation(ID, name), value);
-			else if constexpr (std::is_same<T, glm::vec2>::value)
+			else if constexpr (std::is_same<T, glm::vec2>::value || std::is_same<T, Vec2>::value)
 				glUniform2f(glGetUniformLocation(ID, name), value.x, value.y);
-			else if constexpr (std::is_same<T, glm::vec3>::value)
+			else if constexpr (std::is_same<T, glm::vec3>::value || std::is_same<T, Vec3>::value)
 				glUniform3f(glGetUniformLocation(ID, name), value.x, value.y, value.z);
 			else if constexpr (std::is_same<T, glm::vec4>::value)
 				glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);

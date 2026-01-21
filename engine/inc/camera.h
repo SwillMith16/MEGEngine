@@ -1,26 +1,19 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "GLAD/glad.h"
-#include "GLFW/glfw3.h"
-#include "GLM/glm.hpp"
-#include "GLM/gtc/matrix_transform.hpp"
-#include "GLM/gtc/type_ptr.hpp"
-#include "GLM/gtx/rotate_vector.hpp"
-#include "GLM/gtx/vector_angle.hpp"
-
 #include "common.h"
-
 #include "shader.h"
+#include "math/vec3.h"
+#include "math/mat4.h"
 
 namespace MEGEngine {
 	class ENGINE_API Camera {
 	public:
-		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f);
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::mat4 camMatrix = glm::mat4(1.0f);
+		Vec3 orientation = Vec3(0.0f, 0.0f, -1.0f);
+		Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
+		Mat4 camMatrix = Mat4(1.0f);
 
-		glm::vec3 position;
+		Vec3 position;
 
 		// Used to prevent camera from jumping on click
 		bool firstClick = true;
@@ -34,12 +27,12 @@ namespace MEGEngine {
 		float boostSpeed = 10.0f;
 		float sensitivity = 100.0f;
 
-		Camera(int width, int height, glm::vec3 position);
+		Camera(int width, int height, Vec3 position);
 
-		glm::vec3 getPosition();
+		Vec3 getPosition();
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void matrix(Shader& shader, const char* uniform);
-		void processInputs(GLFWwindow* window, float deltaTime);
+		//void processInputs(GLFWwindow* window, float deltaTime);
 
 	private:
 		float _width;

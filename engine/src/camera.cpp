@@ -1,24 +1,24 @@
-//
-// Created by Will on 07/12/2025.
-//
+#include "GLAD/glad.h"
+#include "GLFW/glfw3.h"
 
 #include "camera.h"
+#include "math/glm_conversions.h"
 
 namespace MEGEngine {
-    Camera::Camera(int width, int height, glm::vec3 position) :
+    Camera::Camera(int width, int height, Vec3 position) :
         _width(static_cast<float>(width)),
         _height(static_cast<float>(height)),
         initialMouseX(float(width)),
         initialMouseY(float(height)),
-        position(glm::vec3(position.x, position.y, -position.z)),
+        position(Vec3(position.x, position.y, -position.z)),
         lastMouseInputState(GLFW_RELEASE){}
 
     void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
-        glm::mat4 view = glm::mat4(1.0f);
-        glm::mat4 projection = glm::mat4(1.0f);
+        Mat4 view = Mat4(1.0f);
+        Mat4 projection = Mat4(1.0f);
 
-        view = glm::lookAt(position, position + orientation, up);
-        projection = glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane);
+        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(position), Private::toGlmVec3(position + orientation), Private::toGlmVec3(up)));
+        projection = Private::fromGlmMat4(glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane));
 
         // set new camera matrix
         camMatrix = projection * view;
@@ -26,34 +26,36 @@ namespace MEGEngine {
 
     void Camera::matrix(Shader& shader, const char* uniform) {
         // export camera matrix to shader
-        shader.setUniform(uniform, camMatrix);
+        glm::mat4 glmCamMatrix = Private::toGlmMat4(camMatrix);
+        shader.setUniform(uniform,  glmCamMatrix);
     }
 
+    /*
     void Camera::processInputs(GLFWwindow* window, float deltaTime) {
         // Handles key inputs
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            position += speed * deltaTime * orientation;
+            position += orientation * speed * deltaTime;
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            position += speed * deltaTime * -glm::normalize(glm::cross(orientation, up));
+            position += Private::fromGlmVec3(speed * deltaTime * -glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up))));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            position += speed * deltaTime * -orientation;
+            position +=  orientation * -1 * speed * deltaTime;
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            position += speed * deltaTime * glm::normalize(glm::cross(orientation, up));
+            position += Private::fromGlmVec3(speed * deltaTime * glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up))));
         }
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
-            position += speed * deltaTime * up;
+            position += up * speed * deltaTime;
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
-            position += speed * deltaTime * -up;
+            position += up * -1 * speed * deltaTime;
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
@@ -83,16 +85,16 @@ namespace MEGEngine {
             float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
 
             // Calculates upcoming vertical change in the Orientation
-            glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
+            Vec3 newOrientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(orientation), glm::radians(-rotX), glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up)))));
 
             // Decides whether or not the next vertical Orientation is legal or not
-            if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f))
+            if (abs(glm::angle(Private::toGlmVec3(newOrientation), Private::toGlmVec3(up)) - glm::radians(90.0f)) <= glm::radians(85.0f))
             {
                 orientation = newOrientation;
             }
 
             // Rotates the Orientation left and right
-            orientation = glm::rotate(orientation, glm::radians(-rotY), up);
+            orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(orientation), glm::radians(-rotY), Private::toGlmVec3(up)));
 
             // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
             glfwSetCursorPos(window, (_width / 2), (_height / 2));
@@ -116,4 +118,5 @@ namespace MEGEngine {
 
         }
     }
+    */
 }
