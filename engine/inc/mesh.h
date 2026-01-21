@@ -1,18 +1,15 @@
-//
-// Created by Will on 26/12/2025.
-//
-
 #ifndef MESH_H
 #define MESH_H
 
-// #include <vector>
+#include "common.h"
+
 #include "vao.h"
 #include "ebo.h"
 #include "camera.h"
 #include "texture.h"
 
 namespace MEGEngine {
-	class Mesh {
+	class ENGINE_API Mesh {
 	public:
 		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;

@@ -32,8 +32,6 @@ add_library(MEGEngine SHARED
         inc/mesh.h
         src/model.cpp
         inc/model.h
-        src/app.cpp
-        inc/app.h
         inc/common.h
         inc/vertex.h
         inc/math/vec2.h

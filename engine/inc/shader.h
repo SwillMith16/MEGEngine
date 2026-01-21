@@ -8,10 +8,12 @@
 #include <string>
 #include <sstream>
 
+#include "common.h"
+
 namespace MEGEngine {
 	std::string get_file_contents(const char* filename);
 
-	class Shader {
+	class ENGINE_API Shader {
 	public:
 		GLuint ID;
 		Shader(const char* vertexFile, const char* fragmentFile);

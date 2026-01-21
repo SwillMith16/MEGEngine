@@ -1,17 +1,15 @@
-//
-// Created by Will on 28/12/2025.
-//
-
 #ifndef MODEL_H
 #define MODEL_H
 
 #include <JSON/json.hpp>
+
+#include "common.h"
 #include "mesh.h"
 
 using json = nlohmann::json;
 
 namespace MEGEngine {
-	class Model {
+	class ENGINE_API Model {
 	public:
 		glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::quat orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);

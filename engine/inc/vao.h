@@ -1,7 +1,3 @@
-//
-// Created by Will on 05/12/2025.
-//
-
 #ifndef VAO_H
 #define VAO_H
 

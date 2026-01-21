@@ -1,15 +1,13 @@
-//
-// Created by Will on 07/12/2025.
-//
-
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
 #include "GLAD/glad.h"
+
+#include "common.h"
 #include "shader.h"
 
 namespace MEGEngine {
-	class Texture {
+	class ENGINE_API Texture {
 	public:
 		GLuint ID;
 		const char* type;

@@ -1,16 +1,14 @@
-//
-// Created by Will on 11/12/2025.
-//
-
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
 #include <iostream>
 
+#include "common.h"
+
 inline std::string g_resourcesDir = "../../../engine/resources";
 
 namespace MEGEngine {
-	class Settings {
+	class ENGINE_API Settings {
 	public:
 		static int maxFPS;
 	};

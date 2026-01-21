@@ -1,7 +1,3 @@
-//
-// Created by Will on 07/12/2025.
-//
-
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -13,10 +9,12 @@
 #include "GLM/gtx/rotate_vector.hpp"
 #include "GLM/gtx/vector_angle.hpp"
 
+#include "common.h"
+
 #include "shader.h"
 
 namespace MEGEngine {
-	class Camera {
+	class ENGINE_API Camera {
 	public:
 		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);

@@ -1,10 +1,5 @@
-//
-// Created by Will on 05/12/2025.
-//
-
 #ifndef MEGENGINE_VBO_H
 #define MEGENGINE_VBO_H
-
 
 #include <vector>
 

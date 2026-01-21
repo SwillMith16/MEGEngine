@@ -1,9 +1,7 @@
-//
-// Created by Will on 08/12/2025.
-//
-
 #ifndef TIMER_H
 #define TIMER_H
+
+#include "common.h"
 
 namespace MEGEngine {
     /**
@@ -11,7 +9,7 @@ namespace MEGEngine {
      * @brief   A key class to grant write access to specific variables in the Timer class. Any friend functions can use
      *          the key to access selected private Timer variables.
      */
-    class TimerKey {
+    class ENGINE_API TimerKey {
     private:
         friend int main();
         TimerKey() = default;
@@ -21,7 +19,7 @@ namespace MEGEngine {
      * @class   Timer
      * @brief   A class that can be used for synchronised timing throughout the application.
      */
-    class Timer {
+    class ENGINE_API Timer {
     public:
         /**
          * @brief   Gets the time taken to render the previous frame. Used for synchronising timing regardless of FPS and
