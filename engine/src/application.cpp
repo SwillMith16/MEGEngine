@@ -5,7 +5,7 @@
 
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
-#include "GLM/glm.hpp"
+#include "GLM/gtx/rotate_vector.hpp"
 
 // #include "window.h"
 // #include "scene.h"
@@ -17,6 +17,8 @@
 #include "shader.h"
 #include "texture.h"
 #include "vbo.h"
+
+#include "math/glm_conversions.h"
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
 
@@ -160,10 +162,10 @@ namespace MEGEngine {
 
 
 		// glm::vec3 cameraPos = glm::vec3(-5.0f, 7.0f, 5.0f);
-		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -10.0f);
+		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
 	    Camera camera(g_windowWidth, g_windowHeight, cameraPos);
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
-		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), glm::normalize(glm::cross(camera.orientation, camera.up))); // up-down rotation
+		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-30.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
 
 		Model sword((g_resourcesDir + "/models/sword/sword.gltf").c_str());
 		sword.transform = glm::vec3(-10.0f, -10.0f, 4.0f);
@@ -182,7 +184,7 @@ namespace MEGEngine {
 
 	    	sword.transform += glm::vec3(1, 0, 0) * deltaTime();
 
-	        camera.processInputs(window, deltaTime());
+	        // camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
     		sword.draw(objectShader, camera);
