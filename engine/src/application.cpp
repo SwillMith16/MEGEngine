@@ -171,7 +171,7 @@ namespace MEGEngine {
 		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-30.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
 
 		Model sword((g_resourcesDir + "/models/sword/sword.gltf").c_str());
-		sword.transform = glm::vec3(-10.0f, -10.0f, 4.0f);
+		sword.transform = Vec3(-10.0f, -10.0f, 4.0f);
 		sword.orientation = glm::quat(0.707, 0, 0, 0.707);
 		sword.scale = 0.2f;
 
@@ -185,7 +185,7 @@ namespace MEGEngine {
 	        // clean back buffer and depth buffer
 	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	    	sword.transform += glm::vec3(1, 0, 0) * deltaTime();
+	    	sword.transform += Vec3(1, 0, 0) * deltaTime();
 
 	        // camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);

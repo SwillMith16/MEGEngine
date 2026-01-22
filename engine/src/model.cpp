@@ -1,8 +1,6 @@
-//
-// Created by Will on 28/12/2025.
-//
-
 #include "model.h"
+
+#include "math/glm_conversions.h"
 
 namespace MEGEngine {
 	Model::Model(const char* file) {
@@ -22,7 +20,7 @@ namespace MEGEngine {
 
 	void Model::draw(Shader &shader, Camera &camera) {
 		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes[i].draw(shader, camera, matricesMeshes[i], transform, orientation, glm::vec3(scale, scale, scale));
+			meshes[i].draw(shader, camera, Private::toGlmMat4(matricesMeshes[i]), Private::toGlmVec3(transform), orientation, glm::vec3(scale, scale, scale));
 		}
 	}
 
@@ -36,11 +34,11 @@ namespace MEGEngine {
 
 		// Use accessor indices to get all vertices components
 		std::vector<float> posVec = getFloats(JSON["accessors"][posAccInd]);
-		std::vector<glm::vec3> positions = groupFloatsVec3(posVec);
+		std::vector<Vec3> positions = groupFloatsVec3(posVec);
 		std::vector<float> normalVec = getFloats(JSON["accessors"][normalAccInd]);
-		std::vector<glm::vec3> normals = groupFloatsVec3(normalVec);
+		std::vector<Vec3> normals = groupFloatsVec3(normalVec);
 		std::vector<float> texVec = getFloats(JSON["accessors"][texAccInd]);
-		std::vector<glm::vec2> texUVs = groupFloatsVec2(texVec);
+		std::vector<Vec2> texUVs = groupFloatsVec2(texVec);
 
 		// Combine all the vertex components and also get the indices and textures
 		std::vector<Vertex> vertices = assembleVertices(positions, normals, texUVs);
@@ -51,18 +49,18 @@ namespace MEGEngine {
 		meshes.push_back(Mesh(vertices, indices, textures));
 	}
 
-	void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix) {
+	void Model::traverseNode(unsigned int nextNode, Mat4 matrix) {
 		// Current node
 		json node = JSON["nodes"][nextNode];
 
 		// Get translation if it exists for this node
-		glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
+		Vec3 translation = Vec3(0.0f, 0.0f, 0.0f);
 		if (node.find("translation") != node.end())
 		{
 			float transValues[3];
 			for (unsigned int i = 0; i < node["translation"].size(); i++)
 				transValues[i] = (node["translation"][i]);
-			translation = glm::make_vec3(transValues);
+			translation = Vec3(transValues[0], transValues[1], transValues[2]);
 		}
 		// Get quaternion if it exists for this node
 		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
@@ -78,33 +76,33 @@ namespace MEGEngine {
 			rotation = glm::make_quat(rotValues);
 		}
 		// Get scale if it exists for this node
-		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
 		if (node.find("scale") != node.end())
 		{
 			float scaleValues[3];
 			for (unsigned int i = 0; i < node["scale"].size(); i++)
 				scaleValues[i] = (node["scale"][i]);
-			scale = glm::make_vec3(scaleValues);
+			scale = Vec3(scaleValues[0], scaleValues[1], scaleValues[2]);
 		}
 		// Get matrix if it exists for this node
-		glm::mat4 matNode = glm::mat4(1.0f);
+		Mat4 matNode = Mat4(1.0f);
 		if (node.find("matrix") != node.end())
 		{
 			float matValues[16];
 			for (unsigned int i = 0; i < node["matrix"].size(); i++)
 				matValues[i] = (node["matrix"][i]);
-			matNode = glm::make_mat4(matValues);
+			matNode = Private::fromGlmMat4(glm::make_mat4(matValues));
 		}
 
 		// Initialize matrices
-		glm::mat4 trans = glm::mat4(1.0f);
-		glm::mat4 rot = glm::mat4(1.0f);
-		glm::mat4 sca = glm::mat4(1.0f);
+		Mat4 trans = Mat4(1.0f);
+		Mat4 rot = Mat4(1.0f);
+		Mat4 sca = Mat4(1.0f);
 
 		// Use translation, rotation, and scale to change the initialized matrices
-		trans = glm::translate(trans, translation);
-		rot = glm::mat4_cast(rotation);
-		sca = glm::scale(sca, scale);
+		trans = Private::fromGlmMat4(glm::translate(Private::toGlmMat4(trans), Private::toGlmVec3(translation)));
+		rot = Private::fromGlmMat4(glm::mat4_cast(rotation));
+		sca = Private::fromGlmMat4(glm::scale(Private::toGlmMat4(sca), Private::toGlmVec3(scale)));
 
 		/*
 		 * Multiply all matrices together.
@@ -112,7 +110,7 @@ namespace MEGEngine {
 		 * Important for models that contains several meshes, so each mesh is positioned correctly relative to the others.
 		 * Without this, each mesh will be positioned on top of/inside one another.
 		*/
-		glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
+		Mat4 matNextNode = matrix * matNode * trans * rot * sca;
 
 		// Check if the node contains a mesh and if it does load it
 		if (node.find("mesh") != node.end())
@@ -184,8 +182,8 @@ namespace MEGEngine {
 		return floatVec;
 	}
 
-	std::vector <GLuint> Model::getIndices(json accessor) {
-		std::vector<GLuint> indices;
+	std::vector <unsigned int> Model::getIndices(json accessor) {
+		std::vector<unsigned int> indices;
 
 		// Get properties from the accessor
 		unsigned int buffViewInd = accessor.value("bufferView", 0);
@@ -206,7 +204,7 @@ namespace MEGEngine {
 				unsigned char bytes[] = { data[i], data[i + 1], data[i + 2], data[i + 3] };
 				unsigned int value;
 				std::memcpy(&value, bytes, sizeof(unsigned int));
-				indices.push_back((GLuint)value);
+				indices.push_back(static_cast<unsigned int>(value));
 			}
 		}
 		else if (componentType == 5123)
@@ -216,7 +214,7 @@ namespace MEGEngine {
 				unsigned char bytes[] = { data[i], data[i + 1] };
 				unsigned short value;
 				std::memcpy(&value, bytes, sizeof(unsigned short));
-				indices.push_back((GLuint)value);
+				indices.push_back(static_cast<unsigned int>(value));
 			}
 		}
 		else if (componentType == 5122)
@@ -226,7 +224,7 @@ namespace MEGEngine {
 				unsigned char bytes[] = { data[i], data[i + 1] };
 				short value;
 				std::memcpy(&value, bytes, sizeof(short));
-				indices.push_back((GLuint)value);
+				indices.push_back(static_cast<unsigned int>(value));
 			}
 		}
 
@@ -282,7 +280,7 @@ namespace MEGEngine {
 		return textures;
 	}
 
-	std::vector<Vertex> Model::assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs) {
+	std::vector<Vertex> Model::assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs) {
 		std::vector<Vertex> vertices;
 		for (int i = 0; i < positions.size(); i++)
 		{
@@ -292,7 +290,7 @@ namespace MEGEngine {
 				{
 					positions[i],
 					normals[i],
-					glm::vec3(1.0f, 1.0f, 1.0f),
+					Vec3(1.0f, 1.0f, 1.0f),
 					texUVs[i]
 				}
 			);
@@ -301,18 +299,18 @@ namespace MEGEngine {
 	}
 
 
-	std::vector<glm::vec2> Model::groupFloatsVec2(std::vector<float> floatVec) {
-		std::vector<glm::vec2> vectors;
+	std::vector<Vec2> Model::groupFloatsVec2(std::vector<float> floatVec) {
+		std::vector<Vec2> vectors;
 		for (int i = 0; i < floatVec.size(); i+=2) {
-			vectors.push_back(glm::vec2(floatVec[i], floatVec[i+1]));
+			vectors.push_back(Vec2(floatVec[i], floatVec[i+1]));
 		}
 		return vectors;
 	}
 
-	std::vector<glm::vec3> Model::groupFloatsVec3(std::vector<float> floatVec) {
-		std::vector<glm::vec3> vectors;
+	std::vector<Vec3> Model::groupFloatsVec3(std::vector<float> floatVec) {
+		std::vector<Vec3> vectors;
 		for (int i = 0; i < floatVec.size(); i+=3) {
-			vectors.push_back(glm::vec3(floatVec[i], floatVec[i+1], floatVec[i+2]));
+			vectors.push_back(Vec3(floatVec[i], floatVec[i+1], floatVec[i+2]));
 		}
 		return vectors;
 	}
