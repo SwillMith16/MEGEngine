@@ -15,6 +15,7 @@
 #include "settings.h"
 #include "model.h"
 #include "shader.h"
+#include "shader_priv.h"
 #include "texture.h"
 #include "camera.h"
 

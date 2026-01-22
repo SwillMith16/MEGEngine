@@ -1,7 +1,9 @@
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
+#include "GLM/gtc/type_ptr.hpp"
 
 #include "camera.h"
+#include "shader_priv.h"
 #include "math/glm_conversions.h"
 
 namespace MEGEngine {

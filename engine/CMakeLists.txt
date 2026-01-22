@@ -41,6 +41,7 @@ add_library(MEGEngine SHARED
         inc/math/glm_conversions.h
         inc/math/mat4.cpp
         inc/math/mat4.h
+        inc/shader_priv.h
 )
 
 target_include_directories(MEGEngine

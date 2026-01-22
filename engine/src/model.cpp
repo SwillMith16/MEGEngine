@@ -1,5 +1,6 @@
-#include "model.h"
+#include "GLM/gtc/type_ptr.hpp"
 
+#include "model.h"
 #include "shader.h"
 #include "camera.h"
 #include "texture.h"
@@ -48,7 +49,7 @@ namespace MEGEngine {
 
 		// Combine all the vertex components and also get the indices and textures
 		std::vector<Vertex> vertices = assembleVertices(positions, normals, texUVs);
-		std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
+		std::vector<unsigned int> indices = getIndices(JSON["accessors"][indAccInd]);
 		std::vector<Texture> textures = getTextures();
 
 		// Combine the vertices, indices, and textures into a mesh

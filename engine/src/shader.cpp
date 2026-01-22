@@ -1,6 +1,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "GLAD/glad.h"
+#include "GLM/gtc/type_ptr.hpp"
+
 #include "shader.h"
 
 namespace MEGEngine {

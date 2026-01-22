@@ -1,9 +1,11 @@
-#include"texture.h"
-
-
 #include <iostream>
-#include <STB/stb_image.h>
-#include "settings.h"
+
+#include "GLAD/glad.h"
+#include "STB/stb_image.h"
+
+#include "texture.h"
+#include "shader.h"
+#include "shader_priv.h"
 
 namespace MEGEngine {
 	Texture::Texture(const char *image, const char *texType, unsigned int slot) {

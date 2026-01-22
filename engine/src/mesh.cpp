@@ -1,11 +1,14 @@
+#include "GLAD/glad.h"
+
 #include "mesh.h"
 #include "shader.h"
+#include "shader_priv.h"
 #include "camera.h"
 #include "ebo.h"
 #include "math/glm_conversions.h"
 
 namespace MEGEngine {
-	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures) {
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures) {
 		this->vertices = vertices;
 		this->indices = indices;
 		this->textures = textures;

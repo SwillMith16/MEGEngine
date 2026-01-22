@@ -2,7 +2,6 @@
 #define TEXTURE_H
 
 #include "common.h"
-#include "shader.h"
 
 namespace MEGEngine {
 	class ENGINE_API Texture {
@@ -14,7 +13,7 @@ namespace MEGEngine {
 
 		Texture(const char* image, const char* texType, unsigned int slot);
 
-		void texUnit(Shader& shader, const char* uniform, unsigned int unit);
+		void texUnit(class Shader& shader, const char* uniform, unsigned int unit);
 		void bind();
 		void unbind();
 		void del();
