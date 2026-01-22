@@ -16,7 +16,7 @@
 #include "model.h"
 #include "shader.h"
 #include "texture.h"
-#include "vbo.h"
+#include "camera.h"
 
 #include "math/vec3.h"
 #include "math/vec2.h"
@@ -146,7 +146,7 @@ namespace MEGEngine {
 		glDepthFunc(GL_LESS);
 
 		glm::vec4 lightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+		Vec3 lightPos = Vec3(0.0f, 0.0f, 0.0f);
 
 		Shader objectShader((g_resourcesDir + "/shaders/default.vert").c_str(), (g_resourcesDir + "/shaders/default.frag").c_str());
 		objectShader.activate();
@@ -191,7 +191,7 @@ namespace MEGEngine {
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
     		sword.draw(objectShader, camera);
-    		light.draw(lightShader, camera, glm::mat4(1.0), lightPos);
+    		light.draw(lightShader, camera, Mat4(1.0), lightPos);
 
 	        // bring buffer to the front
 	        glfwSwapBuffers(window);

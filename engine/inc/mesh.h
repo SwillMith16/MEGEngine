@@ -1,34 +1,38 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "GLM/gtx/quaternion.hpp"
+
 #include "common.h"
 
 #include "vao.h"
-#include "ebo.h"
-#include "camera.h"
+#include "vertex.h"
 #include "texture.h"
+
+#include "math/mat4.h"
+#include "math/vec3.h"
 
 namespace MEGEngine {
 	class ENGINE_API Mesh {
 	public:
 		std::vector<Vertex> vertices;
-		std::vector<GLuint> indices;
+		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 
 		// float scale = 1.0f;
 
 		VAO vao;
 
-		Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+		Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
 
 		void draw
 		(
-			Shader& shader,
-			Camera& camera,
-			glm::mat4 matrix = glm::mat4(1.0f),
-			glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f),
+			class Shader& shader,
+			class Camera& camera,
+			Mat4 matrix = Mat4(1.0f),
+			Vec3 transform = Vec3(0.0f, 0.0f, 0.0f),
 			glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
-			glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
+			Vec3 scale = Vec3(1.0f, 1.0f, 1.0f)
 		);
 	};
 }

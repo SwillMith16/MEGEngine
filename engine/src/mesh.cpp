@@ -1,10 +1,8 @@
-//
-// Created by Will on 26/12/2025.
-//
-
 #include "mesh.h"
-
-#include <iostream>
+#include "shader.h"
+#include "camera.h"
+#include "ebo.h"
+#include "math/glm_conversions.h"
 
 namespace MEGEngine {
 	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures) {
@@ -29,10 +27,10 @@ namespace MEGEngine {
 	( // parameters
 		Shader& shader,
 		Camera& camera,
-		glm::mat4 matrix,
-		glm::vec3 transform,
+		Mat4 matrix,
+		Vec3 transform,
 		glm::quat rotation,
-		glm::vec3 scale
+		Vec3 scale
 	)
 	{ // body
 		// Bind shader to be able to access uniforms
@@ -63,18 +61,18 @@ namespace MEGEngine {
 		camera.matrix(shader, "camMatrix");
 
 		// Initialize matrices
-		glm::mat4 trans = glm::mat4(1.0f);
-		glm::mat4 rot = glm::mat4(1.0f);
-		glm::mat4 sca = glm::mat4(1.0f);
+		Mat4 trans = Mat4(1.0f);
+		Mat4 rot = Mat4(1.0f);
+		Mat4 sca = Mat4(1.0f);
 
 		// Transform the matrices to their correct form
 		transform.z = -transform.z;
-		trans = glm::translate(trans, transform);
-		rot = glm::mat4_cast(rotation);
-		sca = glm::scale(sca, scale);
+		trans = Private::fromGlmMat4(glm::translate(Private::toGlmMat4(trans), Private::toGlmVec3(transform)));
+		rot = Private::fromGlmMat4(glm::mat4_cast(rotation));
+		sca = Private::fromGlmMat4(glm::scale(Private::toGlmMat4(sca), Private::toGlmVec3(scale)));
 
 		// Push the matrices to the vertex shader
-		shader.setUniform("model", matrix);
+		shader.setUniform("model",  matrix);
 		shader.setUniform("translation", trans);
 		shader.setUniform("rotation", rot);
 		shader.setUniform("scale", sca);

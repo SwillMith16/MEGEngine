@@ -26,7 +26,7 @@ namespace MEGEngine {
 
 	void Model::draw(Shader &shader, Camera &camera) {
 		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes[i].draw(shader, camera, Private::toGlmMat4(matricesMeshes[i]), Private::toGlmVec3(transform), orientation, glm::vec3(scale, scale, scale));
+			meshes[i].draw(shader, camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
 		}
 	}
 

@@ -26,8 +26,7 @@ namespace MEGEngine {
 
     void Camera::matrix(Shader& shader, const char* uniform) {
         // export camera matrix to shader
-        glm::mat4 glmCamMatrix = Private::toGlmMat4(camMatrix);
-        shader.setUniform(uniform,  glmCamMatrix);
+        shader.setUniform(uniform,  camMatrix);
     }
 
     /*
