@@ -6,7 +6,7 @@
 #include "settings.h"
 
 namespace MEGEngine {
-	Texture::Texture(const char *image, const char *texType, GLuint slot) {
+	Texture::Texture(const char *image, const char *texType, unsigned int slot) {
 		// Assigns the type of the texture ot the texture object
 		type = texType;
 
@@ -69,7 +69,7 @@ namespace MEGEngine {
 	}
 
 
-	void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit) {
+	void Texture::texUnit(Shader& shader, const char* uniform, unsigned int unit) {
 		// Shader needs to be activated before changing the value of a uniform
 		shader.activate();
 		// Sets the value of the uniform
