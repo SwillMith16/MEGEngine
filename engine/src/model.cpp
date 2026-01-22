@@ -1,5 +1,11 @@
 #include "model.h"
 
+#include "shader.h"
+#include "camera.h"
+#include "texture.h"
+#include "vertex.h"
+#include "mesh.h"
+
 #include "math/glm_conversions.h"
 
 namespace MEGEngine {

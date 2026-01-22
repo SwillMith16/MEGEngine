@@ -4,12 +4,10 @@
 #include <JSON/json.hpp>
 
 #include "common.h"
-#include "shader.h"
-#include "camera.h"
-#include "texture.h"
-#include "vertex.h"
-#include "mesh.h"
 
+#include "GLM/gtx/quaternion.hpp"
+
+#include "math/mat4.h"
 #include "math/vec3.h"
 #include "math/vec2.h"
 
@@ -23,21 +21,21 @@ namespace MEGEngine {
 		float scale = 1.0f;
 
 		Model(const char* file);
-		void draw(Shader& shader, Camera& camera);
+		void draw(class Shader& shader, class Camera& camera);
 
 	private:
 		const char* file;
 		std::vector<unsigned char> data;
 		json JSON;
 
-		std::vector<Mesh> meshes;
+		std::vector<class Mesh> meshes;
 		std::vector<Vec3> translationsMeshes;
 		std::vector<glm::quat> rotationsMeshes;
 		std::vector<Vec3> scalesMeshes;
 		std::vector<Mat4> matricesMeshes;
 
 		std::vector<std::string> loadedTexName;
-		std::vector<Texture> loadedTex;
+		std::vector<class Texture> loadedTex;
 
 		void loadMesh(unsigned int indMesh);
 
@@ -45,10 +43,10 @@ namespace MEGEngine {
 
 		std::vector<unsigned char> getData();
 		std::vector<float> getFloats(json accessor);
-		std::vector<unsigned int> getIndices(json accesor);
+		std::vector<unsigned int> getIndices(json accessor);
 		std::vector<Texture> getTextures();
 
-		std::vector<Vertex> assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs);
+		std::vector<struct Vertex> assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs);
 
 		std::vector<Vec2> groupFloatsVec2(std::vector<float> floatVec);
 		std::vector<Vec3> groupFloatsVec3(std::vector<float> floatVec);
