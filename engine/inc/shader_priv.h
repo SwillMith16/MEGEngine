@@ -24,6 +24,8 @@ namespace MEGEngine {
             glUniform3f(glGetUniformLocation(ID, name), value.x, value.y, value.z);
         else if constexpr (std::is_same<T, glm::vec4>::value)
             glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);
+        else if constexpr (std::is_same<T, Vec4>::value)
+            glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);
         else if constexpr (std::is_same<T, glm::mat2>::value)
             glUniformMatrix2fv(glGetUniformLocation(ID, name), 1, GL_FALSE, glm::value_ptr(value));
         else if constexpr (std::is_same<T, glm::mat3>::value)

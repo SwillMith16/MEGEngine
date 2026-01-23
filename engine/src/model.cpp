@@ -304,7 +304,7 @@ namespace MEGEngine {
 	std::vector<Vec2> Model::groupFloatsVec2(std::vector<float> floatVec) {
 		std::vector<Vec2> vectors;
 		for (int i = 0; i < floatVec.size(); i+=2) {
-			vectors.push_back(Vec2(floatVec[i], floatVec[i+1]));
+			vectors.emplace_back(floatVec[i], floatVec[i+1]);
 		}
 		return vectors;
 	}
@@ -312,15 +312,15 @@ namespace MEGEngine {
 	std::vector<Vec3> Model::groupFloatsVec3(std::vector<float> floatVec) {
 		std::vector<Vec3> vectors;
 		for (int i = 0; i < floatVec.size(); i+=3) {
-			vectors.push_back(Vec3(floatVec[i], floatVec[i+1], floatVec[i+2]));
+			vectors.emplace_back(floatVec[i], floatVec[i+1], floatVec[i+2]);
 		}
 		return vectors;
 	}
 
-	std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec) {
-		std::vector<glm::vec4> vectors;
+	std::vector<Vec4> Model::groupFloatsVec4(std::vector<float> floatVec) {
+		std::vector<Vec4> vectors;
 		for (int i = 0; i < floatVec.size(); i+=4) {
-			vectors.push_back(glm::vec4(floatVec[i], floatVec[i+1], floatVec[i+2], floatVec[i+3]));
+			vectors.emplace_back(floatVec[i], floatVec[i+1], floatVec[i+2], floatVec[i+3]);
 		}
 		return vectors;
 	}

@@ -7,6 +7,7 @@
 
 #include "math/quat.h"
 #include "math/mat4.h"
+#include "math/vec4.h"
 #include "math/vec3.h"
 #include "math/vec2.h"
 
@@ -49,7 +50,7 @@ namespace MEGEngine {
 
 		std::vector<Vec2> groupFloatsVec2(std::vector<float> floatVec);
 		std::vector<Vec3> groupFloatsVec3(std::vector<float> floatVec);
-		std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
+		std::vector<Vec4> groupFloatsVec4(std::vector<float> floatVec);
 	};
 }
 

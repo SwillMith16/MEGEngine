@@ -20,6 +20,7 @@
 #include "camera.h"
 
 #include "math/quat.h"
+#include "math/vec4.h"
 #include "math/vec3.h"
 #include "math/vec2.h"
 
@@ -147,7 +148,7 @@ namespace MEGEngine {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
-		glm::vec4 lightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		Vec3 lightPos = Vec3(0.0f, 0.0f, 0.0f);
 
 		Shader objectShader((g_resourcesDir + "/shaders/default.vert").c_str(), (g_resourcesDir + "/shaders/default.frag").c_str());
