@@ -14,6 +14,7 @@ namespace MEGEngine {
 		// Operators
 		Vec3 operator+ (const Vec3 &v) const;
 		Vec3 operator- (const Vec3 &v) const;
+		Vec3 operator- () const;
 		Vec3 operator* (float scalar) const;
 
 		Vec3 operator+= (const Vec3 &v);

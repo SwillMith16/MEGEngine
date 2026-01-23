@@ -14,6 +14,10 @@ namespace MEGEngine {
 		return Private::fromGlmVec3(Private::toGlmVec3(*this) - Private::toGlmVec3(v));
 	}
 
+	Vec3 Vec3::operator-() const {
+		return (*this*-1);
+	}
+
 	Vec3 Vec3::operator*(float scalar) const {
 		return Private::fromGlmVec3(Private::toGlmVec3(*this) * scalar);
 	}
