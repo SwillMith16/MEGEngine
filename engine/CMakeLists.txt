@@ -66,6 +66,6 @@ if (UNIX)
     target_compile_options(MEGEngine
             PRIVATE -fvisibility=hidden
     )
-endif (UNIX)
+endif ()
 
 
