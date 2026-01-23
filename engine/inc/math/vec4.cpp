@@ -22,6 +22,10 @@ namespace MEGEngine {
         return Private::fromGlmVec4(Private::toGlmVec4(*this) * scalar);
     }
 
+    Vec4 operator*(float scalar, const Vec4 &v) {
+        return v * scalar;
+    }
+
     Vec4 Vec4::operator+=(const Vec4 &v) {
         *this = *this + v;
         return *this;
@@ -50,7 +54,4 @@ namespace MEGEngine {
         return glm::dot(Private::toGlmVec4(a), Private::toGlmVec4(b));
     }
 
-    Vec4 operator*(float scalar, const Vec4 &v) {
-        return Private::fromGlmVec4(scalar * Private::toGlmVec4(v));
-    }
 } // MEGEngine

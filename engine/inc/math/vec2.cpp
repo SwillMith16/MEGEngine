@@ -18,6 +18,10 @@ namespace MEGEngine {
 		return Private::fromGlmVec2(Private::toGlmVec2(*this) * scalar);
 	}
 
+	Vec2 operator*(float scalar, const Vec2 &v) {
+		return v * scalar;
+	}
+
 	Vec2 Vec2::operator+=(const Vec2 &v) {
 		*this = *this + v;
 		return *this;

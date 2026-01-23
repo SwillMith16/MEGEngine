@@ -26,6 +26,8 @@ namespace MEGEngine {
 		static float dot(const Vec3 &a, const Vec3 &b);
 		static Vec3 cross(const Vec3 &a, const Vec3 &b);
 	};
+
+	Vec3 operator* (float scalar, const Vec3 &v);
 } // MEGEngine
 
 #endif //MEGENGINE_VEC3_H

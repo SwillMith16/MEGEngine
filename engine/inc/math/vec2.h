@@ -25,6 +25,8 @@ namespace MEGEngine {
 		Vec2 normalized() const;
 		static float dot(const Vec2 &a, const Vec2 &b);
 	};
+
+	Vec2 operator* (float scalar, const Vec2 &v);
 } // MEGEngine
 
 #endif //MEGENGINE_VEC2_H
