@@ -44,6 +44,8 @@ add_library(MEGEngine SHARED
         inc/shader_priv.h
         inc/math/quat.cpp
         inc/math/quat.h
+        inc/math/vec4.cpp
+        inc/math/vec4.h
 )
 
 target_include_directories(MEGEngine

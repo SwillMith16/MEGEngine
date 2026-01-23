@@ -5,12 +5,14 @@
 
 #include "GLM/vec2.hpp"
 #include "GLM/vec3.hpp"
+#include "GLM/vec4.hpp"
 #include "GLM/mat4x4.hpp"
 #include "GLM/gtc/quaternion.hpp"
 #include "GLM/gtx/quaternion.hpp"
 
 #include "math/vec2.h"
 #include "math/vec3.h"
+#include "math/vec4.h"
 #include "math/mat4.h"
 #include "math/quat.h"
 
@@ -32,6 +34,16 @@ namespace MEGEngine::Private {
 
 	inline Vec3 fromGlmVec3(const glm::vec3& v) {
 		return {v.x, v.y, v.z};
+	}
+
+
+
+	inline glm::vec4 toGlmVec4(const Vec4& v) {
+		return {v.x, v.y, v.z, v.w};
+	}
+
+	inline Vec4 fromGlmVec4(const glm::vec4& v) {
+		return {v.x, v.y, v.z, v.w};
 	}
 
 

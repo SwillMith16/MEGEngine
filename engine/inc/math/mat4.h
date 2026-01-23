@@ -4,7 +4,8 @@
 #include "math/vec3.h"
 
 namespace MEGEngine {
-    struct Mat4 {
+    class Mat4 {
+    public:
         float m[16]{0}; // the raw data in the matrices
 
         Mat4();

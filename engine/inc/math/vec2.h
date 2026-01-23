@@ -2,7 +2,8 @@
 #define MEGENGINE_VEC2_H
 
 namespace MEGEngine {
-	struct Vec2 {
+	class Vec2 {
+	public:
 		// Member vars
 		float x, y;
 
