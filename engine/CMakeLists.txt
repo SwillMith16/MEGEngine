@@ -37,6 +37,8 @@ add_library(MEGEngine SHARED
         inc/math/quat.h
         inc/math/vec4.cpp
         inc/math/vec4.h
+        inc/utils/log.h
+        inc/utils/log.cpp
 )
 
 target_include_directories(MEGEngine

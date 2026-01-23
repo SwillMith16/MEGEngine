@@ -6,6 +6,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "shader_priv.h"
+#include "utils/log.h"
 
 namespace MEGEngine {
 	Texture::Texture(const char *image, const char *texType, unsigned int slot) {
@@ -36,28 +37,21 @@ namespace MEGEngine {
 
 		// Assigns the image to the OpenGL Texture object
 		switch (numColCh) {
-			default:
 			case 4:
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-#ifdef DEBUG
-				std::cout << "4 Channel texture image - using GL_RGBA format" << std::endl;
-#endif
+				Log(LogLevel::DBG, "4 Channel texture image - using GL_RGBA format. Image: %s", image);
 				break;
 			case 3:
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-#ifdef DEBUG
-				std::cout << "3 Channel texture image - using GL_RGB format" << std::endl;
-#endif
+				Log(LogLevel::DBG, "3 Channel texture image - using GL_RGB format. Image: %s", image);
 				break;
 			case 1:
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RED, GL_UNSIGNED_BYTE, bytes);
-#ifdef DEBUG
-				std::cout << "1 Channel texture image - using GL_RED format" << std::endl;
-#endif
+				Log(LogLevel::DBG, "1 Channel texture image - using GL_RED format. Image: %s", image);
 				break;
-				// default:
-				// 	throw std::invalid_argument("Cannot recognise texture type using image colour channels");
-				// 	break;
+			default:
+				Log(LogLevel::ERR, "Invalid number of channels in texture image. Must be 4 or 3 or 1. Image: %s", image);
+				break;
 		}
 
 		// Generates MipMaps
