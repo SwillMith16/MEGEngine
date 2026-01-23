@@ -1,14 +1,13 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "GLM/gtx/quaternion.hpp"
-
 #include "common.h"
 
 #include "vao.h"
 #include "vertex.h"
 #include "texture.h"
 
+#include "math/quat.h"
 #include "math/mat4.h"
 #include "math/vec3.h"
 
@@ -31,7 +30,7 @@ namespace MEGEngine {
 			class Camera& camera,
 			Mat4 matrix = Mat4(1.0f),
 			Vec3 transform = Vec3(0.0f, 0.0f, 0.0f),
-			glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
+			Quat rotation = Quat(1.0f, 0.0f, 0.0f, 0.0f),
 			Vec3 scale = Vec3(1.0f, 1.0f, 1.0f)
 		);
 	};

@@ -5,8 +5,7 @@
 
 #include "common.h"
 
-#include "GLM/gtx/quaternion.hpp"
-
+#include "math/quat.h"
 #include "math/mat4.h"
 #include "math/vec3.h"
 #include "math/vec2.h"
@@ -17,7 +16,7 @@ namespace MEGEngine {
 	class ENGINE_API Model {
 	public:
 		Vec3 transform = Vec3(0.0f, 0.0f, 0.0f);
-		glm::quat orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		Quat orientation = Quat(0, 0, 0, 1);
 		float scale = 1.0f;
 
 		Model(const char* file);
@@ -30,7 +29,7 @@ namespace MEGEngine {
 
 		std::vector<class Mesh> meshes;
 		std::vector<Vec3> translationsMeshes;
-		std::vector<glm::quat> rotationsMeshes;
+		std::vector<Quat> rotationsMeshes;
 		std::vector<Vec3> scalesMeshes;
 		std::vector<Mat4> matricesMeshes;
 

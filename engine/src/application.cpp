@@ -19,6 +19,7 @@
 #include "texture.h"
 #include "camera.h"
 
+#include "math/quat.h"
 #include "math/vec3.h"
 #include "math/vec2.h"
 
@@ -173,7 +174,7 @@ namespace MEGEngine {
 
 		Model sword((g_resourcesDir + "/models/sword/sword.gltf").c_str());
 		sword.transform = Vec3(-10.0f, -10.0f, 4.0f);
-		sword.orientation = glm::quat(0.707, 0, 0, 0.707);
+		sword.orientation = Quat(0, 0, 0.707, 0.707);
 		sword.scale = 0.2f;
 
 		auto lastTime = clock::now();

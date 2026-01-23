@@ -70,17 +70,17 @@ namespace MEGEngine {
 			translation = Vec3(transValues[0], transValues[1], transValues[2]);
 		}
 		// Get quaternion if it exists for this node
-		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		Quat rotation = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 		if (node.find("rotation") != node.end())
 		{
 			float rotValues[4] =
 			{
-				node["rotation"][3],
 				node["rotation"][0],
 				node["rotation"][1],
-				node["rotation"][2]
+				node["rotation"][2],
+				node["rotation"][3]
 			};
-			rotation = glm::make_quat(rotValues);
+			rotation = Quat(rotValues[0], rotValues[1], rotValues[2], rotValues[3]);
 		}
 		// Get scale if it exists for this node
 		Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
@@ -101,15 +101,10 @@ namespace MEGEngine {
 			matNode = Private::fromGlmMat4(glm::make_mat4(matValues));
 		}
 
-		// Initialize matrices
-		Mat4 trans = Mat4(1.0f);
-		Mat4 rot = Mat4(1.0f);
-		Mat4 sca = Mat4(1.0f);
-
-		// Use translation, rotation, and scale to change the initialized matrices
-		trans = Private::fromGlmMat4(glm::translate(Private::toGlmMat4(trans), Private::toGlmVec3(translation)));
-		rot = Private::fromGlmMat4(glm::mat4_cast(rotation));
-		sca = Private::fromGlmMat4(glm::scale(Private::toGlmMat4(sca), Private::toGlmVec3(scale)));
+		// Use translation, rotation, and scale as matrices
+		Mat4 trans = Mat4::translation(translation);
+		Mat4 rot = rotation.toMatrix();
+		Mat4 sca = Mat4::scale(scale);
 
 		/*
 		 * Multiply all matrices together.

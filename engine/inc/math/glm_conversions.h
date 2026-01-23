@@ -6,10 +6,13 @@
 #include "GLM/vec2.hpp"
 #include "GLM/vec3.hpp"
 #include "GLM/mat4x4.hpp"
+#include "GLM/gtc/quaternion.hpp"
+#include "GLM/gtx/quaternion.hpp"
 
 #include "math/vec2.h"
 #include "math/vec3.h"
 #include "math/mat4.h"
+#include "math/quat.h"
 
 namespace MEGEngine::Private {
 
@@ -44,6 +47,17 @@ namespace MEGEngine::Private {
 	{
 		Mat4 out;
 		std::memcpy(out.m, &m[0][0], sizeof(float) * 16);
+		return out;
+	}
+
+
+	inline glm::quat toGlmQuat(const Quat& q) {
+		glm::quat out(q.w, q.x, q.y, q.z);
+		return out;
+	}
+
+	inline Quat fromGlmQuat(const glm::quat& q) {
+		Quat out(q.x, q.y, q.z, q.w);
 		return out;
 	}
 }

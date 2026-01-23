@@ -32,7 +32,7 @@ namespace MEGEngine {
 		Camera& camera,
 		Mat4 matrix,
 		Vec3 transform,
-		glm::quat rotation,
+		Quat rotation,
 		Vec3 scale
 	)
 	{ // body
@@ -63,16 +63,11 @@ namespace MEGEngine {
 		shader.setUniform("camPos", camera.position);
 		camera.matrix(shader, "camMatrix");
 
-		// Initialize matrices
-		Mat4 trans = Mat4(1.0f);
-		Mat4 rot = Mat4(1.0f);
-		Mat4 sca = Mat4(1.0f);
-
-		// Transform the matrices to their correct form
+		// Create matrices
 		transform.z = -transform.z;
-		trans = Private::fromGlmMat4(glm::translate(Private::toGlmMat4(trans), Private::toGlmVec3(transform)));
-		rot = Private::fromGlmMat4(glm::mat4_cast(rotation));
-		sca = Private::fromGlmMat4(glm::scale(Private::toGlmMat4(sca), Private::toGlmVec3(scale)));
+		Mat4 trans = Mat4::translation(transform);
+		Mat4 rot = rotation.toMatrix();
+		Mat4 sca = Mat4::scale(scale);
 
 		// Push the matrices to the vertex shader
 		shader.setUniform("model",  matrix);
