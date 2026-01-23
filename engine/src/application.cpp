@@ -25,6 +25,7 @@
 #include "math/vec2.h"
 
 #include "math/glm_conversions.h"
+#include "utils/log.h"
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
 
@@ -151,7 +152,7 @@ namespace MEGEngine {
 		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		Vec3 lightPos = Vec3(0.0f, 0.0f, 0.0f);
 
-		Shader objectShader((g_resourcesDir + "/shaders/default.vert").c_str(), (g_resourcesDir + "/shaders/default.frag").c_str());
+		Shader objectShader((settings.general().shaderDirectory + "/default.vert").c_str(), (settings.general().shaderDirectory + "/default.frag").c_str());
 		objectShader.activate();
 		objectShader.setUniform("lightColour", lightColour);
 		objectShader.setUniform("lightPos", lightPos);
@@ -161,7 +162,7 @@ namespace MEGEngine {
 		std::vector<Texture> tex {Texture("", "diffuse", 0)};
 		Mesh light(lightVerts, lightInd, tex);
 
-		Shader lightShader((g_resourcesDir + "/shaders/light.vert").c_str(), (g_resourcesDir + "/shaders/light.frag").c_str());
+		Shader lightShader((settings.general().shaderDirectory + "/light.vert").c_str(), (settings.general().shaderDirectory + "/light.frag").c_str());
 		lightShader.activate();
 		lightShader.setUniform("lightColour", lightColour);
 		lightShader.setUniform("translation", lightPos);
@@ -173,7 +174,7 @@ namespace MEGEngine {
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
 		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-30.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
 
-		Model sword((g_resourcesDir + "/models/sword/sword.gltf").c_str());
+		Model sword((settings.general().modelDirectory + "/sword/sword.gltf").c_str());
 		sword.transform = Vec3(-10.0f, -10.0f, 4.0f);
 		sword.orientation = Quat(0, 0, 0.707, 0.707);
 		sword.scale = 0.2f;
@@ -239,6 +240,7 @@ namespace MEGEngine {
 	// }
 
 	void Application::init() {
+		settings.init();
 		// gladLoadGL();
 		// glViewport(0, 0, config.width, config.height);
 

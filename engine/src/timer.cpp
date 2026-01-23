@@ -21,7 +21,7 @@ namespace MEGEngine {
 			_deltaTime = currentTime - lastTime;
 			FPS = 1 / _deltaTime;
 		}
-		while (FPS > Settings::maxFPS && Settings::maxFPS != 0);
+		while (FPS > settings.graphics().maxFps && settings.graphics().maxFps != 0);
 		lastTime = currentTime;
 	}
 }
