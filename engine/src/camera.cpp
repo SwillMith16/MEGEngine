@@ -1,6 +1,8 @@
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
 #include "GLM/gtc/type_ptr.hpp"
+#include "GLM/gtx/rotate_vector.hpp"
+#include "GLM/gtx/vector_angle.hpp"
 
 #include "camera.h"
 #include "shader_priv.h"
@@ -31,32 +33,32 @@ namespace MEGEngine {
         shader.setUniform(uniform,  camMatrix);
     }
 
-    /*
+
     void Camera::processInputs(GLFWwindow* window, float deltaTime) {
         // Handles key inputs
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            position += orientation * speed * deltaTime;
+            position += speed * deltaTime * orientation;
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            position += Private::fromGlmVec3(speed * deltaTime * -glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up))));
+            position += speed * deltaTime * -Vec3::cross(orientation, up).normalized();
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            position +=  orientation * -1 * speed * deltaTime;
+            position +=  -speed * deltaTime * orientation;
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            position += Private::fromGlmVec3(speed * deltaTime * glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up))));
+            position += speed * deltaTime * Vec3::cross(orientation, up).normalized();
         }
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
-            position += up * speed * deltaTime;
+            position += speed * deltaTime * up;
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
-            position += up * -1 * speed * deltaTime;
+            position += speed * deltaTime * -up;
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
@@ -119,5 +121,5 @@ namespace MEGEngine {
 
         }
     }
-    */
+
 }

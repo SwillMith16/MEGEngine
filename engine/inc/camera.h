@@ -32,7 +32,7 @@ namespace MEGEngine {
 		Vec3 getPosition();
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void matrix(Shader& shader, const char* uniform);
-		//void processInputs(GLFWwindow* window, float deltaTime);
+		void processInputs(class GLFWwindow* window, float deltaTime);
 
 	private:
 		float _width;

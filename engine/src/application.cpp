@@ -190,7 +190,7 @@ namespace MEGEngine {
 
 	    	sword.transform += Vec3(1, 0, 0) * deltaTime();
 
-	        // camera.processInputs(window, deltaTime());
+	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
     		sword.draw(objectShader, camera);
