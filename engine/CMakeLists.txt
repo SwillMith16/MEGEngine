@@ -1,14 +1,5 @@
 cmake_minimum_required(VERSION 4.2)
 
-find_library(GLFW
-        NAMES libglfw3.a libglfw3.so
-        PATHS /usr/local/lib64/GLFW/
-)
-find_library(GLAD
-        NAMES libGLAD.a libGLAD.so
-        PATHS /usr/local/lib64/GLAD/
-)
-
 add_library(MEGEngine SHARED
         inc/application.h
         src/application.cpp
@@ -20,7 +11,6 @@ add_library(MEGEngine SHARED
         inc/vbo.h
         src/ebo.cpp
         inc/ebo.h
-        src/stb.cpp
         src/texture.cpp
         inc/texture.h
         src/camera.cpp
@@ -33,10 +23,20 @@ add_library(MEGEngine SHARED
         inc/mesh.h
         src/model.cpp
         inc/model.h
-        src/app.cpp
-        inc/app.h
         inc/common.h
         inc/vertex.h
+        inc/math/vec2.h
+        inc/math/vec2.cpp
+        inc/math/vec3.h
+        inc/math/vec3.cpp
+        inc/math/glm_conversions.h
+        inc/math/mat4.cpp
+        inc/math/mat4.h
+        inc/shader_priv.h
+        inc/math/quat.cpp
+        inc/math/quat.h
+        inc/math/vec4.cpp
+        inc/math/vec4.h
 )
 
 target_include_directories(MEGEngine
@@ -55,8 +55,17 @@ target_compile_definitions(MEGEngine PRIVATE
         $<$<CONFIG:Debug>:DEBUG>
         ENGINE_BUILD
         GLM_ENABLE_EXPERIMENTAL
+        STB_IMAGE_IMPLEMENTATION
 )
 
-target_compile_options(MEGEngine PRIVATE -fPIC)
+target_compile_options(MEGEngine
+        PRIVATE -fPIC
+)
+
+if (UNIX)
+    target_compile_options(MEGEngine
+            PRIVATE -fvisibility=hidden
+    )
+endif ()
 
 

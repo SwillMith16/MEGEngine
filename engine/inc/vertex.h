@@ -3,19 +3,18 @@
 
 #include "common.h"
 
-#include "GLM/glm.hpp"
+#include "math/vec3.h"
+#include "math/vec2.h"
 
 namespace MEGEngine {
-
     class ENGINE_API Vertex {
     public:
-        Vertex(glm::vec3 position, glm::vec3 normal, glm::vec3 colour, glm::vec2 texUV) : position(position), normal(normal), colour(colour), texUV(texUV) {};
-        glm::vec3 position;
-        glm::vec3 normal;
-        glm::vec3 colour;
-        glm::vec2 texUV;
+        Vertex(Vec3 position, Vec3 normal, Vec3 colour, Vec2 texUV) : position(position), normal(normal), colour(colour), texUV(texUV) {};
+        Vec3 position;
+        Vec3 normal;
+        Vec3 colour;
+        Vec2 texUV;
     };
-
 }
 
 #endif //MEGENGINEPROJECT_VERTEX_H

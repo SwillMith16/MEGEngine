@@ -1,38 +1,40 @@
-//
-// Created by Will on 26/12/2025.
-//
-
 #ifndef MESH_H
 #define MESH_H
 
-// #include <vector>
+#include "common.h"
+
 #include "vao.h"
-#include "ebo.h"
-#include "camera.h"
+#include "vertex.h"
 #include "texture.h"
 
-class Mesh {
-public:
-	std::vector<MEGEngine::Vertex> vertices;
-	std::vector<GLuint> indices;
-	std::vector<Texture> textures;
+#include "math/quat.h"
+#include "math/mat4.h"
+#include "math/vec3.h"
 
-	// float scale = 1.0f;
+namespace MEGEngine {
+	class ENGINE_API Mesh {
+	public:
+		std::vector<Vertex> vertices;
+		std::vector<unsigned int> indices;
+		std::vector<Texture> textures;
 
-	VAO vao;
+		// float scale = 1.0f;
 
-	Mesh(std::vector<MEGEngine::Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+		VAO vao;
 
-	void draw
-	(
-		Shader& shader,
-		Camera& camera,
-		glm::mat4 matrix = glm::mat4(1.0f),
-		glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f)
-	);
-};
+		Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
+
+		void draw
+		(
+			class Shader& shader,
+			class Camera& camera,
+			Mat4 matrix = Mat4(1.0f),
+			Vec3 transform = Vec3(0.0f, 0.0f, 0.0f),
+			Quat rotation = Quat(1.0f, 0.0f, 0.0f, 0.0f),
+			Vec3 scale = Vec3(1.0f, 1.0f, 1.0f)
+		);
+	};
+}
 
 
 #endif //MESH_H

@@ -1,44 +1,44 @@
-//
-// Created by Will on 08/12/2025.
-//
-
 #ifndef TIMER_H
 #define TIMER_H
 
-/**
- * @class   TimerKey
- * @brief   A key class to grant write access to specific variables in the Timer class. Any friend functions can use
- *          the key to access selected private Timer variables.
- */
-class TimerKey {
-private:
-    friend int main();
-    TimerKey() = default;
-};
+#include "common.h"
 
-/**
- * @class   Timer
- * @brief   A class that can be used for synchronised timing throughout the application.
- */
-class Timer {
-public:
+namespace MEGEngine {
     /**
-     * @brief   Gets the time taken to render the previous frame. Used for synchronising timing regardless of FPS and
-     *          loop speeds.
-     * @return  float deltaTime
+     * @class   TimerKey
+     * @brief   A key class to grant write access to specific variables in the Timer class. Any friend functions can use
+     *          the key to access selected private Timer variables.
      */
-    float deltaTime();
+    class ENGINE_API TimerKey {
+    private:
+        friend int main();
+        TimerKey() = default;
+    };
 
-	static void processTime(TimerKey key);
+    /**
+     * @class   Timer
+     * @brief   A class that can be used for synchronised timing throughout the application.
+     */
+    class ENGINE_API Timer {
+    public:
+        /**
+         * @brief   Gets the time taken to render the previous frame. Used for synchronising timing regardless of FPS and
+         *          loop speeds.
+         * @return  float deltaTime
+         */
+        float deltaTime();
 
-	static float FPS;
+        static void processTime(TimerKey key);
 
-private:
-    static float _deltaTime;
-	static float lastTime;
-};
+        static float FPS;
 
-inline Timer Time;
+    private:
+        static float _deltaTime;
+        static float lastTime;
+    };
+
+    inline Timer Time;
+}
 
 
 

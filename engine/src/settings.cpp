@@ -4,4 +4,6 @@
 
 #include "settings.h"
 
-int Settings::maxFPS = 120;
+namespace MEGEngine {
+    int Settings::maxFPS = 120;
+}
