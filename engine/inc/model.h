@@ -1,54 +1,58 @@
-//
-// Created by Will on 28/12/2025.
-//
-
 #ifndef MODEL_H
 #define MODEL_H
 
 #include <JSON/json.hpp>
-#include "mesh.h"
+
+#include "common.h"
+
+#include "math/quat.h"
+#include "math/mat4.h"
+#include "math/vec4.h"
+#include "math/vec3.h"
+#include "math/vec2.h"
 
 using json = nlohmann::json;
 
+namespace MEGEngine {
+	class ENGINE_API Model {
+	public:
+		Vec3 transform = Vec3(0.0f, 0.0f, 0.0f);
+		Quat orientation = Quat(0, 0, 0, 1);
+		float scale = 1.0f;
 
-class Model {
-public:
-	glm::vec3 transform = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::quat orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-	GLfloat scale = 1.0f;
+		Model(const char* file);
+		void draw(class Shader& shader, class Camera& camera);
 
-	Model(const char* file);
-	void draw(Shader& shader, Camera& camera);
+	private:
+		const char* file;
+		std::vector<unsigned char> data;
+		json JSON;
 
-private:
-	const char* file;
-	std::vector<unsigned char> data;
-	json JSON;
+		std::vector<class Mesh> meshes;
+		std::vector<Vec3> translationsMeshes;
+		std::vector<Quat> rotationsMeshes;
+		std::vector<Vec3> scalesMeshes;
+		std::vector<Mat4> matricesMeshes;
 
-	std::vector<Mesh> meshes;
-	std::vector<glm::vec3> translationsMeshes;
-	std::vector<glm::quat> rotationsMeshes;
-	std::vector<glm::vec3> scalesMeshes;
-	std::vector<glm::mat4> matricesMeshes;
+		std::vector<std::string> loadedTexName;
+		std::vector<class Texture> loadedTex;
 
-	std::vector<std::string> loadedTexName;
-	std::vector<Texture> loadedTex;
+		void loadMesh(unsigned int indMesh);
 
-	void loadMesh(unsigned int indMesh);
+		void traverseNode(unsigned int nextNode, Mat4 matrix = Mat4(1.0f));
 
-	void traverseNode(unsigned int nextNode, glm::mat4 matrix = glm::mat4(1.0f));
+		std::vector<unsigned char> getData();
+		std::vector<float> getFloats(json accessor);
+		std::vector<unsigned int> getIndices(json accessor);
+		std::vector<Texture> getTextures();
 
-	std::vector<unsigned char> getData();
-	std::vector<float> getFloats(json accessor);
-	std::vector<GLuint> getIndices(json accesor);
-	std::vector<Texture> getTextures();
+		std::vector<struct Vertex> assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs);
 
-	std::vector<MEGEngine::Vertex> assembleVertices(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> texUVs);
-
-	std::vector<glm::vec2> groupFloatsVec2(std::vector<float> floatVec);
-	std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);
-	std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
-};
+		std::vector<Vec2> groupFloatsVec2(std::vector<float> floatVec);
+		std::vector<Vec3> groupFloatsVec3(std::vector<float> floatVec);
+		std::vector<Vec4> groupFloatsVec4(std::vector<float> floatVec);
+	};
+}
 
 
 #endif //MODEL_H

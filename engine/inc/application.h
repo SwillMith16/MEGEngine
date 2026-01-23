@@ -11,7 +11,7 @@ namespace MEGEngine {
 	class Scene;
 	class Renderer;
 
-	struct ApplicationConfig {
+	struct ENGINE_API ApplicationConfig {
 		std::string windowTitle = "MEGEngine Game";
 		int width = 1280;
 		int height = 720;
