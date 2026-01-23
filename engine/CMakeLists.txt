@@ -1,14 +1,5 @@
 cmake_minimum_required(VERSION 4.2)
 
-find_library(GLFW
-        NAMES libglfw3.a libglfw3.so
-        PATHS /usr/local/lib64/GLFW/
-)
-find_library(GLAD
-        NAMES libGLAD.a libGLAD.so
-        PATHS /usr/local/lib64/GLAD/
-)
-
 add_library(MEGEngine SHARED
         inc/application.h
         src/application.cpp

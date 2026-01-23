@@ -2,18 +2,16 @@ cmake_minimum_required(VERSION 4.2)
 
 set(LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/libraries")
 
-#find_package(OpenGL REQUIRED)
+# App executable
+add_executable(Game
+        src/main.cpp
+)
 
-include_directories(Game
+target_include_directories(Game PRIVATE
         inc
         ${LIB_PATH}/include
         ${PROJECT_SOURCE_DIR}/engine/inc
         ${PROJECT_SOURCE_DIR}/engine/ext/libraries/include
-)
-
-# App executable
-add_executable(Game
-        src/main.cpp
 )
 
 target_link_libraries(Game MEGEngine)
