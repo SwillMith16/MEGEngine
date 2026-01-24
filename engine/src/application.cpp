@@ -18,6 +18,7 @@
 #include "shader_priv.h"
 #include "texture.h"
 #include "camera.h"
+#include "material.h"
 
 #include "math/quat.h"
 #include "math/vec4.h"
@@ -29,13 +30,10 @@
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
 
-//TODO: move all engine code into MEGEngine namespace
-
 MEGEngine::Vertex lightVertices[] =
 {
 	//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
 	// top
-	//TODO: abstract all use of glm types into engine types
 	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
 	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
@@ -152,21 +150,19 @@ namespace MEGEngine {
 		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		Vec3 lightPos = Vec3(0.0f, 0.0f, 0.0f);
 
-		Shader objectShader((settings.general().shaderDirectory + "/default.vert").c_str(), (settings.general().shaderDirectory + "/default.frag").c_str());
-		objectShader.activate();
-		objectShader.setUniform("lightColour", lightColour);
-		objectShader.setUniform("lightPos", lightPos);
-
-		std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
-		std::vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
-		std::vector<Texture> tex {Texture("", "diffuse", 0)};
-		Mesh light(lightVerts, lightInd, tex);
 
 		Shader lightShader((settings.general().shaderDirectory + "/light.vert").c_str(), (settings.general().shaderDirectory + "/light.frag").c_str());
 		lightShader.activate();
 		lightShader.setUniform("lightColour", lightColour);
 		lightShader.setUniform("translation", lightPos);
 
+		std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
+		std::vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
+		std::vector<Texture> tex {Texture("", "diffuse", 0)};
+		Material lightMaterial(std::make_shared<Shader>(lightShader));
+		lightMaterial.setTextureList(tex);
+		Mesh light(lightVerts, lightInd);
+		MeshRenderer lightMR(std::make_shared<Mesh>(light), std::make_shared<Material>(lightMaterial));
 
 		// glm::vec3 cameraPos = glm::vec3(-5.0f, 7.0f, 5.0f);
 		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
@@ -178,6 +174,9 @@ namespace MEGEngine {
 		sword.transform = Vec3(-10.0f, -10.0f, 4.0f);
 		sword.orientation = Quat(0, 0, 0.707, 0.707);
 		sword.scale = 0.2f;
+		sword.meshRenderers()[0].material()->shader()->activate();
+		sword.meshRenderers()[0].material()->shader()->setUniform("lightColour", lightColour);
+		sword.meshRenderers()[0].material()->shader()->setUniform("lightPos", lightPos);
 
 		auto lastTime = clock::now();
 
@@ -194,8 +193,8 @@ namespace MEGEngine {
 	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
-    		sword.draw(objectShader, camera);
-    		light.draw(lightShader, camera, Mat4(1.0), lightPos);
+	    	sword.draw(camera);
+    		lightMR.draw(camera, Mat4(1.0), lightPos, Quat(0.0f, 0.0f, 0.0f, 1.0f), Vec3(1, 1, 1));
 
 	        // bring buffer to the front
 	        glfwSwapBuffers(window);
@@ -208,10 +207,6 @@ namespace MEGEngine {
 
 	    	setDeltaTime(lastTime);
 	    }
-
-	    // cleanup
-		objectShader.del();
-		// lightShader.del();
 
 	    // close
 	    glfwDestroyWindow(window);

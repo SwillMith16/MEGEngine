@@ -21,8 +21,8 @@ namespace MEGEngine {
     }
 
     void MeshRenderer::draw(Camera& camera, Mat4 matrix, Vec3 transform, Quat rotation, Vec3 scale) {
-        _material->shader()->activate();
-        _mesh->vao.bind();
+        _material->bind();
+        _mesh->bind();
 
         // Keep track of how many of each type of textures we have
         unsigned int numDiffuse = 0;
@@ -59,6 +59,6 @@ namespace MEGEngine {
         _material->shader()->setUniform("scale", sca);
 
         // Draw the actual mesh
-        glDrawElements(GL_TRIANGLES, _mesh->indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, _mesh->numIndices(), GL_UNSIGNED_INT, 0);
     }
 } // MEGEngine

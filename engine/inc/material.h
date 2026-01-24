@@ -16,7 +16,6 @@ namespace MEGEngine {
         void setTextureList(std::vector<class Texture> textureList);
 
         std::shared_ptr<Shader> shader();
-
         std::vector<Texture> textures();
 
     private:

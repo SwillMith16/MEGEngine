@@ -11,7 +11,6 @@ namespace MEGEngine {
 
     void Material::bind() {
         _shader->activate();
-
         _shader->setUniform("diffuse0", _textures[0].ID);
     }
 

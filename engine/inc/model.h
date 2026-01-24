@@ -7,6 +7,7 @@
 
 #include "mesh.h"
 #include "mesh_renderer.h"
+#include "shader.h"
 
 #include "math/quat.h"
 #include "math/mat4.h"
@@ -24,7 +25,9 @@ namespace MEGEngine {
 		float scale = 1.0f;
 
 		Model(const char* file);
-		void draw(class Shader& shader, class Camera& camera);
+		void draw(class Camera& camera);
+
+		std::vector<MeshRenderer> meshRenderers();
 
 	private:
 		const char* file;
@@ -32,7 +35,8 @@ namespace MEGEngine {
 		json JSON;
 
 		std::vector<Mesh> meshes;
-		std::vector<MeshRenderer> meshRenderers;
+		std::vector<MeshRenderer> _meshRenderers;
+		Shader _objectShader;
 		std::vector<Vec3> translationsMeshes;
 		std::vector<Quat> rotationsMeshes;
 		std::vector<Vec3> scalesMeshes;

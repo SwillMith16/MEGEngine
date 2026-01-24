@@ -27,11 +27,14 @@ namespace MEGEngine {
 		traverseNode(0);
 	}
 
-	void Model::draw(Shader &shader, Camera &camera) {
-		for (unsigned int i = 0; i < meshRenderers.size(); i++) {
-			meshRenderers[i].draw(camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
-			// meshes[i].draw(shader, camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
+	void Model::draw(Camera &camera) {
+		for (unsigned int i = 0; i < _meshRenderers.size(); i++) {
+			_meshRenderers[i].draw(camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
 		}
+	}
+
+	std::vector<MeshRenderer> Model::meshRenderers() {
+		return _meshRenderers;
 	}
 
 
@@ -55,14 +58,12 @@ namespace MEGEngine {
 		std::vector<unsigned int> indices = getIndices(JSON["accessors"][indAccInd]);
 		std::vector<Texture> textures = getTextures();
 
-		// Combine the vertices, indices, and textures into a mesh
-		Shader shader;
-		Material material(std::make_shared<Shader>(shader));
+		// Combine the vertices, indices into a mesh, and texture, shader into material
+		Material material(std::make_shared<Shader>(_objectShader));
 		material.setTextureList(textures);
 		Mesh mesh(vertices, indices);
 		MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));
-		meshRenderers.push_back(mr);
-		meshes.emplace_back(vertices, indices, textures);
+		_meshRenderers.push_back(mr);
 	}
 
 	void Model::traverseNode(unsigned int nextNode, Mat4 matrix) {

@@ -1,11 +1,5 @@
-#include "GLAD/glad.h"
-
 #include "mesh.h"
-#include "shader.h"
-#include "shader_priv.h"
-#include "camera.h"
 #include "ebo.h"
-#include "math/glm_conversions.h"
 
 namespace MEGEngine {
 	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
@@ -25,74 +19,11 @@ namespace MEGEngine {
 		ebo.unbind();
 	}
 
-	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures) {
-		this->vertices = vertices;
-		this->indices = indices;
-		this->textures = textures;
-
+	void Mesh::bind() {
 		vao.bind();
-		VBO vbo(vertices);
-		EBO ebo(indices);
-
-		vao.linkAttrib(vbo, 0, 3, sizeof(Vertex), (void *) 0); // position
-		vao.linkAttrib(vbo, 1, 3, sizeof(Vertex), (void *) (3 * sizeof(float))); // normal
-		vao.linkAttrib(vbo, 2, 3, sizeof(Vertex), (void *) (6 * sizeof(float))); // colour
-		vao.linkAttrib(vbo, 3, 2, sizeof(Vertex), (void *) (9 * sizeof(float))); // texture UV
-		vao.unbind();
-		vbo.unbind();
-		ebo.unbind();
 	}
 
-	void Mesh::draw
-	( // parameters
-		Shader& shader,
-		Camera& camera,
-		Mat4 matrix,
-		Vec3 transform,
-		Quat rotation,
-		Vec3 scale
-	)
-	{ // body
-		// Bind shader to be able to access uniforms
-		shader.activate();
-		vao.bind();
-
-		// Keep track of how many of each type of textures we have
-		unsigned int numDiffuse = 0;
-		unsigned int numSpecular = 0;
-
-		for (unsigned int i = 0; i < textures.size(); i++)
-		{
-			std::string num;
-			std::string type = textures[i].type;
-			if (type == "diffuse")
-			{
-				num = std::to_string(numDiffuse++);
-			}
-			else if (type == "specular")
-			{
-				num = std::to_string(numSpecular++);
-			}
-			textures[i].texUnit(shader, (type + num).c_str(), i);
-			textures[i].bind();
-		}
-		// Take care of the camera Matrix
-		shader.setUniform("camPos", camera.position);
-		camera.matrix(shader, "camMatrix");
-
-		// Create matrices
-		transform.z = -transform.z;
-		Mat4 trans = Mat4::translation(transform);
-		Mat4 rot = rotation.toMatrix();
-		Mat4 sca = Mat4::scale(scale);
-
-		// Push the matrices to the vertex shader
-		shader.setUniform("model",  matrix);
-		shader.setUniform("translation", trans);
-		shader.setUniform("rotation", rot);
-		shader.setUniform("scale", sca);
-
-		// Draw the actual mesh
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	size_t Mesh::numIndices() {
+		return this->indices.size();
 	}
 }
