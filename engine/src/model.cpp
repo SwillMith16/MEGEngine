@@ -6,6 +6,8 @@
 #include "texture.h"
 #include "vertex.h"
 #include "mesh.h"
+#include "material.h"
+#include "mesh_renderer.h"
 
 #include "math/glm_conversions.h"
 
@@ -26,8 +28,9 @@ namespace MEGEngine {
 	}
 
 	void Model::draw(Shader &shader, Camera &camera) {
-		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes[i].draw(shader, camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
+		for (unsigned int i = 0; i < meshRenderers.size(); i++) {
+			meshRenderers[i].draw(camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
+			// meshes[i].draw(shader, camera, matricesMeshes[i], transform, orientation, Vec3(scale, scale, scale));
 		}
 	}
 
@@ -53,7 +56,13 @@ namespace MEGEngine {
 		std::vector<Texture> textures = getTextures();
 
 		// Combine the vertices, indices, and textures into a mesh
-		meshes.push_back(Mesh(vertices, indices, textures));
+		Shader shader;
+		Material material(std::make_shared<Shader>(shader));
+		material.setTextureList(textures);
+		Mesh mesh(vertices, indices);
+		MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));
+		meshRenderers.push_back(mr);
+		meshes.emplace_back(vertices, indices, textures);
 	}
 
 	void Model::traverseNode(unsigned int nextNode, Mat4 matrix) {

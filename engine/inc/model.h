@@ -5,6 +5,9 @@
 
 #include "common.h"
 
+#include "mesh.h"
+#include "mesh_renderer.h"
+
 #include "math/quat.h"
 #include "math/mat4.h"
 #include "math/vec4.h"
@@ -28,7 +31,8 @@ namespace MEGEngine {
 		std::vector<unsigned char> data;
 		json JSON;
 
-		std::vector<class Mesh> meshes;
+		std::vector<Mesh> meshes;
+		std::vector<MeshRenderer> meshRenderers;
 		std::vector<Vec3> translationsMeshes;
 		std::vector<Quat> rotationsMeshes;
 		std::vector<Vec3> scalesMeshes;

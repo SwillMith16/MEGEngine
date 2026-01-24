@@ -22,6 +22,7 @@ namespace MEGEngine {
 
 		VAO vao;
 
+		Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 		Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
 
 		void draw

@@ -39,6 +39,10 @@ add_library(MEGEngine SHARED
         inc/math/vec4.h
         inc/utils/log.h
         inc/utils/log.cpp
+        src/material.cpp
+        inc/material.h
+        src/mesh_renderer.cpp
+        inc/mesh_renderer.h
 )
 
 target_include_directories(MEGEngine

@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "common.h"
+#include "settings.h"
 
 
 namespace MEGEngine {
@@ -13,7 +14,7 @@ namespace MEGEngine {
 	class ENGINE_API Shader {
 	public:
 		unsigned int ID;
-		Shader(const char* vertexFile, const char* fragmentFile);
+		Shader(const char* vertexFile = (settings.general().shaderDirectory+"/default.vert").c_str(), const char* fragmentFile = (settings.general().shaderDirectory+"/default.frag").c_str());
 
 		void activate();
 		void del();
