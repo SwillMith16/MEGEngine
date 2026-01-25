@@ -13,7 +13,8 @@
 
 #include "mesh.h"
 #include "settings.h"
-#include "model.h"
+#include "entity.h"
+#include "model_loader.h"
 #include "shader.h"
 #include "shader_priv.h"
 #include "texture.h"
@@ -168,15 +169,16 @@ namespace MEGEngine {
 		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
 	    Camera camera(g_windowWidth, g_windowHeight, cameraPos);
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
-		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-30.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
+		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
 
-		Model sword((settings.general().modelDirectory + "/sword/sword.gltf").c_str());
-		sword.transform = Vec3(-10.0f, -10.0f, 4.0f);
-		sword.orientation = Quat(0, 0, 0.707, 0.707);
-		sword.scale = 0.2f;
-		sword.meshRenderers()[0].material()->shader()->activate();
-		sword.meshRenderers()[0].material()->shader()->setUniform("lightColour", lightColour);
-		sword.meshRenderers()[0].material()->shader()->setUniform("lightPos", lightPos);
+		Entity sword = Entity();
+		modelLoader.loadModelFromFile(sword, (settings.general().modelDirectory + "/sword/sword.gltf").c_str());
+		sword.transform().setPosition(Vec3(-5, -5, 0));
+		sword.transform().setRotation(Quat(0, 0, 0.707, 0.707));
+		sword.transform().setScale(0.5);
+		sword.meshRenderer()->material()->shader()->activate();
+		sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
+		sword.meshRenderer()->material()->shader()->setUniform("lightPos", lightPos);
 
 		auto lastTime = clock::now();
 
@@ -188,7 +190,7 @@ namespace MEGEngine {
 	        // clean back buffer and depth buffer
 	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	    	sword.transform += Vec3(1, 0, 0) * deltaTime();
+	    	sword.transform().setPosition(sword.transform().position() + (Vec3(1, 0, 0) * deltaTime()));
 
 	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);

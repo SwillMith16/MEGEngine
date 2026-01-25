@@ -21,27 +21,48 @@ namespace MEGEngine {
 
 
 
+    Mat4 Mat4::translation(Mat4& m, const Vec3& t) {
+        return Private::fromGlmMat4(glm::translate(Private::toGlmMat4(m), Private::toGlmVec3(t)));
+    }
+
+    Mat4 Mat4::scale(Mat4& m, const Vec3& s) {
+        return Private::fromGlmMat4(glm::scale(Private::toGlmMat4(m), Private::toGlmVec3(s)));
+    }
+
+    Mat4 Mat4::rotationX(Mat4& m, float radians) {
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(m), radians, Private::toGlmVec3({1, 0, 0})));
+    }
+
+    Mat4 Mat4::rotationY(Mat4& m, float radians) {
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(m), radians, Private::toGlmVec3({0, 1, 0})));
+    }
+
+    Mat4 Mat4::rotationZ(Mat4& m, float radians) {
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(m), radians, Private::toGlmVec3({0, 0, 1})));
+    }
+
+
+
     Mat4 Mat4::translation(const Vec3& t) {
-        return Private::fromGlmMat4(glm::translate(glm::mat4(1.0f), Private::toGlmVec3(t)));
+        return Private::fromGlmMat4(glm::translate(Private::toGlmMat4(Mat4::identity()), Private::toGlmVec3(t)));
     }
 
     Mat4 Mat4::scale(const Vec3& s) {
-        return Private::fromGlmMat4(glm::scale(glm::mat4(1.0f), Private::toGlmVec3(s)));
+        return Private::fromGlmMat4(glm::scale(Private::toGlmMat4(Mat4::identity()), Private::toGlmVec3(s)));
     }
 
-
-
     Mat4 Mat4::rotationX(float radians) {
-        return Private::fromGlmMat4(glm::rotate(glm::mat4(1.0f), radians, Private::toGlmVec3({1, 0, 0})));
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(Mat4::identity()), radians, Private::toGlmVec3({1, 0, 0})));
     }
 
     Mat4 Mat4::rotationY(float radians) {
-        return Private::fromGlmMat4(glm::rotate(glm::mat4(1.0f), radians, Private::toGlmVec3({0, 1, 0})));
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(Mat4::identity()), radians, Private::toGlmVec3({0, 1, 0})));
     }
 
     Mat4 Mat4::rotationZ(float radians) {
-        return Private::fromGlmMat4(glm::rotate(glm::mat4(1.0f), radians, Private::toGlmVec3({0, 0, 1})));
+        return Private::fromGlmMat4(glm::rotate(Private::toGlmMat4(Mat4::identity()), radians, Private::toGlmVec3({0, 0, 1})));
     }
+
 
 
     Mat4 Mat4::perspective(float fovDegrees, float aspect, float near, float far) {

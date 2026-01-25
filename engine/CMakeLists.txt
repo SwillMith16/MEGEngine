@@ -21,8 +21,8 @@ add_library(MEGEngine SHARED
         inc/settings.h
         src/mesh.cpp
         inc/mesh.h
-        src/model.cpp
-        inc/model.h
+        src/entity.cpp
+        inc/entity.h
         inc/common.h
         inc/vertex.h
         inc/math/vec2.h
@@ -43,6 +43,10 @@ add_library(MEGEngine SHARED
         inc/material.h
         src/mesh_renderer.cpp
         inc/mesh_renderer.h
+        src/model_loader.cpp
+        inc/model_loader.h
+        src/transform.cpp
+        inc/transform.h
 )
 
 target_include_directories(MEGEngine

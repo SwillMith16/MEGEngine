@@ -9,7 +9,7 @@ namespace MEGEngine {
         unsigned int ID;
         VAO();
 
-        void linkAttrib(MEGEngine::VBO& VBO, unsigned int layout, int numComponents, int stride, void* offset);
+        void linkAttrib(VBO& VBO, unsigned int layout, int numComponents, int stride, void* offset);
         void bind();
         void unbind();
         void del();

@@ -5,12 +5,13 @@
 namespace MEGEngine {
     Transform::Transform() : _scale(1, 1, 1) {}
 
-    void Transform::setPosition(const Vec3& position) {_position = position;}
+    // z flipped so positive is moving away same done when getting position vector
+    void Transform::setPosition(const Vec3& position) {_position = Vec3(position.x, position.y, -position.z);}
     void Transform::setRotation(const Quat& rotation) {_rotation = rotation;}
     void Transform::setScale(const Vec3& scale) {_scale = scale;}
     void Transform::setScale(float scale) {_scale = Vec3(scale, scale, scale);}
 
-    Vec3 Transform::position() const {return _position;}
+    Vec3 Transform::position() const {return {_position.x, _position.y, -_position.z};}
     Quat Transform::rotation() const {return _rotation;}
     Vec3 Transform::scale() const {return _scale;}
 
