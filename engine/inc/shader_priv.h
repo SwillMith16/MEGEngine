@@ -13,7 +13,7 @@
 
 namespace MEGEngine {
     template<typename T>
-    void Shader::setUniform(const char* name, T& value) {
+    void Shader::setUniform(const char* name, const T& value) {
         if constexpr (std::is_same<T, GLfloat>::value)
             glUniform1f(glGetUniformLocation(ID, name), value);
         else if constexpr (std::is_same<T, GLuint>::value)

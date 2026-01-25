@@ -1,17 +1,7 @@
 #include "primitive_shapes.h"
 
 namespace MEGEngine {
-    std::vector<Vertex>& Primitive::vertices() {
-        return _vertices;
-    }
-
-    std::vector<unsigned int>& Primitive::indices() {
-        return _indices;
-    }
-
-
-    Cube::Cube() {
-        _vertices =
+	std::vector<Vertex> Cube::_vertices =
 		{
 			//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
 			// top
@@ -51,31 +41,32 @@ namespace MEGEngine {
 			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)}
 		};
 
-    	_indices =
-    	{
-    		// top
-    		0, 1, 2,
-			2, 3, 0,
+	std::vector<unsigned int> Cube::_indices =
+	{
+		// top
+		0, 1, 2,
+		2, 3, 0,
 
-			// front
-			4, 5, 6,
-			6, 7, 4,
+		// front
+		4, 5, 6,
+		6, 7, 4,
 
-			// right
-			8, 9, 10,
-			10, 11, 8,
+		// right
+		8, 9, 10,
+		10, 11, 8,
 
-			// back
-			12, 13, 14,
-			14, 15, 12,
+		// back
+		12, 13, 14,
+		14, 15, 12,
 
-			// left
-			16, 17, 18,
-			18, 19, 16,
+		// left
+		16, 17, 18,
+		18, 19, 16,
 
-			// bottom
-			20, 21, 22,
-			22, 23, 20
-		};
-    }
+		// bottom
+		20, 21, 22,
+		22, 23, 20
+	};
+
+
 } // MEGEngine

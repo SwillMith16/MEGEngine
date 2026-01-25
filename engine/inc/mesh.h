@@ -10,7 +10,7 @@
 namespace MEGEngine {
 	class ENGINE_API Mesh {
 	public:
-		Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+		Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 		void bind();
 		size_t numIndices();
 

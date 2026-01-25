@@ -1,6 +1,8 @@
 #include "GLAD/glad.h"
 
 #include "mesh_renderer.h"
+
+#include <utility>
 #include "camera.h"
 #include "material.h"
 #include "mesh.h"
@@ -12,6 +14,10 @@
 namespace MEGEngine {
     MeshRenderer::MeshRenderer(std::shared_ptr<Mesh> mesh, std::shared_ptr<class Material> material)
         : _mesh(std::move(mesh)), _material(std::move(material)) {}
+
+    void MeshRenderer::setMaterial(std::shared_ptr<class Material> material) {
+        _material = std::move(material);
+    }
 
     std::shared_ptr<Material> MeshRenderer::material() {
         return _material;

@@ -36,6 +36,13 @@ namespace MEGEngine {
         traverseNode(model, 0);
     }
 
+    void ModelLoader::loadModelFromData(Entity &model, const std::vector<class Vertex> &vertices, const std::vector<unsigned int> &indices) {
+        Mesh mesh(vertices, indices);
+        Material material(std::make_shared<Shader>()); // TODO: once shader manager is implemented, fetch from there
+        MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));
+        model.setMeshRenderer(std::make_shared<MeshRenderer>(mr));
+    }
+
     void ModelLoader::traverseNode(Entity& model, unsigned int nodeIndex, Mat4 matrix) {
         Log(LogLevel::DBG, "Processing model node index: %u", nodeIndex);
         json node = _json["nodes"][nodeIndex];

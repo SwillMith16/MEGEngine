@@ -7,7 +7,7 @@ namespace MEGEngine {
     class EBO {
     public:
         unsigned int ID;
-        EBO(std::vector<unsigned int>& indices);
+        EBO(const std::vector<unsigned int>& indices);
 
         void bind();
         void unbind();

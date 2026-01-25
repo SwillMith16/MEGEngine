@@ -20,6 +20,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "material.h"
+#include "primitive_shapes.h"
 
 #include "math/quat.h"
 #include "math/vec4.h"
@@ -30,74 +31,6 @@
 #include "utils/log.h"
 
 const GLint g_windowWidth = 800, g_windowHeight = 800;
-
-MEGEngine::Vertex lightVertices[] =
-{
-	//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
-	// top
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-
-	// front
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-
-	// right
-	MEGEngine::Vertex{MEGEngine::Vec3(01.0, -01.0,  01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(01.0, -01.0, -01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(01.0,  01.0, -01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(01.0,  01.0,  01.0), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-
-	// back
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-
-	// left
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f,  1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-
-	// bottom
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f, -1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3( 1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)},
-	MEGEngine::Vertex{MEGEngine::Vec3(-1.0f, -1.0f,  1.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec3(0.0f,  0.0f,  0.0f), MEGEngine::Vec2(0.0f,  0.0f)}
-
-};
-
-GLuint lightIndices[] =
-{
-	// top
-	0, 1, 2,
-	2, 3, 0,
-
-	// front
-	4, 5, 6,
-	6, 7, 4,
-
-	// right
-	8, 9, 10,
-	10, 11, 8,
-
-	// back
-	12, 13, 14,
-	14, 15, 12,
-
-	// left
-	16, 17, 18,
-	18, 19, 16,
-
-	// bottom
-	20, 21, 22,
-	22, 23, 20
-};
 
 namespace MEGEngine {
 	using clock = std::chrono::high_resolution_clock;
@@ -149,23 +82,20 @@ namespace MEGEngine {
 		glDepthFunc(GL_LESS);
 
 		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		Vec3 lightPos = Vec3(0.0f, 0.0f, 0.0f);
 
 
+		Entity light = Entity();
+		modelLoader.loadModelFromData(light, Cube::vertices(), Cube::indices());
 		Shader lightShader((settings.general().shaderDirectory + "/light.vert").c_str(), (settings.general().shaderDirectory + "/light.frag").c_str());
+		Material lightMaterial(std::make_shared<Shader>(lightShader));
+		std::vector<Texture> tex {Texture("", "diffuse", 0)};
+		lightMaterial.setTextureList(tex);
+		light.meshRenderer()->setMaterial(std::make_shared<Material>(lightMaterial));
+
 		lightShader.activate();
 		lightShader.setUniform("lightColour", lightColour);
-		lightShader.setUniform("translation", lightPos);
+		lightShader.setUniform("translation", light.transform().position());
 
-		std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
-		std::vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
-		std::vector<Texture> tex {Texture("", "diffuse", 0)};
-		Material lightMaterial(std::make_shared<Shader>(lightShader));
-		lightMaterial.setTextureList(tex);
-		Mesh light(lightVerts, lightInd);
-		MeshRenderer lightMR(std::make_shared<Mesh>(light), std::make_shared<Material>(lightMaterial));
-
-		// glm::vec3 cameraPos = glm::vec3(-5.0f, 7.0f, 5.0f);
 		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
 	    Camera camera(g_windowWidth, g_windowHeight, cameraPos);
 		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
@@ -178,7 +108,7 @@ namespace MEGEngine {
 		sword.transform().setScale(0.5);
 		sword.meshRenderer()->material()->shader()->activate();
 		sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
-		sword.meshRenderer()->material()->shader()->setUniform("lightPos", lightPos);
+		sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
 
 		auto lastTime = clock::now();
 
@@ -196,7 +126,7 @@ namespace MEGEngine {
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
 	    	sword.draw(camera);
-    		lightMR.draw(camera, Mat4(1.0), lightPos, Quat(0.0f, 0.0f, 0.0f, 1.0f), Vec3(1, 1, 1));
+	    	light.draw(camera);
 
 	        // bring buffer to the front
 	        glfwSwapBuffers(window);

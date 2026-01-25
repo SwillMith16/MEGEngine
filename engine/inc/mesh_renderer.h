@@ -9,6 +9,7 @@ namespace MEGEngine {
     class ENGINE_API MeshRenderer {
     public:
         MeshRenderer(std::shared_ptr<class Mesh> mesh, std::shared_ptr<class Material> material);
+        void setMaterial(std::shared_ptr<class Material> material);
         std::shared_ptr<class Material> material();
         std::shared_ptr<class Mesh> mesh();
 

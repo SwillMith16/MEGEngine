@@ -8,20 +8,14 @@
 #include "vertex.h"
 
 namespace MEGEngine {
-    class Primitive {
+    class ENGINE_API Cube {
     public:
-        std::vector<Vertex>& vertices();
-        std::vector<unsigned int>& indices();
-    protected:
-        Primitive() = default;
+    	static std::vector<Vertex>& vertices() { return _vertices; };
+    	static std::vector<unsigned int>& indices() { return _indices; };
 
-        std::vector<Vertex> _vertices;
-        std::vector<unsigned int> _indices;
-    };
-
-    class ENGINE_API Cube : public Primitive {
-    public:
-        Cube();
+    private:
+    	static std::vector<Vertex> _vertices;
+    	static std::vector<unsigned int> _indices;
     };
 } // MEGEngine
 
