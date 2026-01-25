@@ -47,6 +47,8 @@ add_library(MEGEngine SHARED
         inc/model_loader.h
         src/transform.cpp
         inc/transform.h
+        src/primitive_shapes.cpp
+        inc/primitive_shapes.h
 )
 
 target_include_directories(MEGEngine
