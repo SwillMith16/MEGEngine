@@ -51,6 +51,8 @@ add_library(MEGEngine SHARED
         inc/primitive_shapes.h
         src/shader_manager.cpp
         inc/shader_manager.h
+        src/scene.cpp
+        inc/scene.h
 )
 
 target_include_directories(MEGEngine

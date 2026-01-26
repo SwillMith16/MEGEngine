@@ -22,6 +22,7 @@
 #include "camera.h"
 #include "material.h"
 #include "primitive_shapes.h"
+#include "scene.h"
 
 #include "math/quat.h"
 #include "math/vec4.h"
@@ -85,7 +86,7 @@ namespace MEGEngine {
 		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 
-		Entity light = Entity();
+		Entity& light = _scene->createEntity();
 		modelLoader.loadModelFromData(light, Cube::vertices(), Cube::indices());
 		std::vector<Texture> tex {Texture("", "diffuse", 0)};
 		light.meshRenderer()->setMaterial(std::make_shared<Material>(ShaderManager::getShader("light")));
@@ -97,14 +98,16 @@ namespace MEGEngine {
 		}
 
 
-		Entity sword = Entity();
+		Entity& sword = _scene->createEntity();
 		modelLoader.loadModelFromFile(sword, (settings.general().modelDirectory + "/sword/sword.gltf").c_str());
 		sword.transform().setPosition(Vec3(-5, -5, 0));
 		sword.transform().setRotation(Quat(0, 0, 0.707, 0.707));
 		sword.transform().setScale(0.5);
-		sword.meshRenderer()->material()->shader()->activate();
-		sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
-		sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
+		if (sword.meshRenderer()->material()->shader()) {
+			sword.meshRenderer()->material()->shader()->activate();
+			sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
+			sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
+		}
 
 
 		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
@@ -123,13 +126,17 @@ namespace MEGEngine {
 	        // clean back buffer and depth buffer
 	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	    	_scene->update(_deltaTime);
+
+	    	// TODO: move into the entity onUpdate function
 	    	sword.transform().setPosition(sword.transform().position() + (Vec3(1, 0, 0) * deltaTime()));
 
 	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
 
-	    	sword.draw(camera);
-	    	light.draw(camera);
+	    	for (auto& entity: _scene->entities()) {
+	    		entity->draw(camera);
+	    	}
 
 	        // bring buffer to the front
 	        glfwSwapBuffers(window);
@@ -161,9 +168,9 @@ namespace MEGEngine {
 	// 	return *_window;
 	// }
 
-	// Scene& Application::scene() {
-	// 	return *_scene;
-	// }
+	Scene& Application::scene() {
+		return *_scene;
+	}
 
 	// Renderer& Application::renderer() {
 	// 	return *_renderer;
@@ -175,6 +182,7 @@ namespace MEGEngine {
 		// glViewport(0, 0, config.width, config.height);
 
 		// setup window, renderer, and scene
+		_scene = std::make_unique<Scene>();
 
 
 		onInit();
