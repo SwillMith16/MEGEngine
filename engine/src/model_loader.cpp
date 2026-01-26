@@ -8,6 +8,7 @@
 #include "material.h"
 #include "texture.h"
 #include "shader.h"
+#include "shader_manager.h"
 #include "vertex.h"
 
 #include "math/glm_conversions.h"
@@ -37,9 +38,7 @@ namespace MEGEngine {
     }
 
     void ModelLoader::loadModelFromData(Entity &model, const std::vector<class Vertex> &vertices, const std::vector<unsigned int> &indices) {
-        Mesh mesh(vertices, indices);
-        Material material(std::make_shared<Shader>()); // TODO: once shader manager is implemented, fetch from there
-        MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));
+        MeshRenderer mr(std::make_shared<Mesh>(vertices, indices), std::make_shared<Material>());
         model.setMeshRenderer(std::make_shared<MeshRenderer>(mr));
     }
 
@@ -136,7 +135,7 @@ namespace MEGEngine {
         std::vector<Texture> textures = getTextures();
 
         // Combine the vertices, indices into a mesh, and texture, shader into material
-        Material material(std::make_shared<Shader>());
+        Material material(ShaderManager::getShader("defaultLit"));
         material.setTextureList(textures);
         Mesh mesh(vertices, indices);
         MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));

@@ -10,6 +10,7 @@ namespace MEGEngine {
     class ENGINE_API Material {
     public:
         explicit Material(std::shared_ptr<class Shader> shader);
+        Material();
 
         void bind();
 

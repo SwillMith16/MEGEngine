@@ -14,7 +14,6 @@ namespace MEGEngine {
         std::shared_ptr<class Mesh> mesh();
 
         void draw(class Camera& camera, class Transform& transform);
-        void draw(class Camera& camera, class Mat4 matrix, class Vec3 transform, class Quat rotation, class Vec3 scale);
 
     private:
         std::shared_ptr<class Mesh> _mesh;

@@ -49,6 +49,8 @@ add_library(MEGEngine SHARED
         inc/transform.h
         src/primitive_shapes.cpp
         inc/primitive_shapes.h
+        src/shader_manager.cpp
+        inc/shader_manager.h
 )
 
 target_include_directories(MEGEngine

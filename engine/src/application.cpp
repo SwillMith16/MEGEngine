@@ -17,6 +17,7 @@
 #include "model_loader.h"
 #include "shader.h"
 #include "shader_priv.h"
+#include "shader_manager.h"
 #include "texture.h"
 #include "camera.h"
 #include "material.h"
@@ -86,20 +87,15 @@ namespace MEGEngine {
 
 		Entity light = Entity();
 		modelLoader.loadModelFromData(light, Cube::vertices(), Cube::indices());
-		Shader lightShader((settings.general().shaderDirectory + "/light.vert").c_str(), (settings.general().shaderDirectory + "/light.frag").c_str());
-		Material lightMaterial(std::make_shared<Shader>(lightShader));
 		std::vector<Texture> tex {Texture("", "diffuse", 0)};
-		lightMaterial.setTextureList(tex);
-		light.meshRenderer()->setMaterial(std::make_shared<Material>(lightMaterial));
+		light.meshRenderer()->setMaterial(std::make_shared<Material>(ShaderManager::getShader("light")));
+		light.meshRenderer()->material()->setTextureList(tex);
+		if (light.meshRenderer()->material()->shader()) {
+			light.meshRenderer()->material()->shader()->activate();
+			light.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
+			light.meshRenderer()->material()->shader()->setUniform("translation", light.transform().position());
+		}
 
-		lightShader.activate();
-		lightShader.setUniform("lightColour", lightColour);
-		lightShader.setUniform("translation", light.transform().position());
-
-		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
-	    Camera camera(g_windowWidth, g_windowHeight, cameraPos);
-		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
-		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
 
 		Entity sword = Entity();
 		modelLoader.loadModelFromFile(sword, (settings.general().modelDirectory + "/sword/sword.gltf").c_str());
@@ -109,6 +105,13 @@ namespace MEGEngine {
 		sword.meshRenderer()->material()->shader()->activate();
 		sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
 		sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
+
+
+		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
+		Camera camera(g_windowWidth, g_windowHeight, cameraPos);
+		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
+		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
+
 
 		auto lastTime = clock::now();
 
