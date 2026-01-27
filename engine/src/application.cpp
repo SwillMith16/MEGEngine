@@ -31,13 +31,12 @@
 #include "math/glm_conversions.h"
 #include "utils/log.h"
 
-const GLint g_windowWidth = 800, g_windowHeight = 800;
-
 namespace MEGEngine {
 	using clock = std::chrono::high_resolution_clock;
 
 	Application::Application(const ApplicationConfig& appConfig) {
 		this->config = appConfig;
+		// TODO: store app config values in settings for global use throughout application
 	}
 
 	Application::~Application() {
@@ -58,7 +57,7 @@ namespace MEGEngine {
 	    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	    // create window object
-	    GLFWwindow* window = glfwCreateWindow(g_windowWidth, g_windowHeight, "MEGEngine", nullptr, nullptr);
+	    GLFWwindow* window = glfwCreateWindow(config.width, config.height, config.windowTitle.c_str(), nullptr, nullptr);
 	    if (!window) {
 	        glfwTerminate();
 	        throw std::runtime_error("Failed to create GLFW window");
@@ -75,7 +74,7 @@ namespace MEGEngine {
 	    }
 
 	    // set the viewport
-	    glViewport(0, 0, g_windowWidth, g_windowHeight);
+	    glViewport(0, 0, config.width, config.height);
 
 		// enables depth perception - prevents incorrect overlapping triangles
 		glEnable(GL_DEPTH_TEST);
@@ -84,14 +83,8 @@ namespace MEGEngine {
 
 		init();
 
-
-
-
-		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
-		Camera camera(g_windowWidth, g_windowHeight, cameraPos);
-		// camera.orientation = glm::rotate(camera.orientation, glm::radians(-45.0f), camera.up); // left-right rotation
-		camera.orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(camera.orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(camera.orientation), Private::toGlmVec3(camera.up))))); // up-down rotation
-
+		_scene->camera().setPosition({0, 0, -10});
+		_scene->camera().orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_scene->camera().orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(_scene->camera().orientation), Private::toGlmVec3(_scene->camera().up))))); // up-down rotation
 
 		auto lastTime = clock::now();
 
@@ -105,11 +98,12 @@ namespace MEGEngine {
 
 	    	_scene->update(_deltaTime);
 
-	        camera.processInputs(window, deltaTime());
-    		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
+
+	        _scene->camera().processInputs(window, deltaTime());
+    		_scene->camera().updateMatrix(70.0f, 0.1f, 1000.0f);
 
 	    	for (auto& entity: _scene->entities()) {
-	    		entity->draw(camera);
+	    		entity->draw(_scene->camera());
 	    	}
 
 	        // bring buffer to the front
@@ -154,7 +148,7 @@ namespace MEGEngine {
 		settings.init();
 
 		// setup window, renderer, and scene
-		_scene = std::make_unique<Scene>();
+		_scene = std::make_unique<Scene>(config.width, config.height);
 
 
 		onInit();

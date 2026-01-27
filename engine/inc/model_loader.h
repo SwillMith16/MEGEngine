@@ -16,8 +16,8 @@ namespace MEGEngine {
     class ENGINE_API ModelLoader {
     public:
         static ModelLoader& instance();
-        void loadModelFromFile(Entity& model, const char* file); // TODO: Need to add scene as an argument, once scene class is created
-        void loadModelFromData(Entity& model, const std::vector<class Vertex>& vertices, const std::vector<unsigned int>& indices); // TODO: same here
+        void loadModelFromFile(Entity& model, const char* file);
+        void loadModelFromData(Entity& model, const std::vector<class Vertex>& vertices, const std::vector<unsigned int>& indices);
 
 
 

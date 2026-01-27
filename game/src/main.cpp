@@ -52,7 +52,11 @@ protected:
 
 int main() {
 	MEGEngine::ApplicationConfig appConfig;
-	appConfig.windowTitle = "Test Game";
+	appConfig = {
+		.windowTitle = "Test Game",
+		.width = 1280,
+		.height = 720
+	};
 
 	ExampleGame game(appConfig);
 	game.run();

@@ -13,8 +13,6 @@ namespace MEGEngine {
 		Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
 		Mat4 camMatrix = Mat4(1.0f);
 
-		Vec3 position;
-
 		// Used to prevent camera from jumping on click
 		bool firstClick = true;
 
@@ -27,9 +25,11 @@ namespace MEGEngine {
 		float boostSpeed = 10.0f;
 		float sensitivity = 100.0f;
 
-		Camera(int width, int height, Vec3 position);
+		Camera(int width, int height);
 
-		Vec3 getPosition();
+		Vec3 position() const;
+		void setPosition(const Vec3& position);
+		void move(const Vec3& move);
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void matrix(Shader& shader, const char* uniform);
 		void processInputs(class GLFWwindow* window, float deltaTime);
@@ -37,6 +37,8 @@ namespace MEGEngine {
 	private:
 		float _width;
 		float _height;
+
+		Vec3 _position;
 	};
 }
 

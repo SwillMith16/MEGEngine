@@ -2,7 +2,9 @@
 #include "camera.h"
 
 namespace MEGEngine {
-    Scene::Scene() : _camera(std::make_unique<Camera>(Camera(800, 800, {0, 0, 0}))) {}
+    Scene::Scene() : _camera(std::make_unique<Camera>(Camera(1280, 720))) {}
+
+    Scene::Scene(unsigned int width, unsigned int height) : _camera(std::make_unique<Camera>(Camera(width, height))) {}
 
     const std::vector<std::unique_ptr<Entity>>& Scene::entities() const {
         return _entities;

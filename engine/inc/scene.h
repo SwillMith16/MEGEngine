@@ -11,6 +11,7 @@ namespace MEGEngine {
     class ENGINE_API Scene {
     public:
         Scene();
+        Scene(unsigned int width, unsigned int height);
         ~Scene() = default;
 
         void update(float dt);

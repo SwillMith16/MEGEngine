@@ -57,7 +57,7 @@ namespace MEGEngine {
             _material->textures()[i].texUnit(*_material->shader().get(), (type + num).c_str(), i);
             _material->textures()[i].bind();
         }
-        _material->shader()->setUniform("camPos", camera.position);
+        _material->shader()->setUniform("camPos", camera.position());
         camera.matrix(*_material->shader().get(), "camMatrix");
 
         // Create matrices

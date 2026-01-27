@@ -4,7 +4,6 @@
 
 namespace MEGEngine {
     // Constructor generates a vertex buffer object, binds it and links the vertices
-    // TODO: Return VBO constructor to how it was
     VBO::VBO(const std::vector<Vertex>& vertices) {
         glGenBuffers(1, &ID);
         glBindBuffer(GL_ARRAY_BUFFER, ID);
