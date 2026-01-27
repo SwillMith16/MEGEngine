@@ -5,7 +5,6 @@
 #include "GLM/gtx/vector_angle.hpp"
 
 #include "camera.h"
-#include "shader_priv.h"
 #include "math/glm_conversions.h"
 
 namespace MEGEngine {

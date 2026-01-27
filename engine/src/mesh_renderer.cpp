@@ -5,6 +5,7 @@
 #include <utility>
 #include "camera.h"
 #include "material.h"
+#include "shader.h"
 #include "mesh.h"
 #include "transform.h"
 

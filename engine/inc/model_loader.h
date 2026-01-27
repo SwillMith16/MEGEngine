@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#include <JSON/json.hpp>
-
 #include "common.h"
 
 #include "math/vec2.h"
@@ -12,10 +10,9 @@
 #include "math/vec4.h"
 #include "math/mat4.h"
 
-using json = nlohmann::json;
-
 namespace MEGEngine {
     class Entity;
+    struct JSONImpl;
     class ENGINE_API ModelLoader {
     public:
         static ModelLoader& instance();
@@ -25,11 +22,11 @@ namespace MEGEngine {
 
 
     private:
-        ModelLoader() = default;
+        ModelLoader();
 
         const char* _file = nullptr;
         std::vector<unsigned char> _data;
-        json _json;
+        std::unique_ptr<JSONImpl> _impl;
 
         std::vector<std::string> _loadedTexName;
         std::vector<class Texture> _loadedTex;
@@ -39,8 +36,6 @@ namespace MEGEngine {
         void traverseNode(Entity& model, unsigned int nextNode, Mat4 matrix = Mat4(1.0f));
 
         std::vector<unsigned char> getData();
-        std::vector<float> getFloats(json accessor);
-        std::vector<unsigned int> getIndices(json accessor);
         std::vector<Texture> getTextures();
 
         std::vector<struct Vertex> assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs);

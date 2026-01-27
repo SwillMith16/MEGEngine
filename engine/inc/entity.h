@@ -1,14 +1,12 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <JSON/json.hpp>
+#include <vector>
 
 #include "common.h"
 
 #include "transform.h"
 #include "mesh_renderer.h"
-
-using json = nlohmann::json;
 
 namespace MEGEngine {
 	class ENGINE_API Entity {

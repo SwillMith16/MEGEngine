@@ -1,5 +1,7 @@
 #include "GLM/gtc/type_ptr.hpp"
 
+#include <JSON/json.hpp>
+
 #include "model_loader.h"
 #include "entity.h"
 #include "texture.h"
@@ -15,7 +17,19 @@
 
 #include "utils/log.h"
 
+using json = nlohmann::json;
+
 namespace MEGEngine {
+    struct JSONImpl {
+        json _json;
+    };
+
+    // Requires JSON argument so kept out of public header
+    std::vector<float> getFloats(json accessor, json _json, std::vector<unsigned char>& _data);
+    std::vector<unsigned int> getIndices(json accessor, json _json, std::vector<unsigned char>& _data);
+
+    ModelLoader::ModelLoader() : _impl(std::make_unique<JSONImpl>()){}
+
     ModelLoader& ModelLoader::instance() {
         static ModelLoader instance;
         return instance;
@@ -27,7 +41,7 @@ namespace MEGEngine {
         std::string text = get_file_contents(file);
 
         // With data parsed into a JSON object, we can access the data without manually reading and modifying strings
-        _json = json::parse(text);
+        _impl->_json = json::parse(text);
 
         // store the raw data as bytes
         this->_file = file;
@@ -44,7 +58,7 @@ namespace MEGEngine {
 
     void ModelLoader::traverseNode(Entity& model, unsigned int nodeIndex, Mat4 matrix) {
         Log(LogLevel::DBG, "Processing model node index: %u", nodeIndex);
-        json node = _json["nodes"][nodeIndex];
+        json node = _impl->_json["nodes"][nodeIndex];
 
         // If this node has a translation, get it
         Vec3 translation = Vec3(0, 0, 0);
@@ -116,22 +130,22 @@ namespace MEGEngine {
 
     MeshRenderer ModelLoader::loadMeshRenderer(unsigned int indMesh) {
         // Get all accessor indices
-        unsigned int posAccInd = _json["meshes"][indMesh]["primitives"][0]["attributes"]["POSITION"];
-        unsigned int normalAccInd = _json["meshes"][indMesh]["primitives"][0]["attributes"]["NORMAL"];
-        unsigned int texAccInd = _json["meshes"][indMesh]["primitives"][0]["attributes"]["TEXCOORD_0"];
-        unsigned int indAccInd = _json["meshes"][indMesh]["primitives"][0]["indices"];
+        unsigned int posAccInd = _impl->_json["meshes"][indMesh]["primitives"][0]["attributes"]["POSITION"];
+        unsigned int normalAccInd = _impl->_json["meshes"][indMesh]["primitives"][0]["attributes"]["NORMAL"];
+        unsigned int texAccInd = _impl->_json["meshes"][indMesh]["primitives"][0]["attributes"]["TEXCOORD_0"];
+        unsigned int indAccInd = _impl->_json["meshes"][indMesh]["primitives"][0]["indices"];
 
         // Use accessor indices to get all vertices components
-        std::vector<float> posVec = getFloats(_json["accessors"][posAccInd]);
+        std::vector<float> posVec = getFloats(_impl->_json["accessors"][posAccInd], _impl->_json, _data);
         std::vector<Vec3> positions = groupFloatsVec3(posVec);
-        std::vector<float> normalVec = getFloats(_json["accessors"][normalAccInd]);
+        std::vector<float> normalVec = getFloats(_impl->_json["accessors"][normalAccInd], _impl->_json, _data);
         std::vector<Vec3> normals = groupFloatsVec3(normalVec);
-        std::vector<float> texVec = getFloats(_json["accessors"][texAccInd]);
+        std::vector<float> texVec = getFloats(_impl->_json["accessors"][texAccInd], _impl->_json, _data);
         std::vector<Vec2> texUVs = groupFloatsVec2(texVec);
 
         // Combine all the vertex components and also get the indices and textures
         std::vector<Vertex> vertices = assembleVertices(positions, normals, texUVs);
-        std::vector<unsigned int> indices = getIndices(_json["accessors"][indAccInd]);
+        std::vector<unsigned int> indices = getIndices(_impl->_json["accessors"][indAccInd], _impl->_json, _data);
         std::vector<Texture> textures = getTextures();
 
         // Combine the vertices, indices into a mesh, and texture, shader into material
@@ -145,7 +159,7 @@ namespace MEGEngine {
     std::vector<unsigned char> ModelLoader::getData() {
         // Create a place to store the raw text, and get the uri of the .bin file
         std::string bytesText;
-        std::string uri = _json["buffers"][0]["uri"];
+        std::string uri = _impl->_json["buffers"][0]["uri"];
 
         // Store raw text data into bytesText
         std::string fileStr = std::string(_file);
@@ -157,7 +171,7 @@ namespace MEGEngine {
         return data;
     }
 
-    std::vector<float> ModelLoader::getFloats(json accessor) {
+    std::vector<float> getFloats(json accessor, json _json, std::vector<unsigned char>& _data) {
         std::vector<float> floatVec;
 
         // Get properties from the accessor
@@ -192,7 +206,7 @@ namespace MEGEngine {
         return floatVec;
     }
 
-    std::vector <unsigned int> ModelLoader::getIndices(json accessor) {
+    std::vector <unsigned int> getIndices(json accessor, json _json, std::vector<unsigned char>& _data) {
         std::vector<unsigned int> indices;
 
         // Get properties from the accessor
@@ -248,10 +262,10 @@ namespace MEGEngine {
         std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 
         // Go over all images
-        for (unsigned int i = 0; i < _json["images"].size(); i++)
+        for (unsigned int i = 0; i < _impl->_json["images"].size(); i++)
         {
             // uri of current texture
-            std::string texPath = _json["images"][i]["uri"];
+            std::string texPath = _impl->_json["images"][i]["uri"];
 
             // Check if the texture has already been loaded
             bool skip = false;

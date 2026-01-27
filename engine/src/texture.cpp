@@ -5,7 +5,6 @@
 
 #include "texture.h"
 #include "shader.h"
-#include "shader_priv.h"
 #include "utils/log.h"
 
 namespace MEGEngine {

@@ -6,6 +6,12 @@
 
 #include "shader.h"
 
+#include "math/glm_conversions.h"
+#include "math/vec2.h"
+#include "math/vec3.h"
+#include "math/vec4.h"
+#include "math/mat4.h"
+
 namespace MEGEngine {
 	// Reads a text file and outputs a string with everything in the text file
 	std::string get_file_contents(const char* filename) {
@@ -77,8 +83,7 @@ namespace MEGEngine {
 	}
 
 	// Checks if the different Shaders have compiled properly
-	void Shader::compileErrors(unsigned int shader, const char* type)
-	{
+	void Shader::compileErrors(unsigned int shader, const char* type) {
 		// Stores status of compilation
 		GLint hasCompiled;
 		// Character array to store error message in
@@ -102,4 +107,29 @@ namespace MEGEngine {
 			}
 		}
 	}
+
+	template<typename T>
+	void Shader::setUniform(const char* name, const T& value) {
+		if constexpr (std::is_same<T, float>::value)
+			glUniform1f(glGetUniformLocation(ID, name), value);
+		else if constexpr (std::is_same<T, unsigned int>::value)
+			glUniform1i(glGetUniformLocation(ID, name), value);
+		else if constexpr (std::is_same<T, Vec2>::value)
+			glUniform2f(glGetUniformLocation(ID, name), value.x, value.y);
+		else if constexpr (std::is_same<T, Vec3>::value)
+			glUniform3f(glGetUniformLocation(ID, name), value.x, value.y, value.z);
+		else if constexpr (std::is_same<T, Vec4>::value)
+			glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);
+		else if constexpr (std::is_same<T, Mat4>::value)
+			glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, glm::value_ptr(Private::toGlmMat4(value)));
+		else
+			std::cout << "Invalid uniform type provided" << std::endl;
+	}
+
+	template void Shader::setUniform<float>(const char* name, const float& value);
+	template void Shader::setUniform<unsigned int>(const char* name, const unsigned int& value);
+	template void Shader::setUniform<Vec2>(const char* name, const Vec2& value);
+	template void Shader::setUniform<Vec3>(const char* name, const Vec3& value);
+	template void Shader::setUniform<Vec4>(const char* name, const Vec4& value);
+	template void Shader::setUniform<Mat4>(const char* name, const Mat4& value);
 }

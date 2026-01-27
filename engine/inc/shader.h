@@ -19,7 +19,6 @@ namespace MEGEngine {
 		void activate();
 		void del();
 
-		// defined in shader_priv.h
 		template<typename T>
 		void setUniform(const char* name, const T& value);
 

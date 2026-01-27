@@ -16,7 +16,6 @@
 #include "entity.h"
 #include "model_loader.h"
 #include "shader.h"
-#include "shader_priv.h"
 #include "shader_manager.h"
 #include "texture.h"
 #include "camera.h"
@@ -49,7 +48,6 @@ namespace MEGEngine {
 	Application& Application::operator=(Application &&) noexcept = default;
 
 	void Application::run() {
-		init();
 
 		// initialise GLFW and set some data for the window
 	    glfwInit();
@@ -83,31 +81,10 @@ namespace MEGEngine {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
-		Vec4 lightColour = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+		init();
 
 
-		Entity& light = _scene->createEntity();
-		modelLoader.loadModelFromData(light, Cube::vertices(), Cube::indices());
-		std::vector<Texture> tex {Texture("", "diffuse", 0)};
-		light.meshRenderer()->setMaterial(std::make_shared<Material>(ShaderManager::getShader("light")));
-		light.meshRenderer()->material()->setTextureList(tex);
-		if (light.meshRenderer()->material()->shader()) {
-			light.meshRenderer()->material()->shader()->activate();
-			light.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
-			light.meshRenderer()->material()->shader()->setUniform("translation", light.transform().position());
-		}
-
-
-		Entity& sword = _scene->createEntity();
-		modelLoader.loadModelFromFile(sword, (settings.general().modelDirectory + "/sword/sword.gltf").c_str());
-		sword.transform().setPosition(Vec3(-5, -5, 0));
-		sword.transform().setRotation(Quat(0, 0, 0.707, 0.707));
-		sword.transform().setScale(0.5);
-		if (sword.meshRenderer()->material()->shader()) {
-			sword.meshRenderer()->material()->shader()->activate();
-			sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
-			sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
-		}
 
 
 		Vec3 cameraPos = Vec3(0.0f, 0.0f, -10.0f);
@@ -127,9 +104,6 @@ namespace MEGEngine {
 	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	    	_scene->update(_deltaTime);
-
-	    	// TODO: move into the entity onUpdate function
-	    	sword.transform().setPosition(sword.transform().position() + (Vec3(1, 0, 0) * deltaTime()));
 
 	        camera.processInputs(window, deltaTime());
     		camera.updateMatrix(70.0f, 0.1f, 1000.0f);
@@ -178,8 +152,6 @@ namespace MEGEngine {
 
 	void Application::init() {
 		settings.init();
-		// gladLoadGL();
-		// glViewport(0, 0, config.width, config.height);
 
 		// setup window, renderer, and scene
 		_scene = std::make_unique<Scene>();
