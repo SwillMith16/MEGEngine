@@ -13,26 +13,21 @@ namespace MEGEngine {
         _height(static_cast<float>(height)),
         initialMouseX(float(width)),
         initialMouseY(float(height)),
-        _position(Vec3(0, 0, 0)),
         lastMouseInputState(GLFW_RELEASE){}
 
-    Vec3 Camera::position() const {
-        return Vec3(_position.x, _position.y, -_position.z);
+    Transform& Camera::transform() {
+        return *_transform;
     }
 
-    void Camera::setPosition(const Vec3& position) {
-        _position = Vec3(position.x, position.y, -position.z);
-    }
-
-    void Camera::move(const Vec3& move) {
-        _position += Vec3(move.x, move.y, -move.z);
-    }
 
     void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
         Mat4 view = Mat4(1.0f);
         Mat4 projection = Mat4(1.0f);
 
-        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_position), Private::toGlmVec3(_position + orientation), Private::toGlmVec3(up)));
+        // annoying ass OpenGL axis problems
+        Vec3 tmpPosition = {_transform->position().x, _transform->position().y, -_transform->position().z};
+
+        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(tmpPosition), Private::toGlmVec3(tmpPosition + orientation), Private::toGlmVec3(up)));
         projection = Private::fromGlmMat4(glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane));
 
         // set new camera matrix
@@ -49,27 +44,27 @@ namespace MEGEngine {
         // Handles key inputs
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            _position += speed * deltaTime * orientation;
+            _transform->setPosition(_transform->position() + (speed * deltaTime * orientation));
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            _position += speed * deltaTime * -Vec3::cross(orientation, up).normalized();
+            _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            _position +=  -speed * deltaTime * orientation;
+            _transform->setPosition(_transform->position() - (speed * deltaTime * orientation));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            _position += speed * deltaTime * Vec3::cross(orientation, up).normalized();
+            _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
         }
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
-            _position += speed * deltaTime * up;
+            _transform->setPosition(_transform->position() + (speed * deltaTime * up));
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
-            _position += speed * deltaTime * -up;
+            _transform->setPosition(_transform->position() - (speed * deltaTime * up));
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {

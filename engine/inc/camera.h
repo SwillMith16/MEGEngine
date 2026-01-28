@@ -1,8 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <memory>
+
 #include "common.h"
 #include "shader.h"
+#include "transform.h"
 #include "math/vec3.h"
 #include "math/mat4.h"
 
@@ -27,9 +30,8 @@ namespace MEGEngine {
 
 		Camera(int width, int height);
 
-		Vec3 position() const;
-		void setPosition(const Vec3& position);
-		void move(const Vec3& move);
+		Transform& transform();
+
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void matrix(Shader& shader, const char* uniform);
 		void processInputs(class GLFWwindow* window, float deltaTime);
@@ -38,7 +40,7 @@ namespace MEGEngine {
 		float _width;
 		float _height;
 
-		Vec3 _position;
+		std::unique_ptr<Transform> _transform = std::make_unique<Transform>();
 	};
 }
 

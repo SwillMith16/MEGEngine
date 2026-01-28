@@ -83,7 +83,7 @@ namespace MEGEngine {
 
 		init();
 
-		_scene->camera().setPosition({0, 0, -10});
+		_scene->camera().transform().setPosition({0, 0, -10});
 		_scene->camera().orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_scene->camera().orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(_scene->camera().orientation), Private::toGlmVec3(_scene->camera().up))))); // up-down rotation
 
 		auto lastTime = clock::now();

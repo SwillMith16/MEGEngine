@@ -35,7 +35,7 @@ protected:
 
 		MEGEngine::Entity& sword = scene().createEntity();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());
-		sword.transform().setPosition(MEGEngine::Vec3(-5, -5, 0));
+		sword.transform().setPosition(MEGEngine::Vec3(-5, -5, 10));
 		sword.transform().setRotation(MEGEngine::Quat(0, 0, 0.707, 0.707));
 		sword.transform().setScale(0.5);
 		if (sword.meshRenderer()->material()->shader()) {

@@ -11,7 +11,7 @@
 namespace MEGEngine {
 	class ENGINE_API Entity {
 	public:
-		Entity();
+		Entity() = default;
 		virtual ~Entity() = default;
 
 		void draw(class Camera& camera);
@@ -30,7 +30,7 @@ namespace MEGEngine {
 	private:
 		Entity* _parent = nullptr;
 		std::vector<Entity*> _children;
-		std::unique_ptr<Transform> _transform;
+		std::unique_ptr<Transform> _transform = std::make_unique<Transform>();
 		std::shared_ptr<MeshRenderer> _meshRenderer;
 	};
 }

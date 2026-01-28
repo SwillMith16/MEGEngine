@@ -4,8 +4,6 @@
 #include "utils/log.h"
 
 namespace MEGEngine {
-	Entity::Entity() : _transform(std::make_unique<Transform>()){}
-
 	Transform& Entity::transform() {
 		return *_transform;
 	}
