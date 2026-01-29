@@ -33,7 +33,7 @@ namespace MEGEngine {
 
 		Transform& transform() const;
 
-		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+		void updateMatrix();
 		void matrix(Shader& shader, const char* uniform) const;
 		void processInputs(class Window& window, float deltaTime);
 

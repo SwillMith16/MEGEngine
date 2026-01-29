@@ -43,6 +43,9 @@ protected:
 			sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
 			sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
 		}
+
+
+		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
 	}
 
 	void onUpdate(float dt) override {

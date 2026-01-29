@@ -36,20 +36,16 @@ namespace MEGEngine {
 		init();
 		running = true;
 
-		_scene->camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
+		// TODO: switch to using transform rotation and move to main
 		_scene->camera()._orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_scene->camera()._orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(_scene->camera()._orientation), Private::toGlmVec3(_scene->camera()._up))))); // up-down rotation
 
 		auto lastTime = clock::now();
 
 		while (running) {
 			_scene->update(_deltaTime);
-
-
-			_scene->camera().processInputs(window(), deltaTime());
-			_scene->camera().updateMatrix(70.0f, 0.1f, 1000.0f);
+			_scene->camera().processInputs(window(), deltaTime()); // TODO: until input manager is added
 
 	    	_renderer->render(*_scene);
-
 
 	    	_window->display();
 	    	_window->pollEvents();

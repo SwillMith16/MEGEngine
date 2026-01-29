@@ -23,5 +23,7 @@ namespace MEGEngine {
         for (auto& entity : _entities) {
             entity->onUpdate(dt);
         }
+
+        _camera->updateMatrix();
     }
 } // MEGEngine

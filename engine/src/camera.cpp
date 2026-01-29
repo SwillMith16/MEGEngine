@@ -32,16 +32,12 @@ namespace MEGEngine {
     }
 
 
-    void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
-        _fov = FOVdeg;
-        _nearZ = nearPlane;
-        _farZ = farPlane;
-
+    void Camera::updateMatrix() {
         Mat4 view = Mat4(1.0f);
         Mat4 projection = Mat4(1.0f);
 
         view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_transform->position()), Private::toGlmVec3(_transform->position() + _orientation), Private::toGlmVec3(_up)));
-        projection = Private::fromGlmMat4(glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane));
+        projection = Private::fromGlmMat4(glm::perspective(glm::radians(_fov), (float)_width / _height, _nearZ, _farZ));
 
         // set new camera matrix
         camMatrix = projection * view;
