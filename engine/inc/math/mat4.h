@@ -13,6 +13,12 @@ namespace MEGEngine {
 
         static Mat4 identity();
 
+        static Mat4 translation(Mat4& m, const Vec3& t);
+        static Mat4 scale(Mat4& m, const Vec3& s);
+        static Mat4 rotationX(Mat4& m, float radians);
+        static Mat4 rotationY(Mat4& m, float radians);
+        static Mat4 rotationZ(Mat4& m, float radians);
+
         static Mat4 translation(const Vec3& t);
         static Mat4 scale(const Vec3& s);
         static Mat4 rotationX(float radians);

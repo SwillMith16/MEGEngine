@@ -44,13 +44,13 @@ namespace MEGEngine {
 		void requestQuit();
 
 		// Return window object owned by the application
-		// Window& window();
+		Window& window();
 
 		// Return scene object owned by the application
-		// Scene& scene();
+		Scene& scene();
 
 		// Return renderer object owned by the application
-		// Renderer& renderer();
+		Renderer& renderer();
 
 		// getter for delta time to allow for synchronised time across the application
 		float deltaTime() const;
@@ -74,9 +74,9 @@ namespace MEGEngine {
 		bool running = false;
 		float _deltaTime = 0.0f;
 
-		// std::unique_ptr<Window> _window;
-		// std::unique_ptr<Renderer> _renderer;
-		// std::unique_ptr<Scene> _scene;
+		std::unique_ptr<Window> _window;
+		std::unique_ptr<Renderer> _renderer;
+		std::unique_ptr<Scene> _scene;
 	};
 } // MEGEngine
 

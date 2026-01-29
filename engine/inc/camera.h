@@ -1,19 +1,20 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <memory>
+
 #include "common.h"
 #include "shader.h"
+#include "transform.h"
 #include "math/vec3.h"
 #include "math/mat4.h"
 
 namespace MEGEngine {
 	class ENGINE_API Camera {
 	public:
-		Vec3 orientation = Vec3(0.0f, 0.0f, -1.0f);
-		Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
+		Vec3 _orientation = Vec3(0.0f, 0.0f, -1.0f);
+		Vec3 _up = Vec3(0.0f, 1.0f, 0.0f);
 		Mat4 camMatrix = Mat4(1.0f);
-
-		Vec3 position;
 
 		// Used to prevent camera from jumping on click
 		bool firstClick = true;
@@ -24,19 +25,30 @@ namespace MEGEngine {
 
 		float speed = 5.0f;
 		float baseSpeed = 5.0f;
+		bool isSprinting = false;
 		float boostSpeed = 10.0f;
 		float sensitivity = 100.0f;
 
-		Camera(int width, int height, Vec3 position);
+		Camera(int width, int height);
 
-		Vec3 getPosition();
-		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
-		void matrix(Shader& shader, const char* uniform);
-		void processInputs(class GLFWwindow* window, float deltaTime);
+		Transform& transform() const;
+
+		void updateMatrix();
+		void matrix(Shader& shader, const char* uniform) const;
+		void processInputs(class Window& window, float deltaTime);
+
+		Mat4 viewMatrix() const;
+		Mat4 projectionMatrix() const;
 
 	private:
 		float _width;
 		float _height;
+
+		float _fov;
+		float _nearZ;
+		float _farZ;
+
+		std::unique_ptr<Transform> _transform = std::make_unique<Transform>();
 	};
 }
 

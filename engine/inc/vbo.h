@@ -9,7 +9,7 @@ namespace MEGEngine {
     class VBO {
     public:
         unsigned int ID;
-        VBO(std::vector<Vertex>& vertices);
+        VBO(const std::vector<Vertex>& vertices);
 
         void bind();
         void unbind();

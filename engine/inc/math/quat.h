@@ -1,8 +1,10 @@
 #ifndef MEGENGINEPROJECT_QUAT_H
 #define MEGENGINEPROJECT_QUAT_H
 
+#include "common.h"
+
 namespace MEGEngine {
-    class Quat {
+    class ENGINE_API Quat {
     public:
         float x, y, z, w;
 

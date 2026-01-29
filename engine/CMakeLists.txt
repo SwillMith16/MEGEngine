@@ -21,8 +21,8 @@ add_library(MEGEngine SHARED
         inc/settings.h
         src/mesh.cpp
         inc/mesh.h
-        src/model.cpp
-        inc/model.h
+        src/entity.cpp
+        inc/entity.h
         inc/common.h
         inc/vertex.h
         inc/math/vec2.h
@@ -32,11 +32,30 @@ add_library(MEGEngine SHARED
         inc/math/glm_conversions.h
         inc/math/mat4.cpp
         inc/math/mat4.h
-        inc/shader_priv.h
         inc/math/quat.cpp
         inc/math/quat.h
         inc/math/vec4.cpp
         inc/math/vec4.h
+        inc/utils/log.h
+        inc/utils/log.cpp
+        src/material.cpp
+        inc/material.h
+        src/mesh_renderer.cpp
+        inc/mesh_renderer.h
+        src/model_loader.cpp
+        inc/model_loader.h
+        src/transform.cpp
+        inc/transform.h
+        src/primitive_shapes.cpp
+        inc/primitive_shapes.h
+        src/shader_manager.cpp
+        inc/shader_manager.h
+        src/scene.cpp
+        inc/scene.h
+        src/window.cpp
+        inc/window.h
+        src/renderer.cpp
+        inc/renderer.h
 )
 
 target_include_directories(MEGEngine
