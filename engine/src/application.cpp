@@ -3,7 +3,6 @@
 
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
-#include "GLM/gtx/rotate_vector.hpp"
 
 #include "application.h"
 #include "window.h"
@@ -11,9 +10,6 @@
 #include "renderer.h"
 #include "camera.h"
 #include "settings.h"
-
-#include "math/vec3.h"
-#include "math/glm_conversions.h"
 
 #include "utils/log.h"
 
@@ -35,9 +31,6 @@ namespace MEGEngine {
 	void Application::run() {
 		init();
 		running = true;
-
-		// TODO: switch to using transform rotation and move to main
-		_scene->camera()._orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_scene->camera()._orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(_scene->camera()._orientation), Private::toGlmVec3(_scene->camera()._up))))); // up-down rotation
 
 		auto lastTime = clock::now();
 
