@@ -10,10 +10,8 @@ namespace MEGEngine {
     public:
         MeshRenderer(std::shared_ptr<class Mesh> mesh, std::shared_ptr<class Material> material);
         void setMaterial(std::shared_ptr<class Material> material);
-        std::shared_ptr<class Material> material();
-        std::shared_ptr<class Mesh> mesh();
-
-        void draw(class Camera& camera, class Transform& transform);
+        [[nodiscard]] std::shared_ptr<class Material> material() const;
+        [[nodiscard]] std::shared_ptr<class Mesh> mesh() const;
 
     private:
         std::shared_ptr<class Mesh> _mesh;

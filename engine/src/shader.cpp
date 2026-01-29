@@ -24,6 +24,10 @@ namespace MEGEngine {
 		return ss.str();
 	}
 
+	unsigned int Shader::ID() {
+		return _id;
+	}
+
 	Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 		// get vertex shader code
 		std::string vertexCode;
@@ -61,13 +65,13 @@ namespace MEGEngine {
 		compileErrors(fragmentShader, "FRAGMENT");
 
 
-		ID = glCreateProgram();
+		_id = glCreateProgram();
 		// create shader program and attach the shaders to it
-		glAttachShader(ID, vertexShader);
-		glAttachShader(ID, fragmentShader);
+		glAttachShader(_id, vertexShader);
+		glAttachShader(_id, fragmentShader);
 		// wrap-up/link all the shaders together in the program
-		glLinkProgram(ID);
-		compileErrors(ID, "PROGRAM");
+		glLinkProgram(_id);
+		compileErrors(_id, "PROGRAM");
 
 		// now shaders are in the shader program, the shaders themselves are not needed
 		glDeleteShader(vertexShader);
@@ -75,11 +79,11 @@ namespace MEGEngine {
 	}
 
 	void Shader::activate() {
-		glUseProgram(ID);
+		glUseProgram(_id);
 	}
 
 	void Shader::del() {
-		glDeleteProgram(ID);
+		glDeleteProgram(_id);
 	}
 
 	// Checks if the different Shaders have compiled properly
@@ -111,17 +115,17 @@ namespace MEGEngine {
 	template<typename T>
 	void Shader::setUniform(const char* name, const T& value) {
 		if constexpr (std::is_same<T, float>::value)
-			glUniform1f(glGetUniformLocation(ID, name), value);
+			glUniform1f(glGetUniformLocation(_id, name), value);
 		else if constexpr (std::is_same<T, unsigned int>::value)
-			glUniform1i(glGetUniformLocation(ID, name), value);
+			glUniform1i(glGetUniformLocation(_id, name), value);
 		else if constexpr (std::is_same<T, Vec2>::value)
-			glUniform2f(glGetUniformLocation(ID, name), value.x, value.y);
+			glUniform2f(glGetUniformLocation(_id, name), value.x, value.y);
 		else if constexpr (std::is_same<T, Vec3>::value)
-			glUniform3f(glGetUniformLocation(ID, name), value.x, value.y, value.z);
+			glUniform3f(glGetUniformLocation(_id, name), value.x, value.y, value.z);
 		else if constexpr (std::is_same<T, Vec4>::value)
-			glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);
+			glUniform4f(glGetUniformLocation(_id, name), value.x, value.y, value.z, value.w);
 		else if constexpr (std::is_same<T, Mat4>::value)
-			glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, glm::value_ptr(Private::toGlmMat4(value)));
+			glUniformMatrix4fv(glGetUniformLocation(_id, name), 1, GL_FALSE, glm::value_ptr(Private::toGlmMat4(value)));
 		else
 			std::cout << "Invalid uniform type provided" << std::endl;
 	}

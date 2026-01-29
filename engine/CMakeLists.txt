@@ -54,6 +54,8 @@ add_library(MEGEngine SHARED
         inc/scene.h
         src/window.cpp
         inc/window.h
+        src/renderer.cpp
+        inc/renderer.h
 )
 
 target_include_directories(MEGEngine

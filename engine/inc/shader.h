@@ -13,7 +13,7 @@ namespace MEGEngine {
 
 	class ENGINE_API Shader {
 	public:
-		unsigned int ID;
+		unsigned int ID();
 		Shader(const char* vertexFile = (settings.general().shaderDirectory+"/defaultLit/defaultLit.vert").c_str(), const char* fragmentFile = (settings.general().shaderDirectory+"/defaultLit/defaultLit.frag").c_str());
 
 		void activate();
@@ -23,6 +23,7 @@ namespace MEGEngine {
 		void setUniform(const char* name, const T& value);
 
 	private:
+		unsigned int _id;
 		void compileErrors(unsigned int shader, const char* type);
 	};
 }

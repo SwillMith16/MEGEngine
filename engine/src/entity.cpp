@@ -8,8 +8,8 @@ namespace MEGEngine {
 		return *_transform;
 	}
 
-	MeshRenderer *Entity::meshRenderer() {
-		return _meshRenderer.get();
+	std::shared_ptr<MeshRenderer> Entity::meshRenderer() {
+		return _meshRenderer;
 	}
 	void Entity::setMeshRenderer(std::shared_ptr<MeshRenderer> renderer) {
 		_meshRenderer = std::move(renderer);
@@ -33,16 +33,16 @@ namespace MEGEngine {
 
 	Entity *Entity::parent() const { return _parent; }
 
-	void Entity::draw(Camera &camera) {
-		if (_meshRenderer) {
-			_meshRenderer->draw(camera, *_transform);
-		}
-		else {
-			Log(LogLevel::WRN, "Cannot draw entity that has no mesh renderer");
-		}
-
-		for (Entity* child : _children) {
-			child->draw(camera);
-		}
-	}
+	// void Entity::draw(Camera &camera) {
+	// 	if (_meshRenderer) {
+	// 		_meshRenderer->draw(camera, *_transform);
+	// 	}
+	// 	else {
+	// 		Log(LogLevel::WRN, "Cannot draw entity that has no mesh renderer");
+	// 	}
+	//
+	// 	for (Entity* child : _children) {
+	// 		child->draw(camera);
+	// 	}
+	// }
 }

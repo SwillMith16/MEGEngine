@@ -12,8 +12,8 @@
 namespace MEGEngine {
 	class ENGINE_API Camera {
 	public:
-		Vec3 orientation = Vec3(0.0f, 0.0f, -1.0f);
-		Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
+		Vec3 _orientation = Vec3(0.0f, 0.0f, -1.0f);
+		Vec3 _up = Vec3(0.0f, 1.0f, 0.0f);
 		Mat4 camMatrix = Mat4(1.0f);
 
 		// Used to prevent camera from jumping on click
@@ -31,15 +31,22 @@ namespace MEGEngine {
 
 		Camera(int width, int height);
 
-		Transform& transform();
+		Transform& transform() const;
 
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
-		void matrix(Shader& shader, const char* uniform);
+		void matrix(Shader& shader, const char* uniform) const;
 		void processInputs(class Window& window, float deltaTime);
+
+		Mat4 viewMatrix() const;
+		Mat4 projectionMatrix() const;
 
 	private:
 		float _width;
 		float _height;
+
+		float _fov;
+		float _nearZ;
+		float _farZ;
 
 		std::unique_ptr<Transform> _transform = std::make_unique<Transform>();
 	};

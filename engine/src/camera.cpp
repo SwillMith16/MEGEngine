@@ -20,27 +20,34 @@ namespace MEGEngine {
     Camera::Camera(int width, int height) :
         _width(static_cast<float>(width)),
         _height(static_cast<float>(height)),
+        _fov(60.0f),
+        _nearZ(0.1f),
+        _farZ(1000.0f),
         initialMouseX(float(width)),
         initialMouseY(float(height)),
         lastMouseInputState(GLFW_RELEASE){}
 
-    Transform& Camera::transform() {
+    Transform& Camera::transform() const {
         return *_transform;
     }
 
 
     void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
+        _fov = FOVdeg;
+        _nearZ = nearPlane;
+        _farZ = farPlane;
+
         Mat4 view = Mat4(1.0f);
         Mat4 projection = Mat4(1.0f);
 
-        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_transform->position()), Private::toGlmVec3(_transform->position() + orientation), Private::toGlmVec3(up)));
+        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_transform->position()), Private::toGlmVec3(_transform->position() + _orientation), Private::toGlmVec3(_up)));
         projection = Private::fromGlmMat4(glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane));
 
         // set new camera matrix
         camMatrix = projection * view;
     }
 
-    void Camera::matrix(Shader& shader, const char* uniform) {
+    void Camera::matrix(Shader& shader, const char* uniform) const {
         // export camera matrix to shader
         shader.setUniform(uniform,  camMatrix);
     }
@@ -52,32 +59,32 @@ namespace MEGEngine {
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "W key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * orientation));
+            _transform->setPosition(_transform->position() + (speed * deltaTime * _orientation));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "A key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
+            _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "S key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * orientation));
+            _transform->setPosition(_transform->position() - (speed * deltaTime * _orientation));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "D key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
+            _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "Space key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * up));
+            _transform->setPosition(_transform->position() + (speed * deltaTime * _up));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "L-Ctrl key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * up));
+            _transform->setPosition(_transform->position() - (speed * deltaTime * _up));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
@@ -111,16 +118,16 @@ namespace MEGEngine {
             float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
 
             // Calculates upcoming vertical change in the Orientation
-            Vec3 newOrientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(orientation), glm::radians(-rotX), glm::normalize(glm::cross(Private::toGlmVec3(orientation), Private::toGlmVec3(up)))));
+            Vec3 newOrientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_orientation), glm::radians(-rotX), glm::normalize(glm::cross(Private::toGlmVec3(_orientation), Private::toGlmVec3(_up)))));
 
             // Decides whether or not the next vertical Orientation is legal or not
-            if (abs(glm::angle(Private::toGlmVec3(newOrientation), Private::toGlmVec3(up)) - glm::radians(90.0f)) <= glm::radians(85.0f))
+            if (abs(glm::angle(Private::toGlmVec3(newOrientation), Private::toGlmVec3(_up)) - glm::radians(90.0f)) <= glm::radians(85.0f))
             {
-                orientation = newOrientation;
+                _orientation = newOrientation;
             }
 
             // Rotates the Orientation left and right
-            orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(orientation), glm::radians(-rotY), Private::toGlmVec3(up)));
+            _orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_orientation), glm::radians(-rotY), Private::toGlmVec3(_up)));
 
             // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
             glfwSetCursorPos(glfwWindow->impl, (_width / 2), (_height / 2));
@@ -143,6 +150,17 @@ namespace MEGEngine {
             }
 
         }
+    }
+
+    Mat4 Camera::viewMatrix() const {
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::lookAt(Private::toGlmVec3(transform().position()), Private::toGlmVec3(transform().position() + _orientation), Private::toGlmVec3(_up));
+        return Private::fromGlmMat4(view);
+    }
+
+    Mat4 Camera::projectionMatrix() const {
+        glm::mat4 projection = glm::perspective(glm::radians(_fov), _width/_height, _nearZ, _farZ);
+        return Private::fromGlmMat4(projection);
     }
 
 }
