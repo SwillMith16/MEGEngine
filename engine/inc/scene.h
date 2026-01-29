@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "entity.h"
+#include "camera.h"
 
 namespace MEGEngine {
     class ENGINE_API Scene {
