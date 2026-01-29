@@ -25,6 +25,7 @@ namespace MEGEngine {
 
 		float speed = 5.0f;
 		float baseSpeed = 5.0f;
+		bool isSprinting = false;
 		float boostSpeed = 10.0f;
 		float sensitivity = 100.0f;
 
@@ -34,7 +35,7 @@ namespace MEGEngine {
 
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void matrix(Shader& shader, const char* uniform);
-		void processInputs(class GLFWwindow* window, float deltaTime);
+		void processInputs(class Window& window, float deltaTime);
 
 	private:
 		float _width;

@@ -52,6 +52,8 @@ add_library(MEGEngine SHARED
         inc/shader_manager.h
         src/scene.cpp
         inc/scene.h
+        src/window.cpp
+        inc/window.h
 )
 
 target_include_directories(MEGEngine

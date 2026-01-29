@@ -5,9 +5,18 @@
 #include "GLM/gtx/vector_angle.hpp"
 
 #include "camera.h"
+#include "window.h"
+
 #include "math/glm_conversions.h"
 
+#include "utils/log.h"
+
 namespace MEGEngine {
+
+    struct WindowImpl {
+        GLFWwindow* impl;
+    };
+
     Camera::Camera(int width, int height) :
         _width(static_cast<float>(width)),
         _height(static_cast<float>(height)),
@@ -24,10 +33,7 @@ namespace MEGEngine {
         Mat4 view = Mat4(1.0f);
         Mat4 projection = Mat4(1.0f);
 
-        // annoying ass OpenGL axis problems
-        Vec3 tmpPosition = {_transform->position().x, _transform->position().y, -_transform->position().z};
-
-        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(tmpPosition), Private::toGlmVec3(tmpPosition + orientation), Private::toGlmVec3(up)));
+        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_transform->position()), Private::toGlmVec3(_transform->position() + orientation), Private::toGlmVec3(up)));
         projection = Private::fromGlmMat4(glm::perspective(glm::radians(FOVdeg), (float)_width / _height, nearPlane, farPlane));
 
         // set new camera matrix
@@ -40,55 +46,66 @@ namespace MEGEngine {
     }
 
 
-    void Camera::processInputs(GLFWwindow* window, float deltaTime) {
+    void Camera::processInputs(Window& window, float deltaTime) {
+        WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&window.impl()));
         // Handles key inputs
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "W key pressed");
             _transform->setPosition(_transform->position() + (speed * deltaTime * orientation));
         }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "A key pressed");
             _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
         }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "S key pressed");
             _transform->setPosition(_transform->position() - (speed * deltaTime * orientation));
         }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "D key pressed");
             _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(orientation, up).normalized()));
         }
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "Space key pressed");
             _transform->setPosition(_transform->position() + (speed * deltaTime * up));
         }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "L-Ctrl key pressed");
             _transform->setPosition(_transform->position() - (speed * deltaTime * up));
         }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
+            Log(LogLevel::DBG, "L-Shift key pressed");
+            isSprinting = true;
             speed = boostSpeed;
         }
-        else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+        else if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE && isSprinting)
         {
+            isSprinting = false;
+            Log(LogLevel::DBG, "L-Shift key released");
             speed = baseSpeed;
         }
 
 
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        if (glfwGetMouseButton(glfwWindow->impl, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            glfwSetInputMode(glfwWindow->impl, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
             // Prevents camera from jumping on the first click
             if (firstClick)
             {
-                glfwGetCursorPos(window, &initialMouseX, &initialMouseY);
-                glfwSetCursorPos(window, (_width / 2), (_height / 2));
+                glfwGetCursorPos(glfwWindow->impl, &initialMouseX, &initialMouseY);
+                glfwSetCursorPos(glfwWindow->impl, (_width / 2), (_height / 2));
                 firstClick = false;
             }
 
             double mouseX, mouseY;
-            glfwGetCursorPos(window, &mouseX, &mouseY);
+            glfwGetCursorPos(glfwWindow->impl, &mouseX, &mouseY);
 
             float rotX = sensitivity * ((float)mouseY - (_height/2)) / _height;
             float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
@@ -106,11 +123,11 @@ namespace MEGEngine {
             orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(orientation), glm::radians(-rotY), Private::toGlmVec3(up)));
 
             // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
-            glfwSetCursorPos(window, (_width / 2), (_height / 2));
+            glfwSetCursorPos(glfwWindow->impl, (_width / 2), (_height / 2));
 
             lastMouseInputState = GLFW_PRESS;
         }
-        else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+        else if (glfwGetMouseButton(glfwWindow->impl, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
 
             // only need to process this if the state has just changed, not constantly when button not pressed
             if (lastMouseInputState == GLFW_PRESS) {
@@ -118,9 +135,9 @@ namespace MEGEngine {
                 firstClick = true;
 
                 // return cursor to position it was in
-                glfwSetCursorPos(window, initialMouseX, initialMouseY);
+                glfwSetCursorPos(glfwWindow->impl, initialMouseX, initialMouseY);
 
-                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                glfwSetInputMode(glfwWindow->impl, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
                 lastMouseInputState = GLFW_RELEASE;
             }

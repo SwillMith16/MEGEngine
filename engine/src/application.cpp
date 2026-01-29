@@ -7,8 +7,8 @@
 #include "GLFW/glfw3.h"
 #include "GLM/gtx/rotate_vector.hpp"
 
-// #include "window.h"
-// #include "scene.h"
+#include "window.h"
+#include "scene.h"
 // #include "renderer.h"
 
 #include "mesh.h"
@@ -21,7 +21,6 @@
 #include "camera.h"
 #include "material.h"
 #include "primitive_shapes.h"
-#include "scene.h"
 
 #include "math/quat.h"
 #include "math/vec4.h"
@@ -47,48 +46,15 @@ namespace MEGEngine {
 	Application& Application::operator=(Application &&) noexcept = default;
 
 	void Application::run() {
-
-		// initialise GLFW and set some data for the window
-	    glfwInit();
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-	    // create window object
-	    GLFWwindow* window = glfwCreateWindow(config.width, config.height, config.windowTitle.c_str(), nullptr, nullptr);
-	    if (!window) {
-	        glfwTerminate();
-	        throw std::runtime_error("Failed to create GLFW window");
-	    }
-
-	    // apply actions to this window (make it the current context)
-	    glfwMakeContextCurrent(window);
-
-	    // load glad for access to GL functions
-	    int status = gladLoadGL();
-	    if (!status) {
-	        glfwTerminate();
-	    	throw std::runtime_error("Failed to initialize GLAD");
-	    }
-
-	    // set the viewport
-	    glViewport(0, 0, config.width, config.height);
-
-		// enables depth perception - prevents incorrect overlapping triangles
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-
-
 		init();
+		running = true;
 
-		_scene->camera().transform().setPosition({0, 0, -10});
+		_scene->camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
 		_scene->camera().orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_scene->camera().orientation), glm::radians(-20.0f), glm::normalize(glm::cross(Private::toGlmVec3(_scene->camera().orientation), Private::toGlmVec3(_scene->camera().up))))); // up-down rotation
 
 		auto lastTime = clock::now();
 
-	    while (!glfwWindowShouldClose(window)) {
+	    while (running) {
 
 	        // set background colour
 	        glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
@@ -99,18 +65,19 @@ namespace MEGEngine {
 	    	_scene->update(_deltaTime);
 
 
-	        _scene->camera().processInputs(window, deltaTime());
+	        _scene->camera().processInputs(window(), deltaTime());
     		_scene->camera().updateMatrix(70.0f, 0.1f, 1000.0f);
 
 	    	for (auto& entity: _scene->entities()) {
 	    		entity->draw(_scene->camera());
 	    	}
 
-	        // bring buffer to the front
-	        glfwSwapBuffers(window);
 
-	        // poll for events, otherwise program doesn't respond
-	        glfwPollEvents();
+	    	_window->display();
+	    	_window->pollEvents();
+
+	    	if (_window->shouldClose())
+	    		requestQuit();
 
 	        // Limit FPS and set deltaTime
 	    	std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -119,8 +86,7 @@ namespace MEGEngine {
 	    }
 
 	    // close
-	    glfwDestroyWindow(window);
-	    glfwTerminate();
+	    shutdown();
 
 	}
 
@@ -132,9 +98,9 @@ namespace MEGEngine {
 		return _deltaTime;
 	}
 
-	// Window& Application::window() {
-	// 	return *_window;
-	// }
+	Window& Application::window() {
+		return *_window;
+	}
 
 	Scene& Application::scene() {
 		return *_scene;
@@ -147,9 +113,26 @@ namespace MEGEngine {
 	void Application::init() {
 		settings.init();
 
-		// setup window, renderer, and scene
-		_scene = std::make_unique<Scene>(config.width, config.height);
+		_window = std::make_unique<Window>();
+		_window->create(config.windowTitle, config.width, config.height);
 
+		// load glad for access to GL functions
+		int status = gladLoadGL();
+		if (!status) {
+			glfwTerminate();
+			throw std::runtime_error("Failed to initialize GLAD");
+		}
+
+		// set the viewport
+		glViewport(0, 0, config.width, config.height);
+
+		// enables depth perception - prevents incorrect overlapping triangles
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
+		// TODO: setup renderer
+
+		_scene = std::make_unique<Scene>(config.width, config.height);
 
 		onInit();
 	}
@@ -157,9 +140,9 @@ namespace MEGEngine {
 	void Application::shutdown() {
 		onShutdown();
 
-		// _scene.reset();
+		_scene.reset();
 		// _renderer.reset();
-		// _window.reset();
+		_window.reset();
 	}
 
 	void Application::setDeltaTime(auto& lastTime) {
