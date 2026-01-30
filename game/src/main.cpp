@@ -1,7 +1,10 @@
 #include <memory>
 
 #include "MEGEngine.h"
+#include "MEGEngine/event_manager.h"
+#include "MEGEngine/events.h"
 #include "MEGEngine/math/quat.h"
+#include "MEGEngine/utils/log.h"
 
 class ExampleGame : public MEGEngine::Application {
 public:
@@ -23,6 +26,7 @@ protected:
 			light.meshRenderer()->material()->shader()->setUniform("translation", light.transform().position());
 		}
 
+		// MEGEngine::EventManager::trigger(std::make_shared<MEGEngine::NewEntityEvent>());
 
 		MEGEngine::Entity& sword = scene().createEntity();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());
@@ -41,6 +45,7 @@ protected:
 
 	void onUpdate(float dt) override {
 		// once per frame
+		MEGEngine::EventManager::processEvents();
 	}
 };
 

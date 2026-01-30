@@ -50,6 +50,7 @@ namespace MEGEngine {
 	    	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	    	setDeltaTime(lastTime);
+			onUpdate(_deltaTime);
 	    }
 
 	    // close
