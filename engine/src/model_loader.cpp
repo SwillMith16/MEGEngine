@@ -2,20 +2,20 @@
 
 #include <JSON/json.hpp>
 
-#include "model_loader.h"
-#include "entity.h"
-#include "texture.h"
-#include "mesh_renderer.h"
-#include "mesh.h"
-#include "material.h"
-#include "texture.h"
-#include "shader.h"
-#include "shader_manager.h"
-#include "vertex.h"
+#include "MEGEngine/model_loader.h"
+#include "MEGEngine/entity.h"
+#include "MEGEngine/texture.h"
+#include "MEGEngine/mesh_renderer.h"
+#include "MEGEngine/mesh.h"
+#include "MEGEngine/material.h"
+#include "MEGEngine/texture.h"
+#include "MEGEngine/shader.h"
+#include "MEGEngine/shader_manager.h"
+#include "MEGEngine/vertex.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 using json = nlohmann::json;
 

@@ -1,16 +1,7 @@
 #include <memory>
 
-#include "application.h"
-#include "scene.h"
-#include "entity.h"
-#include "material.h"
-#include "shader.h"
-#include "model_loader.h"
-#include "primitive_shapes.h"
-#include "shader_manager.h"
-#include "texture.h"
-
-#include "math/quat.h"
+#include "MEGEngine.h"
+#include "MEGEngine/math/quat.h"
 
 class ExampleGame : public MEGEngine::Application {
 public:

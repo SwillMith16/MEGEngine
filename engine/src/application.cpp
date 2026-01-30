@@ -4,14 +4,14 @@
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "application.h"
-#include "window.h"
-#include "scene.h"
-#include "renderer.h"
-#include "camera.h"
-#include "settings.h"
+#include "MEGEngine/application.h"
+#include "MEGEngine/window.h"
+#include "MEGEngine/scene.h"
+#include "MEGEngine/renderer.h"
+#include "MEGEngine/camera.h"
+#include "MEGEngine/settings.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
 	using clock = std::chrono::high_resolution_clock;

@@ -1,6 +1,6 @@
-#include "shader_manager.h"
-#include "utils/log.h"
-#include "settings.h"
+#include "MEGEngine/shader_manager.h"
+#include "MEGEngine/utils/log.h"
+#include "MEGEngine/settings.h"
 
 namespace MEGEngine {
     // initialise static members

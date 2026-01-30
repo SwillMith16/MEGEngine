@@ -1,7 +1,7 @@
 #include "mINI/ini.h"
 
-#include "utils/log.h"
-#include "settings.h"
+#include "MEGEngine/utils/log.h"
+#include "MEGEngine/settings.h"
 
 using namespace mINI;
 

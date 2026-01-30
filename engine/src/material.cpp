@@ -1,11 +1,9 @@
-#include "material.h"
+#include "MEGEngine/material.h"
 
-#include <utility>
-
-#include "shader.h"
-#include "shader_manager.h"
-#include "texture.h"
-#include "utils/log.h"
+#include "MEGEngine/shader.h"
+#include "MEGEngine/shader_manager.h"
+#include "MEGEngine/texture.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
     Material::Material(std::shared_ptr<class Shader> shader) : _shader(std::move(shader)) {}

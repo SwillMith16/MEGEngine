@@ -4,13 +4,13 @@
 #include "GLAD/glad.h"
 #include "GLM/gtc/type_ptr.hpp"
 
-#include "shader.h"
+#include "MEGEngine/shader.h"
 
-#include "math/glm_conversions.h"
-#include "math/vec2.h"
-#include "math/vec3.h"
-#include "math/vec4.h"
-#include "math/mat4.h"
+#include "MEGEngine/math/glm_conversions.h"
+#include "MEGEngine/math/vec2.h"
+#include "MEGEngine/math/vec3.h"
+#include "MEGEngine/math/vec4.h"
+#include "MEGEngine/math/mat4.h"
 
 namespace MEGEngine {
 	// Reads a text file and outputs a string with everything in the text file

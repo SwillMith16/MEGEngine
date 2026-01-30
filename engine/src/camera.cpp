@@ -4,12 +4,12 @@
 #include "GLM/gtx/rotate_vector.hpp"
 #include "GLM/gtx/vector_angle.hpp"
 
-#include "camera.h"
-#include "window.h"
+#include "MEGEngine/camera.h"
+#include "MEGEngine/window.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
 

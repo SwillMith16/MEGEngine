@@ -1,6 +1,6 @@
 #include "GLAD/glad.h"
 
-#include "ebo.h"
+#include "MEGEngine/ebo.h"
 
 namespace MEGEngine {
     // Constructor that generates an Element Buffer Object

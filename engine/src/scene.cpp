@@ -1,5 +1,5 @@
-#include "scene.h"
-#include "camera.h"
+#include "MEGEngine/scene.h"
+#include "MEGEngine/camera.h"
 
 namespace MEGEngine {
     Scene::Scene() : _camera(std::make_unique<Camera>(Camera(1280, 720))) {}

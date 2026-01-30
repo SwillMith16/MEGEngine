@@ -1,7 +1,7 @@
-#include "entity.h"
-#include "transform.h"
-#include "mesh_renderer.h"
-#include "utils/log.h"
+#include "MEGEngine/entity.h"
+#include "MEGEngine/transform.h"
+#include "MEGEngine/mesh_renderer.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
 	Transform& Entity::transform() {
@@ -32,17 +32,4 @@ namespace MEGEngine {
 	const std::vector<Entity*>& Entity::children() const { return _children; }
 
 	Entity *Entity::parent() const { return _parent; }
-
-	// void Entity::draw(Camera &camera) {
-	// 	if (_meshRenderer) {
-	// 		_meshRenderer->draw(camera, *_transform);
-	// 	}
-	// 	else {
-	// 		Log(LogLevel::WRN, "Cannot draw entity that has no mesh renderer");
-	// 	}
-	//
-	// 	for (Entity* child : _children) {
-	// 		child->draw(camera);
-	// 	}
-	// }
 }

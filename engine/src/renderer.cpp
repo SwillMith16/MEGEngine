@@ -1,16 +1,16 @@
 #include "GLAD/glad.h"
 
-#include "renderer.h"
-#include "camera.h"
-#include "material.h"
-#include "mesh.h"
-#include "shader.h"
-#include "scene.h"
-#include "texture.h"
+#include "MEGEngine/renderer.h"
+#include "MEGEngine/camera.h"
+#include "MEGEngine/material.h"
+#include "MEGEngine/mesh.h"
+#include "MEGEngine/shader.h"
+#include "MEGEngine/scene.h"
+#include "MEGEngine/texture.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
     struct Renderer::RenderGroup {
