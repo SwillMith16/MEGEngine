@@ -56,6 +56,10 @@ add_library(MEGEngine SHARED
         inc/MEGEngine/renderer.h
         inc/MEGEngine.h
         inc/MEGEngine/Math.h
+        src/event_manager.cpp
+        inc/MEGEngine/event_manager.h
+        src/events.cpp
+        inc/MEGEngine/events.h
 )
 
 target_include_directories(MEGEngine

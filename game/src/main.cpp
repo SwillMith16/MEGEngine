@@ -1,10 +1,10 @@
 #include <memory>
 
 #include "MEGEngine.h"
-#include "MEGEngine/event_manager.h"
-#include "MEGEngine/events.h"
 #include "MEGEngine/math/quat.h"
 #include "MEGEngine/utils/log.h"
+
+#include "CustomEvents.h"
 
 class ExampleGame : public MEGEngine::Application {
 public:
@@ -26,7 +26,8 @@ protected:
 			light.meshRenderer()->material()->shader()->setUniform("translation", light.transform().position());
 		}
 
-		// MEGEngine::EventManager::trigger(std::make_shared<MEGEngine::NewEntityEvent>());
+		TestEvent event = TestEvent();
+		light.createEventListener<TestEventListener, TestEvent>();
 
 		MEGEngine::Entity& sword = scene().createEntity();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());
@@ -38,6 +39,8 @@ protected:
 			sword.meshRenderer()->material()->shader()->setUniform("lightColour", lightColour);
 			sword.meshRenderer()->material()->shader()->setUniform("lightPos", light.transform().position());
 		}
+
+		MEGEngine::EventManager::triggerEvent<TestEvent>();
 
 
 		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else

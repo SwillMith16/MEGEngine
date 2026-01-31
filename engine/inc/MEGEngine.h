@@ -20,4 +20,7 @@
 #include "MEGEngine/settings.h"
 #include "MEGEngine/model_loader.h"
 
+#include "MEGEngine/event_manager.h"
+#include "MEGEngine/events.h"
+
 #endif //MEGENGINEPROJECT_MEGENGINE_H
