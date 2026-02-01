@@ -4,6 +4,7 @@
 #include <string>
 
 #include "MEGEngine/common.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
     class ENGINE_API Event {
@@ -45,5 +46,14 @@ namespace MEGEngine {
         Entity& _parent;
     };
 } // EVENT LISTENER
+
+class MoveForwardEvent : public MEGEngine::Event {};
+class MoveForwardEventListener : public MEGEngine::EventListener {
+public:
+    MoveForwardEventListener(MEGEngine::Entity& parent) : EventListener(parent) {}
+    void onEvent() override {
+        MEGEngine::Log(LogLevel::DBG, "Move Forward!");
+    }
+};
 
 #endif //MEGENGINEPROJECT_EVENTS_H
