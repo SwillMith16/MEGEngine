@@ -35,7 +35,7 @@ namespace MEGEngine {
 
 		void updateMatrix();
 		void matrix(Shader& shader, const char* uniform) const;
-		void processInputs(class Window& window, float deltaTime);
+		void processInputs(class Window& window);
 
 		Mat4 viewMatrix() const;
 		Mat4 projectionMatrix() const;

@@ -18,9 +18,9 @@ namespace MEGEngine {
         return *_camera;
     }
 
-    void Scene::update(float dt) {
+    void Scene::update() {
         for (auto& entity : _entities) {
-            entity->onUpdate(dt);
+            entity->onUpdate();
         }
 
         updateLights();

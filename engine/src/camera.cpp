@@ -6,6 +6,7 @@
 
 #include "MEGEngine/camera.h"
 #include "MEGEngine/window.h"
+#include "MEGEngine/timer.h"
 
 #include "MEGEngine/math/glm_conversions.h"
 
@@ -49,38 +50,38 @@ namespace MEGEngine {
     }
 
 
-    void Camera::processInputs(Window& window, float deltaTime) {
+    void Camera::processInputs(Window& window) {
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&window.impl()));
         // Handles key inputs
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "W key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * _orientation));
+            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * _orientation));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "A key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
+            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * Vec3::cross(_orientation, _up).normalized()));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "S key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * _orientation));
+            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * _orientation));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "D key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
+            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * Vec3::cross(_orientation, _up).normalized()));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "Space key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * _up));
+            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * _up));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "L-Ctrl key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * _up));
+            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * _up));
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {

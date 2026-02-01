@@ -15,7 +15,7 @@ namespace MEGEngine {
 		Entity() = default;
 		virtual ~Entity() = default;
 
-		virtual void onUpdate(float deltaTime) {} // TODO: update will be moved to script component when script feature is added
+		virtual void onUpdate() {} // TODO: update will be moved to script component when script feature is added
 
 		Transform& transform();
 		std::shared_ptr<MeshRenderer> meshRenderer();

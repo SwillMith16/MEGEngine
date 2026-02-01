@@ -37,7 +37,7 @@ protected:
 		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
 	}
 
-	void onUpdate(float dt) override {
+	void onUpdate() override {
 		// once per frame
 		MEGEngine::EventManager::processEvents();
 	}

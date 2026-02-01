@@ -52,14 +52,11 @@ namespace MEGEngine {
 		// Return renderer object owned by the application
 		Renderer& renderer();
 
-		// getter for delta time to allow for synchronised time across the application
-		float deltaTime() const;
-
 	protected:
 		// Virtual function, overwritten by objects of this class. Called on application startup
 		virtual void onInit() {}
 		// Virtual function, overwritten by objects of this class. Called on each frame
-		virtual void onUpdate(float dt) {};
+		virtual void onUpdate() {};
 		// Virtual function, overwritten by objects of this class. Called on application exit
 		virtual void onShutdown() {};
 
@@ -68,11 +65,8 @@ namespace MEGEngine {
 		void init();
 		// Internal function to handle application exit
 		void shutdown();
-		// Internal function to encapsulate deltaTime calculation
-		void setDeltaTime(auto& _lastTime);
 
 		bool running = false;
-		float _deltaTime = 0.0f;
 
 		std::unique_ptr<Window> _window;
 		std::unique_ptr<Renderer> _renderer;

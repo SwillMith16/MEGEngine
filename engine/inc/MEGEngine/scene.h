@@ -16,7 +16,7 @@ namespace MEGEngine {
         Scene(unsigned int width, unsigned int height);
         ~Scene() = default;
 
-        void update(float dt);
+        void update();
 
         void updateLights();
 

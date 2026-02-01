@@ -65,6 +65,8 @@ add_library(MEGEngine SHARED
         inc/MEGEngine/colour.h
         src/input.cpp
         inc/MEGEngine/input.h
+        src/timer.cpp
+        inc/MEGEngine/timer.h
 )
 
 target_include_directories(MEGEngine

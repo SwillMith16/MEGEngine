@@ -1,10 +1,11 @@
-#include <chrono>
 #include <thread>
 
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
 
 #include "MEGEngine/application.h"
+
+#include "MEGEngine/timer.h"
 #include "MEGEngine/window.h"
 #include "MEGEngine/scene.h"
 #include "MEGEngine/renderer.h"
@@ -15,8 +16,6 @@
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-	using clock = std::chrono::high_resolution_clock;
-
 	Application::Application(const ApplicationConfig& appConfig) {
 		this->config = appConfig;
 		// TODO: store app config values in settings for global use throughout application
@@ -33,10 +32,10 @@ namespace MEGEngine {
 		init();
 		running = true;
 
-		auto lastTime = clock::now();
+		auto lastFrame = std::chrono::high_resolution_clock::now();
 
 		while (running) {
-			_scene->update(_deltaTime);
+			_scene->update();
 			// _scene->camera().processInputs(window(), deltaTime()); // TODO: until input manager is added
 			InputManager::processInputs();
 
@@ -51,8 +50,8 @@ namespace MEGEngine {
 	        // Limit FPS and set deltaTime
 	    	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-	    	setDeltaTime(lastTime);
-			onUpdate(_deltaTime);
+	    	Timer::setDeltaTime(lastFrame);
+			onUpdate();
 	    }
 
 	    // close
@@ -62,10 +61,6 @@ namespace MEGEngine {
 
 	void Application::requestQuit() {
 		running = false;
-	}
-
-	float Application::deltaTime() const {
-		return _deltaTime;
 	}
 
 	Window& Application::window() {
@@ -116,12 +111,5 @@ namespace MEGEngine {
 		_scene.reset();
 		_renderer.reset();
 		_window.reset();
-	}
-
-	void Application::setDeltaTime(auto& lastTime) {
-		auto now = clock::now();
-		std::chrono::duration<float> delta = now - lastTime;
-		lastTime = now;
-		_deltaTime = delta.count();
 	}
 } // MEGEngine
