@@ -2,6 +2,7 @@
 #define MEGENGINEPROJECT_INPUT_H
 
 #include <memory>
+#include <typeindex>
 #include <unordered_map>
 
 #include "MEGEngine/common.h"
@@ -20,20 +21,6 @@ namespace MEGEngine {
         virtual void KeyPress_1() {}
         virtual void KeyPress_2() {}
     };
-
-    using LayoutTypeID = std::size_t;
-    inline LayoutTypeID generateLayoutTypeID()
-    {
-        static LayoutTypeID last = 0;
-        return last++;
-    }
-
-    template<typename T>
-    LayoutTypeID getLayoutTypeID()
-    {
-        static LayoutTypeID id = generateLayoutTypeID();
-        return id;
-    }
 
 
     class ENGINE_API WASDLayout : public InputLayout {
@@ -72,19 +59,17 @@ namespace MEGEngine {
             static_assert(std::is_base_of_v<InputLayout, LayoutType>);
             auto layout = std::make_unique<LayoutType>();
             LayoutType& ref = *layout;
-            _inputLayouts[getLayoutTypeID<LayoutType>()] = std::move(layout);
-            _activeInputLayout = getLayoutTypeID<LayoutType>();
+            _inputLayouts[typeid(LayoutType)] = std::move(layout);
+            _activeInputLayout = typeid(LayoutType);
         }
 
-        static void unbindInputLayout() { _activeInputLayout = -1; }
-
-        static LayoutTypeID activeInputLayoutID() { return _activeInputLayout; };
+        static void unbindInputLayout() { _activeInputLayout = typeid(InputLayout); }
 
         static void processInputs();
 
     private:
-        inline static std::unordered_map<LayoutTypeID, std::unique_ptr<InputLayout>> _inputLayouts;
-        inline static LayoutTypeID _activeInputLayout = -1;
+        inline static std::unordered_map<std::type_index, std::unique_ptr<InputLayout>> _inputLayouts;
+        inline static std::type_index _activeInputLayout = typeid(InputLayout);
         inline static Window* _window = nullptr;
     };
 } // INPUT MANAGER

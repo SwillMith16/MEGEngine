@@ -32,7 +32,12 @@ namespace MEGEngine {
     }
 
     void InputManager::processInputs() {
-        if (!_window) // pointer to window must be set
+        // pointer to window must be non-null
+        if (!_window)
+            return;
+
+        // If active input layout is the InputLayout base class, treat this as if no InputLayout is bound
+        if (_activeInputLayout.name() == typeid(InputLayout).name())
             return;
 
         auto* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&_window->impl()));
