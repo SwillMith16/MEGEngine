@@ -10,11 +10,3 @@ namespace MEGEngine {
         return _parent;
     }
 } // EVENT LISTENER
-
-namespace MEGEngine {
-    Event::Event() : _id(typeid(this).name()) {}
-
-    std::string Event::type() {
-        return _id;
-    }
-} // EVENT

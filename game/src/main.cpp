@@ -24,7 +24,7 @@ protected:
 		light.meshRenderer()->material()->setTextureList(tex);
 
 		light.createEventListener<TestEventListener, TestEvent>();
-		light.createEventListener<MoveForwardEventListener, MoveForwardEvent>();
+		light.createEventListener<MEGEngine::MoveForwardEventListener, MEGEngine::MoveForwardEvent>();
 
 		auto& sword = scene().createEntity<MEGEngine::Entity>();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());

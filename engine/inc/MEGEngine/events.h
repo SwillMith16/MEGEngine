@@ -2,6 +2,7 @@
 #define MEGENGINEPROJECT_EVENTS_H
 
 #include <string>
+#include <typeindex>
 
 #include "MEGEngine/common.h"
 #include "MEGEngine/utils/log.h"
@@ -9,26 +10,8 @@
 namespace MEGEngine {
     class ENGINE_API Event {
     public:
-        Event();
-
-        std::string type();
-    protected:
-        std::string _id;
+        Event() = default;
     };
-
-    using EventTypeID = std::size_t;
-    inline EventTypeID generateEventTypeID()
-    {
-        static EventTypeID last = 0;
-        return last++;
-    }
-
-    template<typename T>
-    EventTypeID getEventTypeID()
-    {
-        static EventTypeID id = generateEventTypeID();
-        return id;
-    }
 } // EVENT
 
 
@@ -47,13 +30,15 @@ namespace MEGEngine {
     };
 } // EVENT LISTENER
 
-class MoveForwardEvent : public MEGEngine::Event {};
-class MoveForwardEventListener : public MEGEngine::EventListener {
-public:
-    MoveForwardEventListener(MEGEngine::Entity& parent) : EventListener(parent) {}
-    void onEvent() override {
-        MEGEngine::Log(LogLevel::DBG, "Move Forward!");
-    }
-};
+namespace MEGEngine {
+    class MoveForwardEvent : public Event {};
+    class MoveForwardEventListener : public EventListener {
+    public:
+        MoveForwardEventListener(Entity& parent) : EventListener(parent) {}
+        void onEvent() override {
+            Log(LogLevel::DBG, "Move Forward!");
+        }
+    };
+}
 
 #endif //MEGENGINEPROJECT_EVENTS_H

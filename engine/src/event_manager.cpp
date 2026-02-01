@@ -2,12 +2,9 @@
 
 namespace MEGEngine {
     void EventManager::processEvents() {
-        for (const auto& eventID: _eventQueue) {
-            auto foundEvent = _listeners.find(eventID);
-            if (foundEvent == _listeners.end())
-                continue;
-
-            for (EventListener* listener: foundEvent->second) {
+        for (const auto& eventType: _eventQueue) {
+            auto foundEvent = _listeners[eventType];
+            for (EventListener* listener: foundEvent) {
                 listener->onEvent();
             }
         }

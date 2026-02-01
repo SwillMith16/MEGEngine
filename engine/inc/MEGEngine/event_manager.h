@@ -15,22 +15,18 @@ namespace MEGEngine {
         template <typename EventType>
         static void addListener(EventListener& listener) {
             static_assert(std::is_base_of_v<Event, EventType>);
-            _listeners[getEventTypeID<EventType>()].push_back(&listener);
+            _listeners[typeid(EventType)].push_back(&listener);
         }
 
         template<typename EventType>
         static void triggerEvent()
         {
-            auto& listeners = _listeners[getEventTypeID<EventType>()];
-            for (EventListener* listener : listeners)
-            {
-                listener->onEvent();
-            }
+            _eventQueue.emplace_back(typeid(EventType));
         }
 
     private:
-        inline static std::vector<EventTypeID> _eventQueue;
-        inline static std::unordered_map<EventTypeID, std::vector<EventListener*>> _listeners;
+        inline static std::vector<std::type_index> _eventQueue;
+        inline static std::unordered_map<std::type_index, std::vector<EventListener*>> _listeners;
     };
 } // MEGEngine
 
