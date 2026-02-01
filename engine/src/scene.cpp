@@ -10,9 +10,8 @@ namespace MEGEngine {
         return _entities;
     }
 
-    Entity &Scene::createEntity() {
-        _entities.push_back(std::make_unique<Entity>());
-        return *_entities.back();
+    const std::vector<LightData>& Scene::lightData() const {
+        return _lightData;
     }
 
     Camera& Scene::camera() const {
@@ -24,6 +23,25 @@ namespace MEGEngine {
             entity->onUpdate(dt);
         }
 
+        updateLights();
+
         _camera->updateMatrix();
+    }
+
+    void Scene::updateLights() {
+        _lightData.clear();
+        for (auto& entity : _entities) {
+            if (auto* light = dynamic_cast<Light*>(entity.get())) {
+                LightData data{};
+                data.position = light->transform().position();
+                data.colour = light->colour();
+                data.intensity = light->intensity();
+                data.type = light->type();
+
+                _lightData.push_back(data);
+
+                light->clearDirty();
+            }
+        }
     }
 } // MEGEngine

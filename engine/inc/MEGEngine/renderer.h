@@ -16,7 +16,7 @@ namespace MEGEngine {
         void render(const class Scene& scene);
 
     private:
-        void drawMesh(const class MeshRenderer& mr, const class Transform& transform, const class Camera& camera);
+        void draw(class Entity& entity, const class Scene& scene);
         void drawMeshes(std::vector<std::unique_ptr<class Entity>&> entities);
 
         bool _initialised = false;

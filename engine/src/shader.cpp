@@ -11,6 +11,7 @@
 #include "MEGEngine/math/vec3.h"
 #include "MEGEngine/math/vec4.h"
 #include "MEGEngine/math/mat4.h"
+#include "MEGEngine/colour.h"
 
 namespace MEGEngine {
 	// Reads a text file and outputs a string with everything in the text file
@@ -114,6 +115,7 @@ namespace MEGEngine {
 
 	template<typename T>
 	void Shader::setUniform(const char* name, const T& value) {
+		activate();
 		if constexpr (std::is_same<T, float>::value)
 			glUniform1f(glGetUniformLocation(_id, name), value);
 		else if constexpr (std::is_same<T, unsigned int>::value)
@@ -124,6 +126,8 @@ namespace MEGEngine {
 			glUniform3f(glGetUniformLocation(_id, name), value.x, value.y, value.z);
 		else if constexpr (std::is_same<T, Vec4>::value)
 			glUniform4f(glGetUniformLocation(_id, name), value.x, value.y, value.z, value.w);
+		else if constexpr (std::is_same<T, Colour>::value)
+			glUniform4f(glGetUniformLocation(_id, name), value.r, value.g, value.b, value.a);
 		else if constexpr (std::is_same<T, Mat4>::value)
 			glUniformMatrix4fv(glGetUniformLocation(_id, name), 1, GL_FALSE, glm::value_ptr(Private::toGlmMat4(value)));
 		else
@@ -135,5 +139,6 @@ namespace MEGEngine {
 	template void Shader::setUniform<Vec2>(const char* name, const Vec2& value);
 	template void Shader::setUniform<Vec3>(const char* name, const Vec3& value);
 	template void Shader::setUniform<Vec4>(const char* name, const Vec4& value);
+	template void Shader::setUniform<Colour>(const char* name, const Colour& value);
 	template void Shader::setUniform<Mat4>(const char* name, const Mat4& value);
 }

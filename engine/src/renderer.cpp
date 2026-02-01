@@ -62,28 +62,28 @@ namespace MEGEngine {
         for (RenderGroup& group : renderQueue) {
             glUseProgram(group.shader->ID());
             for (auto entity : group.entities) {
-                drawMesh(*entity->meshRenderer(), entity->transform(), scene.camera());
+                draw(*entity, scene);
             }
         }
     }
 
-    void Renderer::drawMesh(const MeshRenderer& mr, const Transform& transform, const Camera& camera) {
-        if (!mr.material()->shader()) {
+    void Renderer::draw(Entity& entity, const Scene& scene) {
+        if (!entity.meshRenderer()->material()->shader()) {
             Log(LogLevel::WRN, "Attempt to draw failed. Shader is null");
             return;
         }
 
-        mr.material()->bind();
-        mr.mesh()->bind();
+        entity.meshRenderer()->material()->bind();
+        entity.meshRenderer()->mesh()->bind();
 
         // Keep track of how many of each type of textures we have
         unsigned int numDiffuse = 0;
         unsigned int numSpecular = 0;
 
-        for (unsigned int i = 0; i < mr.material()->textures().size(); i++)
+        for (unsigned int i = 0; i < entity.meshRenderer()->material()->textures().size(); i++)
         {
             std::string num;
-            std::string type = mr.material()->textures()[i].type;
+            std::string type = entity.meshRenderer()->material()->textures()[i].type;
             if (type == "diffuse")
             {
                 num = std::to_string(numDiffuse++);
@@ -92,27 +92,33 @@ namespace MEGEngine {
             {
                 num = std::to_string(numSpecular++);
             }
-            mr.material()->textures()[i].texUnit(*mr.material()->shader().get(), (type + num).c_str(), i);
-            mr.material()->textures()[i].bind();
+            entity.meshRenderer()->material()->textures()[i].texUnit(*entity.meshRenderer()->material()->shader().get(), (type + num).c_str(), i);
+            entity.meshRenderer()->material()->textures()[i].bind();
         }
-        mr.material()->shader()->setUniform("camPos", camera.transform().position());
-        camera.matrix(*mr.material()->shader().get(), "camMatrix");
+        entity.meshRenderer()->material()->shader()->setUniform("camPos", scene.camera().transform().position());
+        scene.camera().matrix(*entity.meshRenderer()->material()->shader().get(), "camMatrix");
 
         // Create matrices
-        Mat4 trans = Mat4::translation(transform.position());
-        Mat4 rot = transform.rotation().toMatrix();
-        Mat4 sca = Mat4::scale(transform.scale());
+        Mat4 trans = Mat4::translation(entity.transform().position());
+        Mat4 rot = entity.transform().rotation().toMatrix();
+        Mat4 sca = Mat4::scale(entity.transform().scale());
 
         // Push the matrices to the vertex shader
-        Mat4 modelMatrix = transform.modelMatrix();
-        mr.material()->shader()->setUniform("model",  modelMatrix);
-        mr.material()->shader()->setUniform("translation", trans);
-        mr.material()->shader()->setUniform("rotation", rot);
-        mr.material()->shader()->setUniform("scale", sca);
+        Mat4 modelMatrix = entity.transform().modelMatrix();
+        entity.meshRenderer()->material()->shader()->setUniform("model",  modelMatrix);
+        entity.meshRenderer()->material()->shader()->setUniform("translation", trans);
+        entity.meshRenderer()->material()->shader()->setUniform("rotation", rot);
+        entity.meshRenderer()->material()->shader()->setUniform("scale", sca);
+
+        entity.meshRenderer()->material()->shader()->setUniform("lightColour", scene.lightData()[0].colour);
+        if (auto* light = dynamic_cast<Light*>(&entity)) {
+            entity.meshRenderer()->material()->shader()->setUniform("translation", scene.lightData()[0].position);
+        } else {
+            entity.meshRenderer()->material()->shader()->setUniform("lightPosition", scene.lightData()[0].colour);
+        }
+
 
         // Draw the actual mesh
-        glDrawElements(GL_TRIANGLES, mr.mesh()->numIndices(), GL_UNSIGNED_INT, 0);
-
-
+        glDrawElements(GL_TRIANGLES, entity.meshRenderer()->mesh()->numIndices(), GL_UNSIGNED_INT, 0);
     }
 } // MEGEngine

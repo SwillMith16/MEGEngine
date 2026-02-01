@@ -39,7 +39,7 @@ namespace MEGEngine {
 			EventManager::addListener<EventType>(ref);
 		}
 
-	private:
+	protected:
 		Entity* _parent = nullptr;
 		std::vector<Entity*> _children;
 		std::unique_ptr<Transform> _transform = std::make_unique<Transform>();

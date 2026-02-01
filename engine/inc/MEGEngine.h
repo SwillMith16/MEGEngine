@@ -7,6 +7,7 @@
 #include "MEGEngine/renderer.h"
 #include "MEGEngine/camera.h"
 #include "MEGEngine/entity.h"
+#include "MEGEngine/light.h"
 #include "MEGEngine/transform.h"
 #include "MEGEngine/mesh_renderer.h"
 #include "MEGEngine/mesh.h"

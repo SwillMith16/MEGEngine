@@ -60,6 +60,9 @@ add_library(MEGEngine SHARED
         inc/MEGEngine/event_manager.h
         src/events.cpp
         inc/MEGEngine/events.h
+        src/light.cpp
+        inc/MEGEngine/light.h
+        inc/MEGEngine/colour.h
 )
 
 target_include_directories(MEGEngine
