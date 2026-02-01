@@ -3,6 +3,7 @@
 #include "MEGEngine.h"
 #include "MEGEngine/math/quat.h"
 #include "MEGEngine/utils/log.h"
+#include "MEGEngine/input.h"
 
 #include "CustomEvents.h"
 
@@ -13,6 +14,8 @@ public:
 protected:
 	void onInit() override {
 		// once at start
+		MEGEngine::InputManager::bindInputLayout<MEGEngine::WASDLayout>();
+
 		auto& light = scene().createEntity<MEGEngine::Light>();
 		light.setColour({1.0, 1.0, 1.0, 1.0});
 		MEGEngine::modelLoader.loadModelFromData(light, MEGEngine::Cube::vertices(), MEGEngine::Cube::indices());
@@ -20,8 +23,8 @@ protected:
 		light.meshRenderer()->setMaterial(std::make_shared<MEGEngine::Material>(MEGEngine::ShaderManager::getShader("light")));
 		light.meshRenderer()->material()->setTextureList(tex);
 
-		TestEvent event = TestEvent();
 		light.createEventListener<TestEventListener, TestEvent>();
+		light.createEventListener<MoveForwardEventListener, MoveForwardEvent>();
 
 		auto& sword = scene().createEntity<MEGEngine::Entity>();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());

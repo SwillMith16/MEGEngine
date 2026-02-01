@@ -63,6 +63,8 @@ add_library(MEGEngine SHARED
         src/light.cpp
         inc/MEGEngine/light.h
         inc/MEGEngine/colour.h
+        src/input.cpp
+        inc/MEGEngine/input.h
 )
 
 target_include_directories(MEGEngine

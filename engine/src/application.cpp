@@ -10,6 +10,7 @@
 #include "MEGEngine/renderer.h"
 #include "MEGEngine/camera.h"
 #include "MEGEngine/settings.h"
+#include "MEGEngine/input.h"
 
 #include "MEGEngine/utils/log.h"
 
@@ -36,7 +37,8 @@ namespace MEGEngine {
 
 		while (running) {
 			_scene->update(_deltaTime);
-			_scene->camera().processInputs(window(), deltaTime()); // TODO: until input manager is added
+			// _scene->camera().processInputs(window(), deltaTime()); // TODO: until input manager is added
+			InputManager::processInputs();
 
 	    	_renderer->render(*_scene);
 
@@ -83,6 +85,8 @@ namespace MEGEngine {
 
 		_window = std::make_unique<Window>();
 		_window->create(config.windowTitle, config.width, config.height);
+
+		InputManager::init(_window.get());
 
 		// load glad for access to GL functions
 		int status = gladLoadGL();
