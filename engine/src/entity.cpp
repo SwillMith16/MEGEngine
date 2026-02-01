@@ -4,7 +4,7 @@
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-	Transform& Entity::transform() {
+	Transform& Entity::transform() const {
 		return *_transform;
 	}
 

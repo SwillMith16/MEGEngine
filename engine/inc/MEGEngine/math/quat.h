@@ -14,6 +14,8 @@ namespace MEGEngine {
         static Quat identity();
         static Quat fromAxisAngle(const class Vec3& axis, float radians);
         static Quat fromEuler(float pitch, float yaw, float roll);
+        static Vec3 toEuler(const Quat& q);
+        Vec3 toEuler(); // called as member function
 
         Quat normalised() const;
         Quat inverse() const;

@@ -12,17 +12,8 @@
 namespace MEGEngine {
     class ENGINE_API Scene {
     public:
-        Scene();
-        Scene(unsigned int width, unsigned int height);
+        Scene(float width, float height);
         ~Scene() = default;
-
-        void update();
-
-        void updateLights();
-
-        const std::vector<std::unique_ptr<Entity>>& entities() const;
-
-        const std::vector<LightData>& lightData() const;
 
         // Template allows for creation of entities AND entity sub-types.
         // i.e. lights, which can have a colour without requiring a mesh renderer
@@ -34,15 +25,26 @@ namespace MEGEngine {
             auto entity = std::make_unique<T>();
             T& ref = *entity;
             _entities.push_back(std::move(entity));
+
             return ref;
         }
+
+        // Special entity creation for camera type.
+        template<typename T>
+        T& createEntity(float width, float height);
+
+        void update();
+
+        const std::vector<std::unique_ptr<Entity>>& entities() const;
+
+        const std::vector<LightData>& lightData() const;
 
         Camera& camera() const;
 
     private:
         std::vector<std::unique_ptr<Entity>> _entities;
         std::vector<LightData> _lightData;
-        std::unique_ptr<Camera> _camera;
+        Camera* _camera = nullptr;
     };
 } // MEGEngine
 

@@ -96,7 +96,7 @@ namespace MEGEngine {
             entity.meshRenderer()->material()->textures()[i].bind();
         }
         entity.meshRenderer()->material()->shader()->setUniform("camPos", scene.camera().transform().position());
-        scene.camera().matrix(*entity.meshRenderer()->material()->shader().get(), "camMatrix");
+        entity.meshRenderer()->material()->shader()->setUniform("camMatrix", scene.camera().camMatrix());
 
         // Create matrices
         Mat4 trans = Mat4::translation(entity.transform().position());
@@ -110,13 +110,13 @@ namespace MEGEngine {
         entity.meshRenderer()->material()->shader()->setUniform("rotation", rot);
         entity.meshRenderer()->material()->shader()->setUniform("scale", sca);
 
+        // TODO: shader support for multiple light sources
         entity.meshRenderer()->material()->shader()->setUniform("lightColour", scene.lightData()[0].colour);
-        if (auto* light = dynamic_cast<Light*>(&entity)) {
+        if (auto* light = dynamic_cast<Light*>(&entity)) { // if this entity is the light, set its translation in vert shader
             entity.meshRenderer()->material()->shader()->setUniform("translation", scene.lightData()[0].position);
-        } else {
+        } else { // any other entity, set light pos in frag shader
             entity.meshRenderer()->material()->shader()->setUniform("lightPosition", scene.lightData()[0].colour);
         }
-
 
         // Draw the actual mesh
         glDrawElements(GL_TRIANGLES, entity.meshRenderer()->mesh()->numIndices(), GL_UNSIGNED_INT, 0);

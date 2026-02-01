@@ -6,7 +6,6 @@
 #include "MEGEngine/common.h"
 #include "MEGEngine/transform.h"
 #include "MEGEngine/mesh_renderer.h"
-#include "MEGEngine/event_manager.h"
 #include "MEGEngine/events.h"
 
 namespace MEGEngine {
@@ -17,7 +16,7 @@ namespace MEGEngine {
 
 		virtual void onUpdate() {} // TODO: update will be moved to script component when script feature is added
 
-		Transform& transform();
+		Transform& transform() const;
 		std::shared_ptr<MeshRenderer> meshRenderer();
 
 		void setMeshRenderer(std::shared_ptr<MeshRenderer> renderer);

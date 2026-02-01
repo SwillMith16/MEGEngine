@@ -28,6 +28,8 @@ namespace MEGEngine {
 		Vec3 normalized() const;
 		static float dot(const Vec3 &a, const Vec3 &b);
 		static Vec3 cross(const Vec3 &a, const Vec3 &b);
+
+		static Vec3 up() { return {0, 1, 0}; }
 	};
 
 	Vec3 operator* (float scalar, const Vec3 &v);

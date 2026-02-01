@@ -3,7 +3,6 @@
 #include "MEGEngine.h"
 #include "MEGEngine/math/quat.h"
 #include "MEGEngine/utils/log.h"
-#include "MEGEngine/input.h"
 
 #include "CustomEvents.h"
 
@@ -15,6 +14,9 @@ protected:
 	void onInit() override {
 		// once at start
 		MEGEngine::InputManager::bindInputLayout<MEGEngine::WASDLayout>();
+		scene().camera().createEventListener<MEGEngine::MoveForwardEventListener, MEGEngine::MoveForwardEvent>();
+
+		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
 
 		auto& light = scene().createEntity<MEGEngine::Light>();
 		light.setColour({1.0, 1.0, 1.0, 1.0});
@@ -23,18 +25,12 @@ protected:
 		light.meshRenderer()->setMaterial(std::make_shared<MEGEngine::Material>(MEGEngine::ShaderManager::getShader("light")));
 		light.meshRenderer()->material()->setTextureList(tex);
 
-		light.createEventListener<TestEventListener, TestEvent>();
-		light.createEventListener<MEGEngine::MoveForwardEventListener, MEGEngine::MoveForwardEvent>();
-
 		auto& sword = scene().createEntity<MEGEngine::Entity>();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());
 		sword.transform().setPosition(MEGEngine::Vec3(-5, -5, 10));
 		sword.transform().setRotation(MEGEngine::Quat(0, 0, 0.707, 0.707));
 		sword.transform().setScale(0.5);
 
-		MEGEngine::EventManager::triggerEvent<TestEvent>();
-
-		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
 	}
 
 	void onUpdate() override {

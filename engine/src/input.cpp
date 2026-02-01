@@ -2,7 +2,6 @@
 
 #include "MEGEngine/input.h"
 #include "MEGEngine/events.h"
-#include "MEGEngine/event_manager.h"
 #include "MEGEngine/window.h"
 #include "MEGEngine/utils/log.h"
 

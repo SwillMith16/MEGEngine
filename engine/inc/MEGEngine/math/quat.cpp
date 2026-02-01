@@ -28,6 +28,14 @@ namespace MEGEngine {
         return {q.x, q.y, q.z, q.w};
     }
 
+    Vec3 Quat::toEuler(const Quat& q) {
+        return Private::fromGlmVec3(glm::eulerAngles(Private::toGlmQuat(q)));
+    }
+
+    Vec3 Quat::toEuler() {
+        return Private::fromGlmVec3(glm::eulerAngles(Private::toGlmQuat(*this)));
+    }
+
     Quat Quat::normalised() const {
         glm::quat q(w, x, y, z);
         q = glm::normalize(q);

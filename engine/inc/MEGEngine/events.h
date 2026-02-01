@@ -1,11 +1,11 @@
 #ifndef MEGENGINEPROJECT_EVENTS_H
 #define MEGENGINEPROJECT_EVENTS_H
 
-#include <string>
 #include <typeindex>
+#include <unordered_map>
+#include <vector>
 
 #include "MEGEngine/common.h"
-#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
     class ENGINE_API Event {
@@ -31,13 +31,34 @@ namespace MEGEngine {
 } // EVENT LISTENER
 
 namespace MEGEngine {
-    class MoveForwardEvent : public Event {};
-    class MoveForwardEventListener : public EventListener {
+    class ENGINE_API EventManager {
+    public:
+        static void processEvents();
+
+        template <typename EventType>
+        static void addListener(EventListener& listener) {
+            static_assert(std::is_base_of_v<Event, EventType>);
+            _listeners[typeid(EventType)].push_back(&listener);
+        }
+
+        template<typename EventType>
+        static void triggerEvent()
+        {
+            _eventQueue.emplace_back(typeid(EventType));
+        }
+
+    private:
+        inline static std::vector<std::type_index> _eventQueue;
+        inline static std::unordered_map<std::type_index, std::vector<EventListener*>> _listeners;
+    };
+} // EVENT MANAGER
+
+namespace MEGEngine {
+    class ENGINE_API MoveForwardEvent : public Event {};
+    class ENGINE_API MoveForwardEventListener : public EventListener {
     public:
         MoveForwardEventListener(Entity& parent) : EventListener(parent) {}
-        void onEvent() override {
-            Log(LogLevel::DBG, "Move Forward!");
-        }
+        void onEvent() override;
     };
 }
 
