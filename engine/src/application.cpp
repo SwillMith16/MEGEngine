@@ -36,8 +36,8 @@ namespace MEGEngine {
 
 		while (running) {
 			_scene->update();
-			// _scene->camera().processInputs(window(), deltaTime()); // TODO: until input manager is added
-			InputManager::processInputs();
+			_scene->camera().processInputs(window());
+			// InputManager::processInputs();
 
 	    	_renderer->render(*_scene);
 

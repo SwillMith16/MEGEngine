@@ -16,7 +16,7 @@ protected:
 		MEGEngine::InputManager::bindInputLayout<MEGEngine::WASDLayout>();
 		scene().camera().createEventListener<MEGEngine::MoveForwardEventListener, MEGEngine::MoveForwardEvent>();
 
-		scene().camera().transform().setPosition({0, 0, 10}); // TODO: z-axis of camera is opposite to everything else
+		scene().camera().transform().setPosition({0, 0, -10});
 
 		auto& light = scene().createEntity<MEGEngine::Light>();
 		light.setColour({1.0, 1.0, 1.0, 1.0});
@@ -28,8 +28,8 @@ protected:
 		auto& sword = scene().createEntity<MEGEngine::Entity>();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());
 		sword.transform().setPosition(MEGEngine::Vec3(-5, -5, 10));
-		sword.transform().setRotation(MEGEngine::Quat(0, 0, 0.707, 0.707));
-		sword.transform().setScale(0.5);
+		sword.transform().setOrientation(MEGEngine::Quat(0, 0, 0, 1));
+		sword.transform().setScale(0.2);
 
 	}
 

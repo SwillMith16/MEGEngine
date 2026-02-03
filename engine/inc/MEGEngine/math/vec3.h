@@ -29,7 +29,9 @@ namespace MEGEngine {
 		static float dot(const Vec3 &a, const Vec3 &b);
 		static Vec3 cross(const Vec3 &a, const Vec3 &b);
 
-		static Vec3 up() { return {0, 1, 0}; }
+		static Vec3 worldRight() { return {1, 0, 0}; }
+		static Vec3 worldUp() { return {0, 1, 0}; }
+		static Vec3 worldForward() { return {0, 0, 1}; }
 	};
 
 	Vec3 operator* (float scalar, const Vec3 &v);

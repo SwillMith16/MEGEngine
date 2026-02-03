@@ -22,7 +22,7 @@ namespace MEGEngine {
 
         class Mat4 toMatrix() const;
 
-        class Vec3 rotate(const class Vec3& v) const;
+        Vec3 rotate(const Vec3& v) const;
 
         Quat operator*(const Quat& rhs) const;
     };

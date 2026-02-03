@@ -26,6 +26,7 @@ namespace MEGEngine {
 
 namespace MEGEngine {
     void MoveForwardEventListener::onEvent() { // TODO: replace constant 5 with a user defined speed parameter
-        _parent.transform().setPosition(_parent.transform().position() + (5 * Timer::deltaTime() * _parent.transform().rotation().toEuler()));
+        Vec3 move = _parent.transform().orientation().rotate(Vec3::worldForward());
+        _parent.transform().setPosition(_parent.transform().position() + (move * 5 * Timer::deltaTime()));
     }
 }

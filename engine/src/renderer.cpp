@@ -100,7 +100,7 @@ namespace MEGEngine {
 
         // Create matrices
         Mat4 trans = Mat4::translation(entity.transform().position());
-        Mat4 rot = entity.transform().rotation().toMatrix();
+        Mat4 rot = entity.transform().orientation().toMatrix();
         Mat4 sca = Mat4::scale(entity.transform().scale());
 
         // Push the matrices to the vertex shader

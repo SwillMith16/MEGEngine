@@ -55,10 +55,11 @@ namespace MEGEngine {
     }
 
     Vec3 Quat::rotate(const Vec3& vec) const {
-        glm::quat q(w, x, y, z);
-        glm::vec3 r = q * glm::vec3(vec.x, vec.y, vec.z);
+        Quat vq(vec.x, vec.y, vec.z, 0);
+        Quat inv = inverse();
+        Quat res = (*this) * vq * inv;
 
-        return {r.x, r.y, r.z};
+        return {res.x, res.y, res.z};
     }
 
     Quat Quat::operator*(const Quat& rhs) const {

@@ -21,20 +21,19 @@ namespace MEGEngine {
     Camera::Camera(int width, int height) :
         _width(static_cast<float>(width)),
         _height(static_cast<float>(height)),
-        _fov(60.0f),
+        _fov(75.0f),
         _nearZ(0.1f),
         _farZ(1000.0f),
         initialMouseX(float(width)),
         initialMouseY(float(height)),
-        lastMouseInputState(GLFW_RELEASE) {
-        _transform->setRotation(Quat::fromEuler(0, 0, -1));
-    }
+        lastMouseInputState(GLFW_RELEASE) {}
 
     void Camera::onUpdate() {
+        Vec3 camForward = transform().orientation().rotate(Vec3::worldForward());
         Mat4 view = Mat4::lookAt(
             _transform->position(),
-            _transform->position() + _transform->rotation().toEuler(),
-            Vec3::up()
+            _transform->position() + camForward,
+            Vec3::worldUp()
             );
 
         Mat4 projection = Mat4::perspective(_fov, _width/_height, _nearZ, _farZ);
@@ -50,35 +49,36 @@ namespace MEGEngine {
     void Camera::processInputs(Window& window) {
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&window.impl()));
         // Handles key inputs
+        Vec3 localMove(0, 0, 0);
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "W key pressed");
-            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * _transform->rotation().toEuler()));
+            localMove.z += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "A key pressed");
-            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * Vec3::cross(_transform->rotation().toEuler(), Vec3::up()).normalized()));
+            localMove.x -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "S key pressed");
-            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * _transform->rotation().toEuler()));
+            localMove.z -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "D key pressed");
-            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * Vec3::cross(_transform->rotation().toEuler(), Vec3::up()).normalized()));
+            localMove.x += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "Space key pressed");
-            _transform->setPosition(_transform->position() + (speed * Timer::deltaTime() * Vec3::up()));
+            localMove.y += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
             Log(LogLevel::DBG, "L-Ctrl key pressed");
-            _transform->setPosition(_transform->position() - (speed * Timer::deltaTime() * Vec3::up()));
+            localMove.y -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
@@ -91,6 +91,13 @@ namespace MEGEngine {
             isSprinting = false;
             Log(LogLevel::DBG, "L-Shift key released");
             speed = baseSpeed;
+        }
+
+        if (localMove.length() * localMove.length() > 0) {
+            localMove = localMove.normalized();
+
+            Vec3 worldMove = transform().orientation().rotate(localMove);
+            transform().setPosition(transform().position() + (worldMove * speed * Timer::deltaTime()));
         }
 
 
@@ -112,17 +119,24 @@ namespace MEGEngine {
             float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
 
             // Calculates upcoming vertical change in the Orientation
-            Vec3 newOrientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_transform->rotation().toEuler()), glm::radians(-rotX), glm::normalize(glm::cross(Private::toGlmVec3(_transform->rotation().toEuler()), Private::toGlmVec3(Vec3::up())))));
+            Quat tmpOrientation = _transform->orientation();
+
+            Vec3 camRight = _transform->orientation().rotate(Vec3::worldRight());
+            Quat pitch = Quat::fromAxisAngle(camRight, glm::radians(rotX));
+            tmpOrientation = pitch * tmpOrientation;
+
+            Vec3 camForward = tmpOrientation.rotate(Vec3::worldForward());
+            float pitchAngle = glm::degrees(std::asin(glm::clamp(camForward.y, -1.0f, 1.0f)));
 
             // Decides whether or not the next vertical Orientation is legal or not
-            if (abs(glm::angle(Private::toGlmVec3(newOrientation), Private::toGlmVec3(Vec3::up())) - glm::radians(90.0f)) <= glm::radians(85.0f))
+            if (pitchAngle > -85.0f && pitchAngle < 85.0f)
             {
-                _transform->setRotation(Quat::fromEuler(newOrientation.x, newOrientation.y, newOrientation.z));
+                _transform->setOrientation(tmpOrientation);
             }
 
             // Rotates the Orientation left and right
-            Vec3 v = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_transform->rotation().toEuler()), glm::radians(-rotY), Private::toGlmVec3(Vec3::up())));
-            _transform->setRotation(Quat::fromEuler(v.x, v.y, v.z));
+            Quat yaw = Quat::fromAxisAngle(Vec3::worldUp(), glm::radians(rotY));
+            _transform->setOrientation(yaw * _transform->orientation().normalised());
 
             // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
             glfwSetCursorPos(glfwWindow->impl, (_width / 2), (_height / 2));

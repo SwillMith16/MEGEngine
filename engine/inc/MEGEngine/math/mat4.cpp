@@ -67,7 +67,7 @@ namespace MEGEngine {
 
 
     Mat4 Mat4::perspective(float fovDegrees, float aspect, float near, float far) {
-        return Private::fromGlmMat4(glm::perspective(glm::radians(fovDegrees), aspect, near, far));
+        return Private::fromGlmMat4(glm::perspectiveLH(glm::radians(fovDegrees), aspect, near, far));
     }
 
     Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far) {
@@ -85,7 +85,7 @@ namespace MEGEngine {
 
     Mat4 Mat4::lookAt(const Vec3& eye, const Vec3& target, const Vec3& up) {
         return Private::fromGlmMat4(
-            glm::lookAt(
+            glm::lookAtLH(
                 Private::toGlmVec3(eye),
                 Private::toGlmVec3(target),
                 Private::toGlmVec3(up)
