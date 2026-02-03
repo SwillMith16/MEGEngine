@@ -4,14 +4,22 @@
 #include "MEGEngine/common.h"
 
 namespace MEGEngine {
+	enum class TexType {
+		ALBEDO = 0,
+		SPECULAR,
+		NORMAL,
+		EMISSION,
+		END
+	};
+
 	class ENGINE_API Texture {
 	public:
 		unsigned int ID;
-		const char* type;
+		TexType type;
 		unsigned int unit;
 		bool isTextureFlipped = false;
 
-		Texture(const char* image, const char* texType, unsigned int slot);
+		Texture(const char* image, TexType texType, unsigned int slot);
 
 		void texUnit(class Shader& shader, const char* uniform, unsigned int unit);
 		void bind();

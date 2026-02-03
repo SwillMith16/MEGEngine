@@ -2,9 +2,10 @@
 #define MEGENGINEPROJECT_MATERIAL_H
 
 #include <memory>
-#include <vector>
+#include <unordered_map>
 
 #include "MEGEngine/common.h"
+#include "MEGEngine/texture.h"
 
 namespace MEGEngine {
     class ENGINE_API Material {
@@ -14,14 +15,16 @@ namespace MEGEngine {
 
         void bind();
 
-        void setTextureList(std::vector<class Texture> textureList);
+        void setTextures(std::unordered_map<TexType, std::shared_ptr<Texture>> textureList);
+        void setTexture(std::shared_ptr<Texture> texture);
 
         Shader* shader();
-        std::vector<Texture> textures();
+        std::unordered_map<TexType, std::shared_ptr<Texture>> textures();
+        std::shared_ptr<Texture> texture(TexType type);
 
     private:
         Shader* _shader;
-        std::vector<Texture> _textures;
+        std::unordered_map<TexType, std::shared_ptr<Texture>> _textures;
     };
 } // MEGEngine
 

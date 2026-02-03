@@ -21,9 +21,7 @@ protected:
 		auto& light = scene().createEntity<MEGEngine::Light>();
 		light.setColour({1.0, 1.0, 1.0, 1.0});
 		MEGEngine::modelLoader.loadModelFromData(light, MEGEngine::Cube::vertices(), MEGEngine::Cube::indices());
-		std::vector<MEGEngine::Texture> tex {MEGEngine::Texture("", "diffuse", 0)};
 		light.meshRenderer()->setMaterial(std::make_shared<MEGEngine::Material>(MEGEngine::ShaderManager::getShader("light")));
-		light.meshRenderer()->material()->setTextureList(tex);
 
 		auto& sword = scene().createEntity<MEGEngine::Entity>();
 		MEGEngine::modelLoader.loadModelFromFile(sword, (MEGEngine::settings.general().modelDirectory + "/sword/sword.gltf").c_str());

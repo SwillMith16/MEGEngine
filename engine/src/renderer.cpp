@@ -80,20 +80,26 @@ namespace MEGEngine {
         unsigned int numDiffuse = 0;
         unsigned int numSpecular = 0;
 
-        for (unsigned int i = 0; i < entity.meshRenderer()->material()->textures().size(); i++)
+        // for (unsigned int i = 0; i < entity.meshRenderer()->material()->textures().size(); i++)
+        unsigned int slot = 0;
+        for (auto& pair : entity.meshRenderer()->material()->textures())
         {
+            TexType type = pair.first;
+            std::shared_ptr<Texture> texture = pair.second;
             std::string num;
-            std::string type = entity.meshRenderer()->material()->textures()[i].type;
-            if (type == "diffuse")
+            std::string uniformName;
+            if (type == TexType::ALBEDO) // TODO: add support for other texture types
             {
                 num = std::to_string(numDiffuse++);
+                uniformName = "diffuse" + num;
             }
-            else if (type == "specular")
+            else if (type == TexType::SPECULAR)
             {
                 num = std::to_string(numSpecular++);
+                uniformName = "specular" + num;
             }
-            entity.meshRenderer()->material()->textures()[i].texUnit(*entity.meshRenderer()->material()->shader(), (type + num).c_str(), i);
-            entity.meshRenderer()->material()->textures()[i].bind();
+            texture->texUnit(*entity.meshRenderer()->material()->shader(), (uniformName).c_str(), slot++);
+            texture->bind();
         }
         entity.meshRenderer()->material()->shader()->setUniform("camPos", scene.camera().transform().position());
         entity.meshRenderer()->material()->shader()->setUniform("camMatrix", scene.camera().camMatrix());

@@ -8,7 +8,7 @@
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-	Texture::Texture(const char *image, const char *texType, unsigned int slot) {
+	Texture::Texture(const char *image, TexType texType, unsigned int slot) {
 		// Assigns the type of the texture ot the texture object
 		type = texType;
 

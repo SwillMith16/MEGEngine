@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "MEGEngine/common.h"
+#include "MEGEngine/texture.h"
 
 #include "MEGEngine/math/vec2.h"
 #include "MEGEngine/math/vec3.h"
@@ -28,15 +29,14 @@ namespace MEGEngine {
         std::vector<unsigned char> _data;
         std::unique_ptr<JSONImpl> _impl;
 
-        std::vector<std::string> _loadedTexName;
-        std::vector<class Texture> _loadedTex;
+        std::unordered_map<TexType, std::shared_ptr<Texture>> _textures;
 
         class MeshRenderer loadMeshRenderer(unsigned int indMesh);
 
         void traverseNode(Entity& model, unsigned int nextNode, Mat4 matrix = Mat4(1.0f));
 
         std::vector<unsigned char> getData();
-        std::vector<Texture> getTextures();
+        std::unordered_map<TexType, std::shared_ptr<Texture>> getTextures();
 
         std::vector<struct Vertex> assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs);
 
