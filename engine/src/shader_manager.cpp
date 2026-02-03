@@ -4,14 +4,16 @@
 
 namespace MEGEngine {
     // initialise static members
-    std::unordered_map<std::string, std::shared_ptr<Shader>> ShaderManager::_shaders;
-    std::vector<std::string> ShaderManager::_defaultShaders = {"defaultLit", "light"};
+    std::unordered_map<std::string, std::unique_ptr<Shader>> ShaderManager::_shaders;
+    std::vector<std::string> ShaderManager::_defaultShaders = {
+        "defaultLit",
+        "light"
+    };
 
-    std::shared_ptr<Shader> ShaderManager::getShader(std::string name) {
-
+    Shader* ShaderManager::getShader(const std::string& name) {
         // search list of already compiled shaders
         if (_shaders.find(name) != _shaders.end()) {
-            return _shaders[name];
+            return _shaders[name].get();
         }
 
         // not already compiled, search default shader list
@@ -19,22 +21,22 @@ namespace MEGEngine {
             if (shaderName == name) {
                 std::string vertexFile = settings.general().shaderDirectory + "/" + name + "/" + name + ".vert";
                 std::string fragmentFile = settings.general().shaderDirectory + "/" + name + "/" + name + ".frag";
-                std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexFile.c_str(), fragmentFile.c_str());
-                _shaders[name] = shader;
-                return shader;
+                std::unique_ptr<Shader> shader = std::make_unique<Shader>(vertexFile.c_str(), fragmentFile.c_str());
+                _shaders[name] = std::move(shader);
+                return _shaders[name].get();
             }
         }
 
         // If reached this point, shader hasn't been found
-        Log(LogLevel::ERR, "Shader not found: " + name + ". Create shader first");
+        Log(LogLevel::ERR, "Get shader failed: " + name + " does not exist. Create shader first");
         return nullptr;
     }
 
-    std::shared_ptr<Shader> ShaderManager::createShader(const std::string& name, const char* vertexFile, const char* fragmentFile) {
-        std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexFile, fragmentFile);
-        _shaders[name] = shader;
+    Shader* ShaderManager::createShader(const std::string& name, const char* vertexFile, const char* fragmentFile) {
+        std::unique_ptr<Shader> shader = std::make_unique<Shader>(vertexFile, fragmentFile);
+        _shaders[name] = std::move(shader);
 
-        return shader;
+        return _shaders[name].get();
     }
 
     void ShaderManager::cleanUp() {

@@ -9,18 +9,18 @@
 namespace MEGEngine {
     class ENGINE_API Material {
     public:
-        explicit Material(std::shared_ptr<class Shader> shader);
+        explicit Material(class Shader* shader);
         Material();
 
         void bind();
 
         void setTextureList(std::vector<class Texture> textureList);
 
-        std::shared_ptr<Shader> shader();
+        Shader* shader();
         std::vector<Texture> textures();
 
     private:
-        std::shared_ptr<class Shader> _shader;
+        Shader* _shader;
         std::vector<Texture> _textures;
     };
 } // MEGEngine

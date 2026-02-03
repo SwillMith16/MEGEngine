@@ -6,7 +6,7 @@
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-    Material::Material(std::shared_ptr<class Shader> shader) : _shader(std::move(shader)) {}
+    Material::Material(Shader* shader) : _shader(shader) {}
     Material::Material() : _shader(ShaderManager::getShader("defaultLit")) {}
 
     void Material::bind() {
@@ -14,7 +14,7 @@ namespace MEGEngine {
             _shader->activate();
             _shader->setUniform("diffuse0", _textures[0].ID);
         } else {
-            Log(LogLevel::WRN, "Attempt to bind material failed. Shader is null");
+            Log(LogLevel::ERR, "Material binding failed: shader is null");
         }
     }
 
@@ -23,7 +23,7 @@ namespace MEGEngine {
         _textures = std::move(textureList);
     }
 
-    std::shared_ptr<Shader> Material::shader() {
+    Shader* Material::shader() {
         return _shader;
     }
 

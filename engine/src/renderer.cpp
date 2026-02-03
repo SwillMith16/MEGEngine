@@ -14,7 +14,7 @@
 
 namespace MEGEngine {
     struct Renderer::RenderGroup {
-        std::shared_ptr<Shader> shader = nullptr;
+        Shader* shader = nullptr;
         std::vector<Entity*> entities;
     };
 
@@ -46,7 +46,7 @@ namespace MEGEngine {
                 }
 
                 for (int i = 0; i < renderQueue.size(); i++) {
-                    if (entity->meshRenderer()->material()->shader().get()->ID() == renderQueue[i].shader.get()->ID()) {
+                    if (entity->meshRenderer()->material()->shader()->ID() == renderQueue[i].shader->ID()) {
                         renderQueue[i].entities.push_back(entity.get());
                     }
                     else if (i == renderQueue.size() - 1) {
@@ -92,7 +92,7 @@ namespace MEGEngine {
             {
                 num = std::to_string(numSpecular++);
             }
-            entity.meshRenderer()->material()->textures()[i].texUnit(*entity.meshRenderer()->material()->shader().get(), (type + num).c_str(), i);
+            entity.meshRenderer()->material()->textures()[i].texUnit(*entity.meshRenderer()->material()->shader(), (type + num).c_str(), i);
             entity.meshRenderer()->material()->textures()[i].bind();
         }
         entity.meshRenderer()->material()->shader()->setUniform("camPos", scene.camera().transform().position());
