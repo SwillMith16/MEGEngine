@@ -6,5 +6,5 @@ uniform vec4 materialColour;
 
 void main()
 {
-    fragColour = vec4(materialColour.x, materialColour.y, materialColour.z, 0.0f);
+    fragColour = vec4(materialColour.x, materialColour.y, materialColour.z, materialColour.w);
 }

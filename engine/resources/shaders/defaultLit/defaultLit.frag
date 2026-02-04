@@ -32,9 +32,8 @@ vec4 pointLight() {
     vec3 lightDirection = normalize(lightVec);
     float diffuse = max(dot(_normal, lightDirection), 0.0f);
 
-    vec4 finalLighting = vec4(0);
-
     // final basic lighting
+    vec4 finalLighting = vec4(0);
     if (useTex == 0) {
         finalLighting = vec4(materialColour * ((diffuse * intensity) + ambient));
     } else {
@@ -68,10 +67,11 @@ vec4 directLight() {
     float diffuse = max(dot(_normal, lightDirection), 0.0f);
 
     // final basic lighting
+    vec4 finalLighting = vec4(0);
     if (useTex == 0) {
-        finalLighting = vec4(materialColour * ((diffuse * intensity) + ambient));
+        finalLighting = vec4(materialColour * (diffuse + ambient));
     } else {
-        finalLighting = vec4(texture(diffuse0, texCoord) * ((diffuse * intensity) + ambient));
+        finalLighting = vec4(texture(diffuse0, texCoord) * (diffuse + ambient));
     }
 
     // specular lighting
@@ -85,7 +85,7 @@ vec4 directLight() {
     if (useTex == 0) {
         finalSpecular = vec4(0);
     } else {
-        finalSpecular = vec4(texture(specular0, texCoord).r * specular * intensity);
+        finalSpecular = vec4(texture(specular0, texCoord).r * specular);
     }
 
     return (finalLighting + finalSpecular) * lightColour;
@@ -113,6 +113,7 @@ vec4 spotLight() {
     float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDirection);
     float intensity = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
+    vec4 finalLighting = vec4(0);
     if (useTex == 0) {
         finalLighting = vec4(materialColour * ((diffuse * intensity) + ambient));
     } else {
