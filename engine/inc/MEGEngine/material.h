@@ -6,6 +6,7 @@
 
 #include "MEGEngine/common.h"
 #include "MEGEngine/texture.h"
+#include "MEGEngine/colour.h"
 
 namespace MEGEngine {
     class ENGINE_API Material {
@@ -22,7 +23,11 @@ namespace MEGEngine {
         std::unordered_map<TexType, std::shared_ptr<Texture>> textures();
         std::shared_ptr<Texture> texture(TexType type);
 
+        void setColour(Colour colour);
+        Colour colour();
+
     private:
+        Colour _colour = {0.3, 0.3, 0.3, 1};
         Shader* _shader;
         std::unordered_map<TexType, std::shared_ptr<Texture>> _textures;
     };

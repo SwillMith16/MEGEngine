@@ -118,8 +118,10 @@ namespace MEGEngine {
 		activate();
 		if constexpr (std::is_same<T, float>::value)
 			glUniform1f(glGetUniformLocation(_id, name), value);
-		else if constexpr (std::is_same<T, unsigned int>::value)
+		else if constexpr (std::is_same<T, int>::value)
 			glUniform1i(glGetUniformLocation(_id, name), value);
+		else if constexpr (std::is_same<T, unsigned int>::value)
+			glUniform1ui(glGetUniformLocation(_id, name), value);
 		else if constexpr (std::is_same<T, Vec2>::value)
 			glUniform2f(glGetUniformLocation(_id, name), value.x, value.y);
 		else if constexpr (std::is_same<T, Vec3>::value)
@@ -135,6 +137,7 @@ namespace MEGEngine {
 	}
 
 	template void Shader::setUniform<float>(const char* name, const float& value);
+	template void Shader::setUniform<int>(const char* name, const int& value);
 	template void Shader::setUniform<unsigned int>(const char* name, const unsigned int& value);
 	template void Shader::setUniform<Vec2>(const char* name, const Vec2& value);
 	template void Shader::setUniform<Vec3>(const char* name, const Vec3& value);
