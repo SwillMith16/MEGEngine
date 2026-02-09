@@ -1,4 +1,3 @@
-#include "MEGEngine/entity.h"
 #include "MEGEngine/events.h"
 #include "MEGEngine/timer.h"
 
@@ -21,12 +20,3 @@ namespace MEGEngine {
         _eventQueue.clear();
     }
 } // EVENT MANAGER
-
-
-
-namespace MEGEngine {
-    void MoveForwardEventListener::onEvent() { // TODO: replace constant 5 with a user defined speed parameter
-        Vec3 move = _parent.transform().orientation().rotate(Vec3::worldForward());
-        _parent.transform().setPosition(_parent.transform().position() + (move * 5 * Timer::deltaTime()));
-    }
-}

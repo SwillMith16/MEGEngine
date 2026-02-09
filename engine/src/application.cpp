@@ -81,8 +81,6 @@ namespace MEGEngine {
 		_window = std::make_unique<Window>();
 		_window->create(config.windowTitle, config.width, config.height);
 
-		InputManager::init(_window.get());
-
 		// load glad for access to GL functions
 		int status = gladLoadGL();
 		if (!status) {

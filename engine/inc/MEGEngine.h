@@ -22,7 +22,8 @@
 #include "MEGEngine/model_loader.h"
 
 #include "MEGEngine/events.h"
-
 #include "MEGEngine/input.h"
+
+#include "MEGEngine/engine.h"
 
 #endif //MEGENGINEPROJECT_MEGENGINE_H

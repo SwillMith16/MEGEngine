@@ -61,10 +61,30 @@ add_library(MEGEngine SHARED
         src/light.cpp
         inc/MEGEngine/light.h
         inc/MEGEngine/colour.h
-        src/input.cpp
         inc/MEGEngine/input.h
         src/timer.cpp
         inc/MEGEngine/timer.h
+        inc/MEGEngine/input/input_shared_types.h
+        inc/MEGEngine/input/input_events.h
+        inc/MEGEngine/input/input_device.h
+        inc/MEGEngine/input/raw_input_event_bus.cpp
+        inc/MEGEngine/input/raw_input_event_bus.h
+        inc/MEGEngine/input/input_manager.cpp
+        inc/MEGEngine/input/input_manager.h
+        inc/MEGEngine/input/input_device.cpp
+        inc/MEGEngine/input/glfw_key_translator.h
+        inc/MEGEngine/input/input_context.cpp
+        inc/MEGEngine/input/input_context.h
+        inc/MEGEngine/input/input_action.cpp
+        inc/MEGEngine/input/input_action.h
+        inc/MEGEngine/input/input_mapping.cpp
+        inc/MEGEngine/input/input_mapping.h
+        inc/MEGEngine/input/player_action_bus.cpp
+        inc/MEGEngine/input/player_action_bus.h
+        inc/MEGEngine/input/input_system.cpp
+        inc/MEGEngine/input/input_system.h
+        inc/MEGEngine/engine.cpp
+        inc/MEGEngine/engine.h
 )
 
 target_include_directories(MEGEngine

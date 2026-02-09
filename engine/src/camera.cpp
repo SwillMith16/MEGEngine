@@ -52,44 +52,44 @@ namespace MEGEngine {
         Vec3 localMove(0, 0, 0);
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "W key pressed");
+            // Log(LogLevel::DBG, "W key pressed");
             localMove.z += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "A key pressed");
+            // Log(LogLevel::DBG, "A key pressed");
             localMove.x -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "S key pressed");
+            // Log(LogLevel::DBG, "S key pressed");
             localMove.z -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "D key pressed");
+            // Log(LogLevel::DBG, "D key pressed");
             localMove.x += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "Space key pressed");
+            // Log(LogLevel::DBG, "Space key pressed");
             localMove.y += 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "L-Ctrl key pressed");
+            // Log(LogLevel::DBG, "L-Ctrl key pressed");
             localMove.y -= 1;
         }
         if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
-            Log(LogLevel::DBG, "L-Shift key pressed");
+            // Log(LogLevel::DBG, "L-Shift key pressed");
             isSprinting = true;
             speed = boostSpeed;
         }
         else if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE && isSprinting)
         {
             isSprinting = false;
-            Log(LogLevel::DBG, "L-Shift key released");
+            // Log(LogLevel::DBG, "L-Shift key released");
             speed = baseSpeed;
         }
 

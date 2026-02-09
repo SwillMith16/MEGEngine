@@ -5,15 +5,12 @@
 #include "MEGEngine/window.h"
 #include "MEGEngine/input/glfw_key_translator.h"
 
-#include "MEGEngine/utils/log.h"
-
 namespace MEGEngine {
     struct WindowImpl {
         GLFWwindow* handle = nullptr;
     };
 
     void KeyboardDevice::poll() {
-        Log(LogLevel::DBG, "Polling KeyboardDevice");
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&_window->impl()));
         for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
             bool isDown = glfwGetKey(glfwWindow->handle, key) == GLFW_PRESS;
@@ -35,7 +32,6 @@ namespace MEGEngine {
         glfwGetCursorPos(glfwWindow->handle, &_lastX, &_lastY);
     }
     void MouseDevice::poll() {
-        Log(LogLevel::DBG, "Polling MouseDevice");
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&_window->impl()));
 
         double x, y;

@@ -8,17 +8,19 @@
 namespace MEGEngine {
     class ENGINE_API InputManager {
     public:
-        static void addDevice(std::unique_ptr<IInputDevice> device);
-        static void update();
+        void addDevice(std::unique_ptr<IInputDevice> device);
+        void update();
 
         template<typename Event>
-        static void emit(const Event& e) {
+        void emit(const Event& e) {
             _bus.queueEvent(e);
         }
 
+        RawInputEventBus& bus() { return _bus; }
+
     private:
-        static RawInputEventBus _bus;
-        static std::vector<std::unique_ptr<IInputDevice>> _devices;
+        RawInputEventBus _bus;
+        std::vector<std::unique_ptr<IInputDevice>> _devices;
     };
 } // MEGEngine
 

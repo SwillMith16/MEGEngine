@@ -3,12 +3,14 @@
 
 #include <array>
 
+#include "MEGEngine/common.h"
+
 // TODO: remove temp debugging includes
 #include <typeinfo>
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-    class IInputDevice {
+    class ENGINE_API IInputDevice {
     public:
         virtual ~IInputDevice() = default;
 
@@ -24,7 +26,7 @@ namespace MEGEngine {
     };
 
 
-    class KeyboardDevice : public IInputDevice {
+    class ENGINE_API KeyboardDevice : public IInputDevice {
     public:
         KeyboardDevice(class Window* window) : _window(window) {}
         void poll() override;
@@ -36,7 +38,7 @@ namespace MEGEngine {
         std::array<bool, 349> _previous{};
     };
 
-    class MouseDevice : public IInputDevice {
+    class ENGINE_API MouseDevice : public IInputDevice {
     public:
         MouseDevice(class Window* window) : _window(window) {}
         void initialise(class RawInputEventBus& bus) override;

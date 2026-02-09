@@ -53,13 +53,4 @@ namespace MEGEngine {
     };
 } // EVENT MANAGER
 
-namespace MEGEngine {
-    class ENGINE_API MoveForwardEvent : public Event {};
-    class ENGINE_API MoveForwardEventListener : public EventListener {
-    public:
-        MoveForwardEventListener(Entity& parent) : EventListener(parent) {}
-        void onEvent() override;
-    };
-}
-
 #endif //MEGENGINEPROJECT_EVENTS_H

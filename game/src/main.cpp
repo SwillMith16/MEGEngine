@@ -9,12 +9,23 @@
 class ExampleGame : public MEGEngine::Application {
 public:
 	using Application::Application;
+	MEGEngine::InputSystem inputSystem;
 
 protected:
 	void onInit() override {
 		// once at start
-		MEGEngine::InputManager::bindInputLayout<MEGEngine::WASDLayout>();
-		scene().camera().createEventListener<MEGEngine::MoveForwardEventListener, MEGEngine::MoveForwardEvent>();
+		MEGEngine::Engine::instance().setInputSystem(&inputSystem); // for access throughout the application
+		inputSystem.init();
+		MEGEngine::KeyboardDevice keyboard(&window());
+		inputSystem.manager().addDevice(std::make_unique<MEGEngine::KeyboardDevice>(keyboard));
+		auto& move = inputSystem.createAction("Move", MEGEngine::InputAction::Type::FLOAT);
+		auto gameplay = inputSystem.createContext();
+		inputSystem.bind(*gameplay, move, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::W}, +1);
+		inputSystem.pushContext(gameplay);
+		inputSystem.subscribe(move, [](const MEGEngine::ActionState& s) {
+			if (s.ongoing)
+				MEGEngine::Log(LogLevel::DBG, "Move: %f", s.value.asFloat());
+		});
 
 		scene().camera().transform().setPosition({0, 0, -10});
 
@@ -42,6 +53,7 @@ protected:
 	void onUpdate() override {
 		// once per frame
 		MEGEngine::EventManager::processEvents();
+		inputSystem.update();
 	}
 };
 
