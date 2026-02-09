@@ -14,18 +14,23 @@ public:
 protected:
 	void onInit() override {
 		// once at start
-		MEGEngine::Engine::instance().setInputSystem(&inputSystem); // for access throughout the application
 		inputSystem.init();
+		MEGEngine::Engine::instance().setInputSystem(&inputSystem); // for access throughout the application
 		MEGEngine::KeyboardDevice keyboard(&window());
 		inputSystem.manager().addDevice(std::make_unique<MEGEngine::KeyboardDevice>(keyboard));
-		auto& move = inputSystem.createAction("Move", MEGEngine::InputAction::Type::FLOAT);
+		// TODO: Have a single move action that takes a Vec2 or Vec3?
+		auto& moveFwd = inputSystem.createAction("MoveForward", MEGEngine::InputAction::Type::FLOAT);
+		auto& moveBwd = inputSystem.createAction("MoveBackward", MEGEngine::InputAction::Type::FLOAT);
+		auto& moveRgt = inputSystem.createAction("MoveRight", MEGEngine::InputAction::Type::FLOAT);
+		auto& moveLft = inputSystem.createAction("MoveLeft", MEGEngine::InputAction::Type::FLOAT);
 		auto gameplay = inputSystem.createContext();
-		inputSystem.bind(*gameplay, move, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::W}, +1);
+		inputSystem.bind(*gameplay, moveFwd, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::W}, +1);
+		inputSystem.bind(*gameplay, moveLft, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::A}, -1);
+		inputSystem.bind(*gameplay, moveBwd, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::S}, -1);
+		inputSystem.bind(*gameplay, moveRgt, MEGEngine::InputSource{MEGEngine::InputSource::Type::KEY, MEGEngine::KeyCode::D}, +1);
 		inputSystem.pushContext(gameplay);
-		inputSystem.subscribe(move, [](const MEGEngine::ActionState& s) {
-			if (s.ongoing)
-				MEGEngine::Log(LogLevel::DBG, "Move: %f", s.value.asFloat());
-		});
+
+		scene().camera().init();
 
 		scene().camera().transform().setPosition({0, 0, -10});
 

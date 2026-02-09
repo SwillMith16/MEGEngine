@@ -14,6 +14,7 @@ namespace MEGEngine {
     class ENGINE_API InputSystem {
     public:
         InputAction& createAction(std::string name, InputAction::Type type);
+        InputAction* findAction(std::string name);
         std::shared_ptr<InputContext> createContext();
         void bind(InputContext& ctx, InputAction& action, InputSource src, float scale = 1.0f);
         void pushContext(std::shared_ptr<InputContext> ctx);

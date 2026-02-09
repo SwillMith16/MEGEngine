@@ -1,5 +1,7 @@
 #include "MEGEngine/input/input_system.h"
 
+#include <cstring>
+
 #include "MEGEngine/engine.h"
 
 namespace MEGEngine {
@@ -10,6 +12,18 @@ namespace MEGEngine {
     InputAction& InputSystem::createAction(std::string name, InputAction::Type type) {
         _actions.push_back(std::make_unique<InputAction>(name, type));
         return *_actions.back();
+    }
+
+    // Returns action if name matches one in the list. Returns null if not found
+    InputAction* InputSystem::findAction(std::string name) {
+        if (this) {
+            for (auto& action : _actions) {
+                if (strcmp(action->name().c_str(), name.c_str()) == 0) {
+                    return action.get();
+                }
+            }
+        }
+        return nullptr;
     }
 
     std::shared_ptr<InputContext> InputSystem::createContext() {

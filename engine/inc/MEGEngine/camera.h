@@ -14,6 +14,11 @@ namespace MEGEngine {
 		Mat4 camMatrix() const;
 		void processInputs(class Window& window);
 
+		// TODO: remove once player controller is added
+		void init();
+		void moveForward(const float* val);
+		void moveRight(const float* val);
+
 	private:
 		float _width;
 		float _height;
@@ -36,6 +41,8 @@ namespace MEGEngine {
 		bool isSprinting = false;
 		float boostSpeed = 10.0f;
 		float sensitivity = 100.0f;
+
+		Vec3 _localMove = {0, 0, 0};
 	};
 }
 

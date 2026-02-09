@@ -10,6 +10,8 @@
 
 #include "MEGEngine/math/glm_conversions.h"
 
+#include "MEGEngine/engine.h"
+
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
@@ -28,6 +30,30 @@ namespace MEGEngine {
         initialMouseY(float(height)),
         lastMouseInputState(GLFW_RELEASE) {}
 
+    void Camera::init() {
+        if (auto fwdAction = Engine::instance().inputSystem()->findAction("MoveForward")) {
+            Engine::instance().inputSystem()->subscribe(*fwdAction, [this](const ActionState& s){ moveForward(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+        if (auto fwdAction = Engine::instance().inputSystem()->findAction("MoveBackward")) {
+            Engine::instance().inputSystem()->subscribe(*fwdAction, [this](const ActionState& s){ moveForward(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+
+        if (auto rightAction = Engine::instance().inputSystem()->findAction("MoveRight")) {
+            Engine::instance().inputSystem()->subscribe(*rightAction, [this](const ActionState& s){ moveRight(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+        if (auto rightAction = Engine::instance().inputSystem()->findAction("MoveLeft")) {
+            Engine::instance().inputSystem()->subscribe(*rightAction, [this](const ActionState& s){ moveRight(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+    }
+
     void Camera::onUpdate() {
         Vec3 camForward = transform().orientation().rotate(Vec3::worldForward());
         Mat4 view = Mat4::lookAt(
@@ -45,60 +71,26 @@ namespace MEGEngine {
         return _camMatrix;
     }
 
+    void Camera::moveForward(const float* val) {
+        if (val)
+            _localMove.z += *val;
+    }
+    void Camera::moveRight(const float* val) {
+        if (val)
+            _localMove.x += *val;
+    }
 
     void Camera::processInputs(Window& window) {
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&window.impl()));
-        // Handles key inputs
-        Vec3 localMove(0, 0, 0);
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "W key pressed");
-            localMove.z += 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "A key pressed");
-            localMove.x -= 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "S key pressed");
-            localMove.z -= 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "D key pressed");
-            localMove.x += 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "Space key pressed");
-            localMove.y += 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "L-Ctrl key pressed");
-            localMove.y -= 1;
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        {
-            // Log(LogLevel::DBG, "L-Shift key pressed");
-            isSprinting = true;
-            speed = boostSpeed;
-        }
-        else if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE && isSprinting)
-        {
-            isSprinting = false;
-            // Log(LogLevel::DBG, "L-Shift key released");
-            speed = baseSpeed;
-        }
 
-        if (localMove.length() * localMove.length() > 0) {
-            localMove = localMove.normalized();
+        if (_localMove.length() * _localMove.length() > 0) {
+            _localMove = _localMove.normalized();
 
-            Vec3 worldMove = transform().orientation().rotate(localMove);
+            Vec3 worldMove = transform().orientation().rotate(_localMove);
             transform().setPosition(transform().position() + (worldMove * speed * Timer::deltaTime()));
         }
+
+        _localMove = {0, 0, 0};
 
 
         if (glfwGetMouseButton(glfwWindow->impl, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
