@@ -1,7 +1,7 @@
 #include "input_manager.h"
 
 namespace MEGEngine {
-    void InputManager::addDevice(std::unique_ptr<IInputDevice> device) {
+    void InputManager::addDevice(std::unique_ptr<Base_InputDevice> device) {
         Log(LogLevel::DBG, "Device added to input manager");
         device->initialise(_bus);
         _devices.push_back(std::move(device));

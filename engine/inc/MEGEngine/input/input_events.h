@@ -111,14 +111,14 @@ namespace MEGEngine {
         float dy;
     };
 
-    class IQueuedEvent {
+    class Base_QueuedEvent {
     public:
-        virtual ~IQueuedEvent() = default;
+        virtual ~Base_QueuedEvent() = default;
         virtual void dispatch() = 0;
     };
 
     template<typename Event>
-    class QueuedEvent : public IQueuedEvent {
+    class QueuedEvent : public Base_QueuedEvent {
     public:
         // Create a queued event object with the event it should be, and a list of it's listeners
         QueuedEvent(const Event& e, std::vector<std::function<void(const Event&)>>& listeners)

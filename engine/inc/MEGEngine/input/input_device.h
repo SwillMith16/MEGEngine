@@ -10,9 +10,9 @@
 #include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
-    class ENGINE_API IInputDevice {
+    class ENGINE_API Base_InputDevice {
     public:
-        virtual ~IInputDevice() = default;
+        virtual ~Base_InputDevice() = default;
 
         virtual void initialise(class RawInputEventBus& bus) {
             Log(LogLevel::DBG, "Initialising device %s", typeid(*this).name());
@@ -26,7 +26,7 @@ namespace MEGEngine {
     };
 
 
-    class ENGINE_API KeyboardDevice : public IInputDevice {
+    class ENGINE_API KeyboardDevice : public Base_InputDevice {
     public:
         KeyboardDevice(class Window* window) : _window(window) {}
         void poll() override;
@@ -38,7 +38,7 @@ namespace MEGEngine {
         std::array<bool, 349> _previous{};
     };
 
-    class ENGINE_API MouseDevice : public IInputDevice {
+    class ENGINE_API MouseDevice : public Base_InputDevice {
     public:
         MouseDevice(class Window* window) : _window(window) {}
         void initialise(class RawInputEventBus& bus) override;

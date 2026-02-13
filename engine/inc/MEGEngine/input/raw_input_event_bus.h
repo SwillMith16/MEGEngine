@@ -31,7 +31,7 @@ namespace MEGEngine {
         void dispatch();
 
     private:
-        static std::vector<std::unique_ptr<IQueuedEvent>> _eventQueue;
+        static std::vector<std::unique_ptr<Base_QueuedEvent>> _eventQueue;
 
         template<typename Event>
         static std::vector<Listener<Event>>& listeners() {

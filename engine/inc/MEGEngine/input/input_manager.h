@@ -8,7 +8,7 @@
 namespace MEGEngine {
     class ENGINE_API InputManager {
     public:
-        void addDevice(std::unique_ptr<IInputDevice> device);
+        void addDevice(std::unique_ptr<Base_InputDevice> device);
         void update();
 
         template<typename Event>
@@ -20,7 +20,7 @@ namespace MEGEngine {
 
     private:
         RawInputEventBus _bus;
-        std::vector<std::unique_ptr<IInputDevice>> _devices;
+        std::vector<std::unique_ptr<Base_InputDevice>> _devices;
     };
 } // MEGEngine
 
