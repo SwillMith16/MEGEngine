@@ -2,20 +2,20 @@
 
 #include <JSON/json.hpp>
 
-#include "model_loader.h"
-#include "entity.h"
-#include "texture.h"
-#include "mesh_renderer.h"
-#include "mesh.h"
-#include "material.h"
-#include "texture.h"
-#include "shader.h"
-#include "shader_manager.h"
-#include "vertex.h"
+#include "MEGEngine/model_loader.h"
+#include "MEGEngine/entity.h"
+#include "MEGEngine/texture.h"
+#include "MEGEngine/mesh_renderer.h"
+#include "MEGEngine/mesh.h"
+#include "MEGEngine/material.h"
+#include "MEGEngine/texture.h"
+#include "MEGEngine/shader.h"
+#include "MEGEngine/shader_manager.h"
+#include "MEGEngine/vertex.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 using json = nlohmann::json;
 
@@ -146,11 +146,11 @@ namespace MEGEngine {
         // Combine all the vertex components and also get the indices and textures
         std::vector<Vertex> vertices = assembleVertices(positions, normals, texUVs);
         std::vector<unsigned int> indices = getIndices(_impl->_json["accessors"][indAccInd], _impl->_json, _data);
-        std::vector<Texture> textures = getTextures();
+        std::unordered_map<TexType, std::shared_ptr<Texture>> textures = getTextures();
 
         // Combine the vertices, indices into a mesh, and texture, shader into material
         Material material(ShaderManager::getShader("defaultLit"));
-        material.setTextureList(textures);
+        material.setTextures(textures);
         Mesh mesh(vertices, indices);
         MeshRenderer mr(std::make_shared<Mesh>(mesh), std::make_shared<Material>(material));
         return mr;
@@ -255,9 +255,7 @@ namespace MEGEngine {
         return indices;
     }
 
-    std::vector<Texture> ModelLoader::getTextures() {
-        std::vector<Texture> textures;
-
+    std::unordered_map<TexType, std::shared_ptr<Texture>> ModelLoader::getTextures() {
         std::string fileStr = std::string(_file);
         std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 
@@ -267,41 +265,19 @@ namespace MEGEngine {
             // uri of current texture
             std::string texPath = _impl->_json["images"][i]["uri"];
 
-            // Check if the texture has already been loaded
-            bool skip = false;
-            for (unsigned int j = 0; j < _loadedTexName.size(); j++)
-            {
-                if (_loadedTexName[j] == texPath)
-                {
-                    textures.push_back(_loadedTex[j]);
-                    skip = true;
-                    break;
-                }
+            // Load diffuse texture
+            if (texPath.find("baseColor") != std::string::npos) {
+                std::shared_ptr<Texture> diffuse = std::make_shared<Texture>((fileDirectory + texPath).c_str(), TexType::ALBEDO, _textures.size());
+                _textures.insert(std::make_pair(TexType::ALBEDO, diffuse));
             }
-
-            // If the texture has been loaded, skip this
-            if (!skip)
-            {
-                // Load diffuse texture
-                if (texPath.find("baseColor") != std::string::npos)
-                {
-                    Texture diffuse = Texture((fileDirectory + texPath).c_str(), "diffuse", _loadedTex.size());
-                    textures.push_back(diffuse);
-                    _loadedTex.push_back(diffuse);
-                    _loadedTexName.push_back(texPath);
-                }
-                // Load specular texture
-                else if (texPath.find("metallicRoughness") != std::string::npos)
-                {
-                    Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", _loadedTex.size());
-                    textures.push_back(specular);
-                    _loadedTex.push_back(specular);
-                    _loadedTexName.push_back(texPath);
-                }
+            // Load specular texture
+            else if (texPath.find("metallicRoughness") != std::string::npos) {
+                std::shared_ptr<Texture> specular = std::make_shared<Texture>((fileDirectory + texPath).c_str(), TexType::SPECULAR, _textures.size());
+                _textures.insert(std::make_pair(TexType::ALBEDO, specular));
             }
         }
 
-        return textures;
+        return _textures;
     }
 
     std::vector<Vertex> ModelLoader::assembleVertices(std::vector<Vec3> positions, std::vector<Vec3> normals, std::vector<Vec2> texUVs) {

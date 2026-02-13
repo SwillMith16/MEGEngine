@@ -2,7 +2,7 @@
 
 #include "GLFW/glfw3.h"
 
-#include "window.h"
+#include "MEGEngine/window.h"
 
 namespace MEGEngine {
     struct Window::Impl {

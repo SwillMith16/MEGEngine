@@ -1,20 +1,20 @@
 #include "GLAD/glad.h"
 
-#include "renderer.h"
-#include "camera.h"
-#include "material.h"
-#include "mesh.h"
-#include "shader.h"
-#include "scene.h"
-#include "texture.h"
+#include "MEGEngine/renderer.h"
+#include "MEGEngine/camera.h"
+#include "MEGEngine/material.h"
+#include "MEGEngine/mesh.h"
+#include "MEGEngine/shader.h"
+#include "MEGEngine/scene.h"
+#include "MEGEngine/texture.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
     struct Renderer::RenderGroup {
-        std::shared_ptr<Shader> shader = nullptr;
+        Shader* shader = nullptr;
         std::vector<Entity*> entities;
     };
 
@@ -46,7 +46,7 @@ namespace MEGEngine {
                 }
 
                 for (int i = 0; i < renderQueue.size(); i++) {
-                    if (entity->meshRenderer()->material()->shader().get()->ID() == renderQueue[i].shader.get()->ID()) {
+                    if (entity->meshRenderer()->material()->shader()->ID() == renderQueue[i].shader->ID()) {
                         renderQueue[i].entities.push_back(entity.get());
                     }
                     else if (i == renderQueue.size() - 1) {
@@ -62,57 +62,69 @@ namespace MEGEngine {
         for (RenderGroup& group : renderQueue) {
             glUseProgram(group.shader->ID());
             for (auto entity : group.entities) {
-                drawMesh(*entity->meshRenderer(), entity->transform(), scene.camera());
+                draw(*entity, scene);
             }
         }
     }
 
-    void Renderer::drawMesh(const MeshRenderer& mr, const Transform& transform, const Camera& camera) {
-        if (!mr.material()->shader()) {
+    void Renderer::draw(Entity& entity, const Scene& scene) {
+        if (!entity.meshRenderer()->material()->shader()) {
             Log(LogLevel::WRN, "Attempt to draw failed. Shader is null");
             return;
         }
 
-        mr.material()->bind();
-        mr.mesh()->bind();
+        entity.meshRenderer()->material()->bind();
+        entity.meshRenderer()->mesh()->bind();
 
         // Keep track of how many of each type of textures we have
         unsigned int numDiffuse = 0;
         unsigned int numSpecular = 0;
 
-        for (unsigned int i = 0; i < mr.material()->textures().size(); i++)
+        // for (unsigned int i = 0; i < entity.meshRenderer()->material()->textures().size(); i++)
+        unsigned int slot = 0;
+        for (auto& pair : entity.meshRenderer()->material()->textures())
         {
+            TexType type = pair.first;
+            std::shared_ptr<Texture> texture = pair.second;
             std::string num;
-            std::string type = mr.material()->textures()[i].type;
-            if (type == "diffuse")
+            std::string uniformName;
+            if (type == TexType::ALBEDO) // TODO: add support for other texture types
             {
                 num = std::to_string(numDiffuse++);
+                uniformName = "diffuse" + num;
             }
-            else if (type == "specular")
+            else if (type == TexType::SPECULAR)
             {
                 num = std::to_string(numSpecular++);
+                uniformName = "specular" + num;
             }
-            mr.material()->textures()[i].texUnit(*mr.material()->shader().get(), (type + num).c_str(), i);
-            mr.material()->textures()[i].bind();
+            texture->texUnit(*entity.meshRenderer()->material()->shader(), (uniformName).c_str(), slot++);
+            texture->bind();
         }
-        mr.material()->shader()->setUniform("camPos", camera.transform().position());
-        camera.matrix(*mr.material()->shader().get(), "camMatrix");
+        entity.meshRenderer()->material()->shader()->setUniform("camPos", scene.camera().transform().position());
+        entity.meshRenderer()->material()->shader()->setUniform("camMatrix", scene.camera().camMatrix());
 
         // Create matrices
-        Mat4 trans = Mat4::translation(transform.position());
-        Mat4 rot = transform.rotation().toMatrix();
-        Mat4 sca = Mat4::scale(transform.scale());
+        Mat4 trans = Mat4::translation(entity.transform().position());
+        Mat4 rot = entity.transform().orientation().toMatrix();
+        Mat4 sca = Mat4::scale(entity.transform().scale());
 
         // Push the matrices to the vertex shader
-        Mat4 modelMatrix = transform.modelMatrix();
-        mr.material()->shader()->setUniform("model",  modelMatrix);
-        mr.material()->shader()->setUniform("translation", trans);
-        mr.material()->shader()->setUniform("rotation", rot);
-        mr.material()->shader()->setUniform("scale", sca);
+        Mat4 modelMatrix = entity.transform().modelMatrix();
+        entity.meshRenderer()->material()->shader()->setUniform("model",  modelMatrix);
+        entity.meshRenderer()->material()->shader()->setUniform("translation", trans);
+        entity.meshRenderer()->material()->shader()->setUniform("rotation", rot);
+        entity.meshRenderer()->material()->shader()->setUniform("scale", sca);
+
+        // TODO: shader support for multiple light sources
+        entity.meshRenderer()->material()->shader()->setUniform("lightColour", scene.lightData()[0].colour);
+        if (auto* light = dynamic_cast<Light*>(&entity)) { // if this entity is the light, set its translation in vert shader
+            entity.meshRenderer()->material()->shader()->setUniform("translation", scene.lightData()[0].position);
+        } else { // any other entity, set light pos in frag shader
+            entity.meshRenderer()->material()->shader()->setUniform("lightPosition", scene.lightData()[0].colour);
+        }
 
         // Draw the actual mesh
-        glDrawElements(GL_TRIANGLES, mr.mesh()->numIndices(), GL_UNSIGNED_INT, 0);
-
-
+        glDrawElements(GL_TRIANGLES, entity.meshRenderer()->mesh()->numIndices(), GL_UNSIGNED_INT, 0);
     }
 } // MEGEngine

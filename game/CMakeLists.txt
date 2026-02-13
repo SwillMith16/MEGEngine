@@ -5,6 +5,7 @@ set(LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/libraries")
 # App executable
 add_executable(Game
         src/main.cpp
+        src/CustomEvents.h
 )
 
 target_include_directories(Game PRIVATE

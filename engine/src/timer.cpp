@@ -1,27 +1,9 @@
-//
-// Created by Will on 08/12/2025.
-//
+#include <chrono>
 
-#include "timer.h"
-#include "settings.h"
-#include "GLFW/glfw3.h"
+#include "MEGEngine/timer.h"
 
 namespace MEGEngine {
-	float Timer::_deltaTime = 0;
-	float Timer::lastTime = 0;
-	float Timer::FPS = 0;
-
-	float Timer::deltaTime() { return _deltaTime; }
-
-	void Timer::processTime(TimerKey key) {
-		float currentTime;
-		// Limit FPS and set deltaTime
-		do {
-			currentTime = glfwGetTime();
-			_deltaTime = currentTime - lastTime;
-			FPS = 1 / _deltaTime;
-		}
-		while (FPS > settings.graphics().maxFps && settings.graphics().maxFps != 0);
-		lastTime = currentTime;
-	}
-}
+    float Timer::deltaTime() {
+        return _deltaTime;
+    }
+} // MEGEngine

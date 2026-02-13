@@ -10,6 +10,9 @@ out vec4 fragColour;
 uniform sampler2D diffuse0;
 uniform sampler2D specular0;
 
+uniform int useTex;
+uniform vec4 materialColour;
+
 uniform vec4 lightColour;
 uniform vec3 lightPos;
 uniform vec3 camPos;
@@ -30,7 +33,12 @@ vec4 pointLight() {
     float diffuse = max(dot(_normal, lightDirection), 0.0f);
 
     // final basic lighting
-    vec4 finalLighting = vec4(texture(diffuse0, texCoord) * ((diffuse * intensity) + ambient));
+    vec4 finalLighting = vec4(0);
+    if (useTex == 0) {
+        finalLighting = vec4(materialColour * ((diffuse * intensity) + ambient));
+    } else {
+        finalLighting = vec4(texture(diffuse0, texCoord) * ((diffuse * intensity) + ambient));
+    }
 
     // specular lighting
     float specularLight = 0.5f;
@@ -38,7 +46,13 @@ vec4 pointLight() {
     vec3 reflectionDirection = reflect(-lightDirection, _normal); // negative as you want the reflection towards the plane
     float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 15);
     float specular = specAmount * specularLight;
-    vec4 finalSpecular = vec4(texture(specular0, texCoord).r * specular * intensity);
+
+    vec4 finalSpecular;
+    if (useTex == 0) {
+        finalSpecular = vec4(0);
+    } else {
+        finalSpecular = vec4(texture(specular0, texCoord).r * specular * intensity);
+    }
 
     return (finalLighting + finalSpecular) * lightColour;
 }
@@ -53,7 +67,12 @@ vec4 directLight() {
     float diffuse = max(dot(_normal, lightDirection), 0.0f);
 
     // final basic lighting
-    vec4 finalLighting = vec4(texture(diffuse0, texCoord) * (diffuse + ambient));
+    vec4 finalLighting = vec4(0);
+    if (useTex == 0) {
+        finalLighting = vec4(materialColour * (diffuse + ambient));
+    } else {
+        finalLighting = vec4(texture(diffuse0, texCoord) * (diffuse + ambient));
+    }
 
     // specular lighting
     float specularLight = 0.5f;
@@ -61,7 +80,13 @@ vec4 directLight() {
     vec3 reflectionDirection = reflect(-lightDirection, _normal); // negative as you want the reflection towards the plane
     float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 15);
     float specular = specAmount * specularLight;
-    vec4 finalSpecular = vec4(texture(specular0, texCoord).r * specular);
+
+    vec4 finalSpecular;
+    if (useTex == 0) {
+        finalSpecular = vec4(0);
+    } else {
+        finalSpecular = vec4(texture(specular0, texCoord).r * specular);
+    }
 
     return (finalLighting + finalSpecular) * lightColour;
 }
@@ -88,8 +113,19 @@ vec4 spotLight() {
     float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDirection);
     float intensity = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
-    vec4 finalLighting = vec4(texture(diffuse0, texCoord) * ((diffuse * intensity) + ambient));
-    vec4 finalSpecular = vec4(texture(specular0, texCoord).r * specular * intensity);
+    vec4 finalLighting = vec4(0);
+    if (useTex == 0) {
+        finalLighting = vec4(materialColour * ((diffuse * intensity) + ambient));
+    } else {
+        finalLighting = vec4(texture(diffuse0, texCoord) * ((diffuse * intensity) + ambient));
+    }
+
+    vec4 finalSpecular;
+    if (useTex == 0) {
+        finalSpecular = vec4(0);
+    } else {
+        finalSpecular = vec4(texture(specular0, texCoord).r * specular * intensity);
+    }
 
     return (finalLighting + finalSpecular) * lightColour;
 }

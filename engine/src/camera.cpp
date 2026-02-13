@@ -4,12 +4,15 @@
 #include "GLM/gtx/rotate_vector.hpp"
 #include "GLM/gtx/vector_angle.hpp"
 
-#include "camera.h"
-#include "window.h"
+#include "MEGEngine/camera.h"
+#include "MEGEngine/window.h"
+#include "MEGEngine/timer.h"
 
-#include "math/glm_conversions.h"
+#include "MEGEngine/math/glm_conversions.h"
 
-#include "utils/log.h"
+#include "MEGEngine/engine.h"
+
+#include "MEGEngine/utils/log.h"
 
 namespace MEGEngine {
 
@@ -20,80 +23,74 @@ namespace MEGEngine {
     Camera::Camera(int width, int height) :
         _width(static_cast<float>(width)),
         _height(static_cast<float>(height)),
-        _fov(60.0f),
+        _fov(75.0f),
         _nearZ(0.1f),
         _farZ(1000.0f),
         initialMouseX(float(width)),
         initialMouseY(float(height)),
-        lastMouseInputState(GLFW_RELEASE){}
+        lastMouseInputState(GLFW_RELEASE) {}
 
-    Transform& Camera::transform() const {
-        return *_transform;
+    void Camera::init() {
+        if (auto fwdAction = Engine::instance().inputSystem()->findAction("MoveForward")) {
+            Engine::instance().inputSystem()->subscribe(*fwdAction, [this](const ActionState& s){ moveForward(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+        if (auto fwdAction = Engine::instance().inputSystem()->findAction("MoveBackward")) {
+            Engine::instance().inputSystem()->subscribe(*fwdAction, [this](const ActionState& s){ moveForward(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+
+        if (auto rightAction = Engine::instance().inputSystem()->findAction("MoveRight")) {
+            Engine::instance().inputSystem()->subscribe(*rightAction, [this](const ActionState& s){ moveRight(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
+        if (auto rightAction = Engine::instance().inputSystem()->findAction("MoveLeft")) {
+            Engine::instance().inputSystem()->subscribe(*rightAction, [this](const ActionState& s){ moveRight(s.value.asFloat()); });
+        } else {
+            Log(LogLevel::WRN, "Find input action returned null");
+        }
     }
 
+    void Camera::onUpdate() {
+        Vec3 camForward = transform().orientation().rotate(Vec3::worldForward());
+        Mat4 view = Mat4::lookAt(
+            _transform->position(),
+            _transform->position() + camForward,
+            Vec3::worldUp()
+            );
 
-    void Camera::updateMatrix() {
-        Mat4 view = Mat4(1.0f);
-        Mat4 projection = Mat4(1.0f);
+        Mat4 projection = Mat4::perspective(_fov, _width/_height, _nearZ, _farZ);
 
-        view = Private::fromGlmMat4(glm::lookAt(Private::toGlmVec3(_transform->position()), Private::toGlmVec3(_transform->position() + _orientation), Private::toGlmVec3(_up)));
-        projection = Private::fromGlmMat4(glm::perspective(glm::radians(_fov), (float)_width / _height, _nearZ, _farZ));
-
-        // set new camera matrix
-        camMatrix = projection * view;
+        _camMatrix = projection * view;
     }
 
-    void Camera::matrix(Shader& shader, const char* uniform) const {
-        // export camera matrix to shader
-        shader.setUniform(uniform,  camMatrix);
+    Mat4 Camera::camMatrix() const {
+        return _camMatrix;
     }
 
+    void Camera::moveForward(const float* val) {
+        if (val)
+            _localMove.z += *val;
+    }
+    void Camera::moveRight(const float* val) {
+        if (val)
+            _localMove.x += *val;
+    }
 
-    void Camera::processInputs(Window& window, float deltaTime) {
+    void Camera::processInputs(Window& window) {
         WindowImpl* glfwWindow = static_cast<WindowImpl*>(static_cast<void*>(&window.impl()));
-        // Handles key inputs
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_W) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "W key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * _orientation));
+
+        if (_localMove.length() * _localMove.length() > 0) {
+            _localMove = _localMove.normalized();
+
+            Vec3 worldMove = transform().orientation().rotate(_localMove);
+            transform().setPosition(transform().position() + (worldMove * speed * Timer::deltaTime()));
         }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_A) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "A key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_S) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "S key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * _orientation));
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_D) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "D key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * Vec3::cross(_orientation, _up).normalized()));
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "Space key pressed");
-            _transform->setPosition(_transform->position() + (speed * deltaTime * _up));
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "L-Ctrl key pressed");
-            _transform->setPosition(_transform->position() - (speed * deltaTime * _up));
-        }
-        if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        {
-            Log(LogLevel::DBG, "L-Shift key pressed");
-            isSprinting = true;
-            speed = boostSpeed;
-        }
-        else if (glfwGetKey(glfwWindow->impl, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE && isSprinting)
-        {
-            isSprinting = false;
-            Log(LogLevel::DBG, "L-Shift key released");
-            speed = baseSpeed;
-        }
+
+        _localMove = {0, 0, 0};
 
 
         if (glfwGetMouseButton(glfwWindow->impl, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
@@ -114,16 +111,24 @@ namespace MEGEngine {
             float rotY = sensitivity * ((float)mouseX - (_width/2)) / _width;
 
             // Calculates upcoming vertical change in the Orientation
-            Vec3 newOrientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_orientation), glm::radians(-rotX), glm::normalize(glm::cross(Private::toGlmVec3(_orientation), Private::toGlmVec3(_up)))));
+            Quat tmpOrientation = _transform->orientation();
+
+            Vec3 camRight = _transform->orientation().rotate(Vec3::worldRight());
+            Quat pitch = Quat::fromAxisAngle(camRight, glm::radians(rotX));
+            tmpOrientation = pitch * tmpOrientation;
+
+            Vec3 camForward = tmpOrientation.rotate(Vec3::worldForward());
+            float pitchAngle = glm::degrees(std::asin(glm::clamp(camForward.y, -1.0f, 1.0f)));
 
             // Decides whether or not the next vertical Orientation is legal or not
-            if (abs(glm::angle(Private::toGlmVec3(newOrientation), Private::toGlmVec3(_up)) - glm::radians(90.0f)) <= glm::radians(85.0f))
+            if (pitchAngle > -85.0f && pitchAngle < 85.0f)
             {
-                _orientation = newOrientation;
+                _transform->setOrientation(tmpOrientation);
             }
 
             // Rotates the Orientation left and right
-            _orientation = Private::fromGlmVec3(glm::rotate(Private::toGlmVec3(_orientation), glm::radians(-rotY), Private::toGlmVec3(_up)));
+            Quat yaw = Quat::fromAxisAngle(Vec3::worldUp(), glm::radians(rotY));
+            _transform->setOrientation(yaw * _transform->orientation().normalised());
 
             // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
             glfwSetCursorPos(glfwWindow->impl, (_width / 2), (_height / 2));
@@ -146,17 +151,6 @@ namespace MEGEngine {
             }
 
         }
-    }
-
-    Mat4 Camera::viewMatrix() const {
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::lookAt(Private::toGlmVec3(transform().position()), Private::toGlmVec3(transform().position() + _orientation), Private::toGlmVec3(_up));
-        return Private::fromGlmMat4(view);
-    }
-
-    Mat4 Camera::projectionMatrix() const {
-        glm::mat4 projection = glm::perspective(glm::radians(_fov), _width/_height, _nearZ, _farZ);
-        return Private::fromGlmMat4(projection);
     }
 
 }

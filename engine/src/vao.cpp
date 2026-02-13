@@ -1,6 +1,6 @@
 #include "GLAD/glad.h"
 
-#include "vao.h"
+#include "MEGEngine/vao.h"
 
 namespace MEGEngine {
     VAO::VAO() {

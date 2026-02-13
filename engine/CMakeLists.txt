@@ -1,61 +1,90 @@
 cmake_minimum_required(VERSION 4.2)
 
 add_library(MEGEngine SHARED
-        inc/application.h
+        inc/MEGEngine/application.h
         src/application.cpp
-        inc/shader.h
+        inc/MEGEngine/shader.h
         src/shader.cpp
         src/vao.cpp
-        inc/vao.h
+        inc/MEGEngine/vao.h
         src/vbo.cpp
-        inc/vbo.h
+        inc/MEGEngine/vbo.h
         src/ebo.cpp
-        inc/ebo.h
+        inc/MEGEngine/ebo.h
         src/texture.cpp
-        inc/texture.h
+        inc/MEGEngine/texture.h
         src/camera.cpp
-        inc/camera.h
-        src/timer.cpp
-        inc/timer.h
+        inc/MEGEngine/camera.h
         src/settings.cpp
-        inc/settings.h
+        inc/MEGEngine/settings.h
         src/mesh.cpp
-        inc/mesh.h
+        inc/MEGEngine/mesh.h
         src/entity.cpp
-        inc/entity.h
-        inc/common.h
-        inc/vertex.h
-        inc/math/vec2.h
-        inc/math/vec2.cpp
-        inc/math/vec3.h
-        inc/math/vec3.cpp
-        inc/math/glm_conversions.h
-        inc/math/mat4.cpp
-        inc/math/mat4.h
-        inc/math/quat.cpp
-        inc/math/quat.h
-        inc/math/vec4.cpp
-        inc/math/vec4.h
-        inc/utils/log.h
-        inc/utils/log.cpp
+        inc/MEGEngine/entity.h
+        inc/MEGEngine/common.h
+        inc/MEGEngine/vertex.h
+        inc/MEGEngine/math/vec2.h
+        inc/MEGEngine/math/vec2.cpp
+        inc/MEGEngine/math/vec3.h
+        inc/MEGEngine/math/vec3.cpp
+        inc/MEGEngine/math/glm_conversions.h
+        inc/MEGEngine/math/mat4.cpp
+        inc/MEGEngine/math/mat4.h
+        inc/MEGEngine/math/quat.cpp
+        inc/MEGEngine/math/quat.h
+        inc/MEGEngine/math/vec4.cpp
+        inc/MEGEngine/math/vec4.h
+        inc/MEGEngine/utils/log.h
+        inc/MEGEngine/utils/log.cpp
         src/material.cpp
-        inc/material.h
+        inc/MEGEngine/material.h
         src/mesh_renderer.cpp
-        inc/mesh_renderer.h
+        inc/MEGEngine/mesh_renderer.h
         src/model_loader.cpp
-        inc/model_loader.h
+        inc/MEGEngine/model_loader.h
         src/transform.cpp
-        inc/transform.h
+        inc/MEGEngine/transform.h
         src/primitive_shapes.cpp
-        inc/primitive_shapes.h
+        inc/MEGEngine/primitive_shapes.h
         src/shader_manager.cpp
-        inc/shader_manager.h
+        inc/MEGEngine/shader_manager.h
         src/scene.cpp
-        inc/scene.h
+        inc/MEGEngine/scene.h
         src/window.cpp
-        inc/window.h
+        inc/MEGEngine/window.h
         src/renderer.cpp
-        inc/renderer.h
+        inc/MEGEngine/renderer.h
+        inc/MEGEngine.h
+        inc/MEGEngine/Math.h
+        src/events.cpp
+        inc/MEGEngine/events.h
+        src/light.cpp
+        inc/MEGEngine/light.h
+        inc/MEGEngine/colour.h
+        inc/MEGEngine/input.h
+        src/timer.cpp
+        inc/MEGEngine/timer.h
+        inc/MEGEngine/input/input_shared_types.h
+        inc/MEGEngine/input/input_events.h
+        inc/MEGEngine/input/input_device.h
+        inc/MEGEngine/input/raw_input_event_bus.cpp
+        inc/MEGEngine/input/raw_input_event_bus.h
+        inc/MEGEngine/input/input_manager.cpp
+        inc/MEGEngine/input/input_manager.h
+        inc/MEGEngine/input/input_device.cpp
+        inc/MEGEngine/input/glfw_key_translator.h
+        inc/MEGEngine/input/input_context.cpp
+        inc/MEGEngine/input/input_context.h
+        inc/MEGEngine/input/input_action.cpp
+        inc/MEGEngine/input/input_action.h
+        inc/MEGEngine/input/input_mapping.cpp
+        inc/MEGEngine/input/input_mapping.h
+        inc/MEGEngine/input/player_action_bus.cpp
+        inc/MEGEngine/input/player_action_bus.h
+        inc/MEGEngine/input/input_system.cpp
+        inc/MEGEngine/input/input_system.h
+        inc/MEGEngine/engine.cpp
+        inc/MEGEngine/engine.h
 )
 
 target_include_directories(MEGEngine

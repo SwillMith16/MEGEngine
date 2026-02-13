@@ -1,44 +1,44 @@
-#include "primitive_shapes.h"
+#include "MEGEngine/primitive_shapes.h"
 
 namespace MEGEngine {
 	std::vector<Vertex> Cube::_vertices =
 		{
 			//                  Position                       /                  Normal                 /                 Colours                /           Texture Coords            //
 			// top
-			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(0.0f,  1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f,  1.0f,  1.0f), Vec3(0.0f,  1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f,  1.0f, -1.0f), Vec3(0.0f,  1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(0.0f,  1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
 
 			// front
-			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
 
 			// right
-			Vertex{Vec3(01.0, -01.0,  01.0), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(01.0, -01.0, -01.0), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(01.0,  01.0, -01.0), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(01.0,  01.0,  01.0), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(01.0, -01.0,  01.0), Vec3(1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(01.0, -01.0, -01.0), Vec3(1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(01.0,  01.0, -01.0), Vec3(1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(01.0,  01.0,  01.0), Vec3(1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
 
 			// back
-			Vertex{Vec3( 1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
 
 			// left
-			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f,  1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f,  1.0f, -1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
 
 			// bottom
-			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f, -1.0f, -1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3( 1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
-			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  0.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)}
+			Vertex{Vec3(-1.0f, -1.0f, -1.0f), Vec3(0.0f,  -1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f, -1.0f, -1.0f), Vec3(0.0f,  -1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3( 1.0f, -1.0f,  1.0f), Vec3(0.0f,  -1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)},
+			Vertex{Vec3(-1.0f, -1.0f,  1.0f), Vec3(0.0f,  -1.0f,  0.0f), Vec3(0.0f,  0.0f,  0.0f), Vec2(0.0f,  0.0f)}
 		};
 
 	std::vector<unsigned int> Cube::_indices =

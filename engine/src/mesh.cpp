@@ -1,5 +1,5 @@
-#include "mesh.h"
-#include "ebo.h"
+#include "MEGEngine/mesh.h"
+#include "MEGEngine/ebo.h"
 
 namespace MEGEngine {
 	Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
